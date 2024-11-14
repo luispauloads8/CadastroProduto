@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClienteProduto.Domain\ClienteProjeto.Domain.csproj" />
+    <ProjectReference Include="..\ClienteProjeto.Application\ClienteProjeto.Application.csproj" />
+    <ProjectReference Include="..\ClienteProjeto.Infrastructure\ClienteProjeto.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IoC\" />
+  </ItemGroup>
+
+</Project>
