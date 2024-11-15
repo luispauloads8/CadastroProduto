@@ -2,13 +2,12 @@
 
 namespace ClienteProjeto.Application.DTOs;
 
-public class ContaContabilDTO
+public class GrupoContaDTO
 {
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Informe descrição do da conta contabil")]
+    [Required(ErrorMessage = "Informe nome fornecedor")]
     [MinLength(3)]
     [MaxLength(300)]
     public string Descricao { get; set; }
-    public int GrupoContaId { get; set; }
 }

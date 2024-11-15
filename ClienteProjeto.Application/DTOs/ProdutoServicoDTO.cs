@@ -10,6 +10,5 @@ public class ProdutoServicoDTO
     [MinLength(3)]
     [MaxLength(100)]
     public string Descricao { get; set; }
-
-    public int MyProperty { get; set; }
+    public int CategoriaId { get; set; }
 }
