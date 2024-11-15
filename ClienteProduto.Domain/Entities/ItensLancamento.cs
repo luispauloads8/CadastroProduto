@@ -4,4 +4,5 @@ public class ItensLancamento : Entity
 {
     public int Quantidade { get; set; }
     public double Valor { get; set; }
+    public Lancamento Lancamento { get; set; }
 }

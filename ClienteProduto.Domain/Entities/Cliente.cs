@@ -16,4 +16,5 @@ public class Cliente : Entity
     public string Nacionalidade { get; set; }
     public string Observacao { get; set; }
     public int CidadeId { get; set; }
+    public Cidade Cidade { get; set; }
 }
