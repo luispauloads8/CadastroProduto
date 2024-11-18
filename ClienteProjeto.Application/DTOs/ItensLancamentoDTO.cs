@@ -12,5 +12,5 @@ public class ItensLancamentoDTO
 
     [Required(ErrorMessage = "Informe o valor")]
     [DisplayFormat(DataFormatString = "{0:n2}")]
-    public decimal Valor { get; set; }
+    public decimal ValorItem { get; set; }
 }
