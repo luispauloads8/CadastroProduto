@@ -2,7 +2,7 @@
 
 namespace ClienteProjeto.Domain.Interfaces;
 
-public interface ICatalogoRepository
+public interface ICategoriaRepository
 {
     Task<IEnumerable<Categoria>> GetCategoriaAsync();
     Task<Categoria> GetByIdAsync(int? id);
