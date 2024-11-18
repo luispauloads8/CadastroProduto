@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClienteProduto.Domain\ClienteProjeto.Domain.csproj" />
-    <ProjectReference Include="..\ClienteProjeto.Application\ClienteProjeto.Application.csproj" />
-    <ProjectReference Include="..\ClienteProjeto.Infrastructure\ClienteProjeto.Infrastructure.csproj" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IoC\" />
+    <ProjectReference Include="..\ClienteProduto.Domain\ClienteProjeto.Domain.csproj" />
+    <ProjectReference Include="..\ClienteProjeto.Application\ClienteProjeto.Application.csproj" />
+    <ProjectReference Include="..\ClienteProjeto.Infrastructure\ClienteProjeto.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
