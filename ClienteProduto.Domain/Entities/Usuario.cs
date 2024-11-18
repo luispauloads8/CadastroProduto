@@ -2,6 +2,15 @@
 
 public class Usuario : Entity
 {
+    public Usuario(int id, string nome, string email, string password, int empresaId)
+    {
+        Id = id;
+        Nome = nome;
+        Email = email;
+        Password = password;
+        EmpresaId = empresaId;
+    }
+
     public string Nome { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }

@@ -12,9 +12,10 @@ public class Cliente : Entity
     public string Telefone { get; set; }
     public string Email { get; set; }
     public EnumEstadoCivil EstadoCivil { get; set; }
-    public Cidade Naturalidade { get; set; }
     public string Nacionalidade { get; set; }
     public string Observacao { get; set; }
-    public int CidadeId { get; set; }
+    public int CidadeEnderecoId { get; set; }
+    public int CidadeNacionalidadeId { get; set; }
     public Cidade Cidade { get; set; }
+    public ICollection<Lancamento> Lancamentos { get; set; }
 }
