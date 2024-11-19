@@ -1,15 +1,19 @@
 ﻿using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ClienteProjeto.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
 
 public class CategoriaRepository : ICategoriaRepository
 {
+    private ApplicationDbContext _categoryContext;
+
+    public CategoriaRepository(ApplicationDbContext categoryContext)
+    {
+        _categoryContext = categoryContext;
+    }
+
     public Task<Categoria> CreateAsync(Categoria categoria)
     {
         throw new NotImplementedException();
@@ -20,14 +24,16 @@ public class CategoriaRepository : ICategoriaRepository
         throw new NotImplementedException();
     }
 
-    public Task<Categoria> GetByIdAsync(int? id)
+    public async Task<Categoria> GetByIdAsync(int? id)
     {
-        throw new NotImplementedException();
+        var categoria = await _categoryContext.Categorias.FindAsync(id);
+        return categoria;
     }
 
-    public Task<IEnumerable<Categoria>> GetCategoriaAsync()
+    public async Task<IEnumerable<Categoria>> GetCategoriaAsync()
     {
-        throw new NotImplementedException();
+        var categorias = await _categoryContext.Categorias.ToListAsync();
+        return categorias;
     }
 
     public Task<Categoria> UpdateAsync(Categoria categoria)
