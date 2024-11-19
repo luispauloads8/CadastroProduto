@@ -2,13 +2,9 @@
 
 public class Lancamento : Entity
 {
-    public Lancamento(int id, int empresaId, int contaContabilId, int produtoServicoId, int clienteId, string observacao, DateTime dataLancamento, decimal valor)
+    public Lancamento(int id, string observacao, DateTime dataLancamento, decimal valor)
     {
         Id = id;
-        EmpresaId = empresaId;
-        ContaContabilId = contaContabilId;
-        ProdutoServicoId = produtoServicoId;
-        ClienteId = clienteId;
         Observacao = observacao;
         DataLancamento = dataLancamento;
         Valor = valor;

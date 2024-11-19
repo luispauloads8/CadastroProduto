@@ -1,4 +1,6 @@
-﻿namespace ClienteProjeto.Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace ClienteProjeto.Domain.Entities;
 
 public class Categoria : Entity
 {
@@ -10,5 +12,7 @@ public class Categoria : Entity
     }
 
     public string Descricao { get; set; }
+
+    [JsonIgnore]
     public ICollection<ProdutoServico> ProdutoServicos { get; set; }
 }

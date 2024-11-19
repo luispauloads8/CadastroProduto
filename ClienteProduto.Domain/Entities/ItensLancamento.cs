@@ -2,12 +2,11 @@
 
 public class ItensLancamento : Entity
 {
-    public ItensLancamento(int id, int quantidade, decimal valorItem, int lancamentoId)
+    public ItensLancamento(int id, int quantidade, decimal valorItem)
     {
         Id = id;
         Quantidade = quantidade;
         ValorItem = valorItem;
-        LancamentoId = lancamentoId;
     }
 
     public int Quantidade { get; set; }

@@ -2,15 +2,6 @@
 
 public class Empresa : Entity
 {
-    public Empresa(int id, string razaoSocial, string nomeFantasia, string cnpj, string email, string telefone)
-    {
-        Id = id;
-        RazaoSocial = razaoSocial;
-        NomeFantasia = nomeFantasia;
-        CNPJ = cnpj;
-        Email = email;
-        Telefone = telefone;
-    }
 
     public string RazaoSocial { get; set; }
     public string NomeFantasia { get; set; }

@@ -15,7 +15,6 @@ public class Cliente : Entity
     public string Nacionalidade { get; set; }
     public string Observacao { get; set; }
     public int CidadeEnderecoId { get; set; }
-    public int CidadeNacionalidadeId { get; set; }
     public Cidade Cidade { get; set; }
     public ICollection<Lancamento> Lancamentos { get; set; }
 }

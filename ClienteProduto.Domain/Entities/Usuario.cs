@@ -2,13 +2,12 @@
 
 public class Usuario : Entity
 {
-    public Usuario(int id, string nome, string email, string password, int empresaId)
+    public Usuario(int id, string nome, string email, string password)
     {
         Id = id;
         Nome = nome;
         Email = email;
         Password = password;
-        EmpresaId = empresaId;
     }
 
     public string Nome { get; set; }
