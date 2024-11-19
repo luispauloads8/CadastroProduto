@@ -17,6 +17,15 @@ public static class DependencyInjection
         new MySqlServerVersion(new Version(8, 0, 29))));
 
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+        services.AddScoped<ICidadeRepository, CidadeRepository>();
+        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IContaContabilRepository, ContaContabilRepository>();
+        services.AddScoped<IEmpresaRepository, EmpresaRepository>();
+        services.AddScoped<IFornecedorRepository, FornecedorRepository>();
+        services.AddScoped<IGrupoContaRepository, GrupoContaRepository>();
+        services.AddScoped<ILancamentoRepository, LancamentoRepository>();
+        services.AddScoped<IProdutoServicoRepository, ProdutoServicoRepository>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
         return services;
     }

@@ -27,9 +27,5 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
             .HasForeignKey(c => c.CidadeEnderecoId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(c => c.Cidade)
-            .WithMany(c => c.ClientesNacionalidade)
-            .HasForeignKey(c => c.CidadeNacionalidadeId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

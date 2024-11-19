@@ -10,7 +10,6 @@ public class LancamentoConfiguration : IEntityTypeConfiguration<Lancamento>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Observacao).HasMaxLength(500);
-        builder.Property(x => x.ItensLancamentos).HasMaxLength(10); 
         builder.Property(x => x.Valor).IsRequired().HasPrecision(18, 2).HasDefaultValue(0);
 
         builder.HasOne(x => x.Empresa)

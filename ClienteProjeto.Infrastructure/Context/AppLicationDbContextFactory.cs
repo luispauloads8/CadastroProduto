@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ClienteProjeto.Infrastructure.Context;
 
-internal class AppLicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+public class AppLicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
