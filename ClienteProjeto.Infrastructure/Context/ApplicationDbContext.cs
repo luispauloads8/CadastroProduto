@@ -26,5 +26,11 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+
+        modelBuilder.Entity<ProdutoServico>(entity => {
+            entity.Property(e => e.Imagem).HasColumnType("LONGBLOB")
+                  .IsRequired(false); 
+        });
     }
 }

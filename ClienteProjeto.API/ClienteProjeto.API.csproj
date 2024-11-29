@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ClienteProjeto.CrossCutting\ClienteProjeto.CrossCutting.csproj" />
   </ItemGroup>
 
