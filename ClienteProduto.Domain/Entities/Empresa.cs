@@ -11,7 +11,6 @@ public class Empresa : Entity
     public int CidadeEmpresaId { get; set; }
     public Cidade Cidade { get; set; }
     public ICollection<Usuario> Usuarios { get; set; }
-    public ICollection<Fornecedor> Forecedores { get; set; }
     public ICollection<Lancamento> Lancamentos { get; set; }
 
 }

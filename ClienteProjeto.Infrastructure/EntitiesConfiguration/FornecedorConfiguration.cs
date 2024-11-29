@@ -16,17 +16,10 @@ public class FornecedorConfiguration : IEntityTypeConfiguration<Fornecedor>
         builder.Property(x => x.CEP).HasMaxLength(8).IsRequired();
         builder.Property(x => x.Email).HasMaxLength(150).IsRequired();
         builder.Property(x => x.Telefone).HasMaxLength(15).IsRequired();
-        builder.Property(x => x.Sexo).HasMaxLength(1).IsRequired();
-        builder.Property(x => x.EstadoCivil).HasMaxLength(1).IsRequired();
 
         builder.HasOne(x => x.Cidade)
             .WithMany(x => x.Fornecedores)
             .HasForeignKey(x => x.CidadeId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(x => x.Empresa)
-            .WithMany(x => x.Forecedores)
-            .HasForeignKey(x => x.EmpresaId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

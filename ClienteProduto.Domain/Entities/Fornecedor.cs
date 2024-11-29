@@ -10,10 +10,6 @@ public class Fornecedor : Entity
     public string CEP { get; set; }
     public string Observacao { get; set; }
     public int CidadeId { get; set; }
-    public int EmpresaId { get; set; }
     public string Email { get; set; }
-    public EnumSexo Sexo { get; set; }
-    public EnumEstadoCivil EstadoCivil { get; set; }
     public Cidade Cidade { get; set; }
-    public Empresa Empresa { get; set; }
 }

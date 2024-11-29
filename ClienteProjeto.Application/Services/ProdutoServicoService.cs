@@ -31,9 +31,10 @@ public class ProdutoServicoService : IProdutoServicoService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<ProdutoServicoDTO>> GetProdutosServicos()
+    public async Task<IEnumerable<ProdutoServicoDTO>> GetProdutosServicos()
     {
-        throw new NotImplementedException();
+        var produtoEntity = await _produtoServicoRepository.GetProdutoServicoAsync();
+        return _mapper.Map<IEnumerable<ProdutoServicoDTO>>(produtoEntity);
     }
 
     public Task Update(ProdutoServicoDTO produto)

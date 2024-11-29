@@ -10,6 +10,7 @@ public class ProdutoServicoConfiguration : IEntityTypeConfiguration<ProdutoServi
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Descricao).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Imagem).HasColumnType("varbinary(max)").IsRequired();
 
         builder.HasOne(x => x.Categoria)
             .WithMany(x => x.ProdutoServicos)
