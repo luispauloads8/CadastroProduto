@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClienteProjeto.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119193118_MigracaoInicial")]
-    partial class MigracaoInicial
+    [Migration("20241122151640_migracaoInicial")]
+    partial class migracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,26 +256,15 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
-                    b.Property<int>("EstadoCivil")
-                        .HasMaxLength(1)
-                        .HasColumnType("int");
-
                     b.Property<string>("Observacao")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
-
-                    b.Property<int>("Sexo")
-                        .HasMaxLength(1)
-                        .HasColumnType("int");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -285,8 +274,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CidadeId");
-
-                    b.HasIndex("EmpresaId");
 
                     b.ToTable("Fornecedores");
                 });
@@ -400,8 +387,8 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<byte>("Imagem")
-                        .HasColumnType("tinyint unsigned");
+                    b.Property<byte[]>("Imagem")
+                        .HasColumnType("LONGBLOB");
 
                     b.HasKey("Id");
 
@@ -484,15 +471,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ClienteProjeto.Domain.Entities.Empresa", "Empresa")
-                        .WithMany("Forecedores")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Cidade");
-
-                    b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ItensLancamento", b =>
@@ -589,8 +568,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Empresa", b =>
                 {
-                    b.Navigation("Forecedores");
-
                     b.Navigation("Lancamentos");
 
                     b.Navigation("Usuarios");

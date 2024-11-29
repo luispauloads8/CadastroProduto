@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClienteProjeto.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracaoInicial : Migration
+    public partial class migracaoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,7 +70,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Imagem = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                    Imagem = table.Column<byte[]>(type: "LONGBLOB", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -157,28 +157,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ContaContabeis",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Descricao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    GrupoContaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContaContabeis", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContaContabeis_GrupoContas_GrupoContaId",
-                        column: x => x.GrupoContaId,
-                        principalTable: "GrupoContas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Fornecedores",
                 columns: table => new
                 {
@@ -197,11 +175,8 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     Observacao = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CidadeId = table.Column<int>(type: "int", nullable: false),
-                    EmpresaId = table.Column<int>(type: "int", nullable: false),
                     Email = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sexo = table.Column<int>(type: "int", maxLength: 1, nullable: false),
-                    EstadoCivil = table.Column<int>(type: "int", maxLength: 1, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -212,12 +187,28 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         principalTable: "Cidades",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ContaContabeis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Descricao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GrupoContaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContaContabeis", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Fornecedores_Empresas_EmpresaId",
-                        column: x => x.EmpresaId,
-                        principalTable: "Empresas",
+                        name: "FK_ContaContabeis_GrupoContas_GrupoContaId",
+                        column: x => x.GrupoContaId,
+                        principalTable: "GrupoContas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -348,11 +339,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
                 name: "IX_Fornecedores_CidadeId",
                 table: "Fornecedores",
                 column: "CidadeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Fornecedores_EmpresaId",
-                table: "Fornecedores",
-                column: "EmpresaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ItensLancamentos_LancamentoId",
