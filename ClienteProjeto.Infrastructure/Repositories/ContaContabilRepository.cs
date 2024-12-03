@@ -15,6 +15,11 @@ public class ContaContabilRepository : IContaContabilRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Cliente> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

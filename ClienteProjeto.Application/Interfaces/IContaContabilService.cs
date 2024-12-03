@@ -9,5 +9,4 @@ public interface IContaContabilService
     Task Add(ContaContabilDTO contaContabilDTO);
     Task Update(ContaContabilDTO contaContabilDTO);
     Task Delete(int? id);
-    Task EnsureConnectionOpenAsync();
 }

@@ -9,4 +9,5 @@ public interface IFornecedorRepository
     Task<Fornecedor> CreateAsync(Fornecedor fornecedor);
     Task<Fornecedor> UpdateAsync(Fornecedor fornecedor);
     Task<Fornecedor> DeleteAsync(Fornecedor fornecedor);
+    Task EnsureConnectionOpenAsync();
 }

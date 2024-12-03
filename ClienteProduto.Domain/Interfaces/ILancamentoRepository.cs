@@ -9,4 +9,5 @@ public interface ILancamentoRepository
     Task<Lancamento> CreateAsync(Lancamento lancamento);
     Task<Lancamento> UpdateAsync(Lancamento lancamento);
     Task<Lancamento> DeleteAsync(Lancamento lancamento);
+    Task EnsureConnectionOpenAsync();
 }

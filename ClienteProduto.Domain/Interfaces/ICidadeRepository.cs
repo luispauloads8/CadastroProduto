@@ -9,4 +9,5 @@ public interface ICidadeRepository
     Task<Cidade> CreateAsync(Cidade cidade);
     Task<Cidade> UpdateAsync(Cidade cidade);
     Task<Cidade> DeleteAsync(Cidade cidade);
+    Task EnsureConnectionOpenAsync();
 }

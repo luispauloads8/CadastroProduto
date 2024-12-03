@@ -1,5 +1,4 @@
 ﻿using ClienteProjeto.Application.DTOs;
-using ClienteProjeto.Infrastructure.Context;
 
 namespace ClienteProjeto.Application.Interfaces;
 
@@ -10,5 +9,4 @@ public interface IProdutoServicoService
     Task Add(ProdutoServicoDTO produtoServicoDTO);
     Task Update(ProdutoServicoDTO produtoDTO);
     Task Delete(int? id);
-    Task EnsureConnectionOpenAsync();
 }

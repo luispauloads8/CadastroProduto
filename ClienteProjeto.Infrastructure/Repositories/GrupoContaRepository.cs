@@ -15,6 +15,11 @@ public class GrupoContaRepository : IGrupoContaRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<GrupoConta> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

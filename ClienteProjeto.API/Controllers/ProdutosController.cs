@@ -1,9 +1,7 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Domain.Entities;
-using ClienteProjeto.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClienteProjeto.API.Controllers;
 
@@ -28,7 +26,6 @@ public class ProdutosController : ControllerBase
     [HttpGet("{id:int}", Name = "GetProdutosServicos")]
     public async Task<ActionResult<ProdutoServico>> Get(int id)
     {
-        await _produtoServicoService.EnsureConnectionOpenAsync();
         var produto = await _produtoServicoService.GetById(id);
 
         if (produto == null)
@@ -47,7 +44,6 @@ public class ProdutosController : ControllerBase
             return BadRequest();
         }
 
-        await _produtoServicoService.EnsureConnectionOpenAsync();
         await _produtoServicoService.Add(produtoServicoDTO);
 
         return new CreatedAtRouteResult("GetProdutosServicos",
@@ -57,7 +53,6 @@ public class ProdutosController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<ActionResult> Put(int id, [FromBody] ProdutoServicoDTO produtoServicoDTO)
     {
-        await _produtoServicoService.EnsureConnectionOpenAsync();
         if (id != produtoServicoDTO.Id)
         {
             return BadRequest();
@@ -72,7 +67,6 @@ public class ProdutosController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<ProdutoServicoDTO>> Delete(int id)
     {
-        await _produtoServicoService.EnsureConnectionOpenAsync();
         var produto = await _produtoServicoService.GetById(id);
         if (produto == null)
         {

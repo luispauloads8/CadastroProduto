@@ -9,5 +9,5 @@ public interface ICategoriaRepository
     Task<Categoria> CreateAsync(Categoria categoria);
     Task<Categoria> UpdateAsync(Categoria categoria);
     Task<Categoria> DeleteAsync(Categoria categoria);
-
+    Task EnsureConnectionOpenAsync();
 }

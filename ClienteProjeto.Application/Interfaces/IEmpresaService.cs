@@ -9,5 +9,4 @@ public interface IEmpresaService
     Task Add(EmpresaDTO empresaDTO);
     Task Update(EmpresaDTO empresaDTO);
     Task Delete(int? id);
-    Task EnsureConnectionOpenAsync();
 }

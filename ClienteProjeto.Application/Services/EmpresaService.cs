@@ -40,9 +40,4 @@ public class EmpresaService : IEmpresaService
     {
         throw new NotImplementedException();
     }
-
-    public Task EnsureConnectionOpenAsync()
-    {
-        throw new NotImplementedException();
-    }
 }

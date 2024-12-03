@@ -15,6 +15,11 @@ public class FornecedorRepository : IFornecedorRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Fornecedor> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

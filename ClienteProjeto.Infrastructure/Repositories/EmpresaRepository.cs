@@ -15,6 +15,11 @@ public class EmpresaRepository : IEmpresaRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Empresa> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

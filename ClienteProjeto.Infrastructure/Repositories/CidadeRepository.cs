@@ -15,6 +15,11 @@ public class CidadeRepository : ICidadeRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Cidade> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

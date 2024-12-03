@@ -9,4 +9,5 @@ public interface IProdutoServicoRepository
     Task<ProdutoServico> CreateAsync(ProdutoServico produtoServico);
     Task<ProdutoServico> UpdateAsync(ProdutoServico produtoServico);
     Task<ProdutoServico> DeleteAsync(ProdutoServico produtoServico);
+    Task EnsureConnectionOpenAsync();
 }

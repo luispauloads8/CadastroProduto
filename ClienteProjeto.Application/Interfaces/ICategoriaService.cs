@@ -9,5 +9,4 @@ public interface ICategoriaService
     Task Add(CategoriaDTO categoriaDTO);
     Task Update(CategoriaDTO categoriaDTO);
     Task Delete(int ?id);
-    Task EnsureConnectionOpenAsync();
 }

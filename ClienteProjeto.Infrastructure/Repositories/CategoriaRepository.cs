@@ -2,16 +2,19 @@
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
 
 public class CategoriaRepository : ICategoriaRepository
 {
+    private IDbContextFactory<ApplicationDbContext> _contextFactory;
     private ApplicationDbContext _categoryContext;
 
-    public CategoriaRepository(ApplicationDbContext categoryContext)
+    public CategoriaRepository(ApplicationDbContext categoryContext, IDbContextFactory<ApplicationDbContext> contextFactory)
     {
         _categoryContext = categoryContext;
+        _contextFactory = contextFactory;
     }
 
     public async Task<Categoria> CreateAsync(Categoria categoria)
@@ -54,5 +57,22 @@ public class CategoriaRepository : ICategoriaRepository
         _categoryContext.Update(categoria);
         await _categoryContext.SaveChangesAsync();
         return categoria;
+    }
+
+    public async Task EnsureConnectionOpenAsync()
+    {
+        var context = _contextFactory.CreateDbContext();
+        var connection = context.Database.GetDbConnection();
+        Console.WriteLine("Estado atual da conexão: " + connection.State);
+        if (connection.State == ConnectionState.Closed || connection.State == ConnectionState.Broken)
+        {
+            Console.WriteLine("Tentando abrir a conexão...");
+            await connection.OpenAsync();
+            Console.WriteLine("Conexão aberta.");
+        }
+        else if (connection.State == ConnectionState.Connecting)
+        {
+            Console.WriteLine("A conexão já está em processo de abertura.");
+        }
     }
 }

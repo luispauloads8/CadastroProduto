@@ -15,6 +15,11 @@ public class UsuarioRepository : IUsuarioRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Usuario> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

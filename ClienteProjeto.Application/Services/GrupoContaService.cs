@@ -41,8 +41,4 @@ public class GrupoContaService : IGrupoContaService
         throw new NotImplementedException();
     }
 
-    public Task EnsureConnectionOpenAsync()
-    {
-        throw new NotImplementedException();
-    }
 }

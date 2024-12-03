@@ -2,16 +2,19 @@
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
 
 public class ProdutoServicoRepository : IProdutoServicoRepository
 {
+    private IDbContextFactory<ApplicationDbContext> _contextFactory;
     private ApplicationDbContext _produtoServicoContext;
 
-    public ProdutoServicoRepository(ApplicationDbContext produtoServicoContext)
+    public ProdutoServicoRepository(ApplicationDbContext produtoServicoContext, IDbContextFactory<ApplicationDbContext> contextFactory)
     {
         _produtoServicoContext = produtoServicoContext;
+        _contextFactory = contextFactory;
     }
 
     public async Task<ProdutoServico> CreateAsync(ProdutoServico produtoServico)
@@ -53,5 +56,22 @@ public class ProdutoServicoRepository : IProdutoServicoRepository
         _produtoServicoContext.Update(produtoServico);
         await _produtoServicoContext.SaveChangesAsync();
         return produtoServico;
+    }
+
+    public async Task EnsureConnectionOpenAsync()
+    {
+        var context = _contextFactory.CreateDbContext();
+        var connection = context.Database.GetDbConnection();
+        Console.WriteLine("Estado atual da conexão: " + connection.State);
+        if (connection.State == ConnectionState.Closed || connection.State == ConnectionState.Broken)
+        {
+            Console.WriteLine("Tentando abrir a conexão...");
+            await connection.OpenAsync();
+            Console.WriteLine("Conexão aberta.");
+        }
+        else if (connection.State == ConnectionState.Connecting)
+        {
+            Console.WriteLine("A conexão já está em processo de abertura.");
+        }
     }
 }

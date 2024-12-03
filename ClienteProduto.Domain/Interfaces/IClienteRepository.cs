@@ -9,4 +9,5 @@ public interface IClienteRepository
     Task<Cliente> CreateAsync(Cliente cliente);
     Task<Cliente> UpdateAsync(Cliente cliente);
     Task<Cliente> DeleteAsync(Cliente cliente);
+    Task EnsureConnectionOpenAsync();
 }

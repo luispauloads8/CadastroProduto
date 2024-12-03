@@ -9,4 +9,5 @@ public interface IGrupoContaRepository
     Task<GrupoConta> CreateAsync(GrupoConta grupoConta);
     Task<GrupoConta> UpdateAsync(GrupoConta grupoConta);
     Task<GrupoConta> DeleteAsync(GrupoConta grupoConta);
+    Task EnsureConnectionOpenAsync();
 }

@@ -15,6 +15,11 @@ public class LancamentoRepository : ILancamentoRepository
         throw new NotImplementedException();
     }
 
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Lancamento> GetByIdAsync(int? id)
     {
         throw new NotImplementedException();

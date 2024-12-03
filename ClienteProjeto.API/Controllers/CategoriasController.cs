@@ -1,6 +1,5 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClienteProjeto.API.Controllers
@@ -19,7 +18,6 @@ namespace ClienteProjeto.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
-            await _categoriaService.EnsureConnectionOpenAsync();
             var categoria = await _categoriaService.GetCategorias();
             return Ok(categoria);
         }
@@ -27,7 +25,6 @@ namespace ClienteProjeto.API.Controllers
         [HttpGet("{id:int}", Name = "GetCategorias")]
         public async Task<ActionResult<CategoriaDTO>> Get(int id)
         {
-            await _categoriaService.EnsureConnectionOpenAsync();
             var categoriaId = await _categoriaService.GetById(id);
 
             if (categoriaId == null)
@@ -47,7 +44,6 @@ namespace ClienteProjeto.API.Controllers
                 return NotFound();
             }
 
-            await _categoriaService.EnsureConnectionOpenAsync();
             await _categoriaService.Add(categoriaDTO);
 
             return new CreatedAtRouteResult("GetCategorias",
@@ -57,7 +53,6 @@ namespace ClienteProjeto.API.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<CategoriaDTO>> Put(int id, CategoriaDTO categoriaDTO)
         {
-            await _categoriaService.EnsureConnectionOpenAsync();
             if (categoriaDTO.Id != id)
             {
                 return NotFound();
@@ -70,7 +65,6 @@ namespace ClienteProjeto.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
-            await _categoriaService.EnsureConnectionOpenAsync();
             var categoria = await _categoriaService.GetById(id);
             if (categoria == null)
             {

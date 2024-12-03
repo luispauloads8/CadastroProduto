@@ -9,5 +9,4 @@ public interface ILancamentoService
     Task Add(LancamentoDTO lancamentoDTO);
     Task Update(LancamentoDTO lancamentoDTO);
     Task Delete(int? id);
-    Task EnsureConnectionOpenAsync();
 }
