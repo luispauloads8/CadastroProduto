@@ -1,4 +1,7 @@
-﻿using ClienteProjeto.Domain.Interfaces;
+﻿using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Mappings;
+using ClienteProjeto.Application.Services;
+using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using ClienteProjeto.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +15,11 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureAPI(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContextFactory<ApplicationDbContext>(options =>
         options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 29))));
+        new MySqlServerVersion(new Version(8, 0, 38))));
 
+        services.AddScoped<IProdutoServicoRepository, ProdutoServicoRepository>();
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         services.AddScoped<ICidadeRepository, CidadeRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
@@ -24,8 +28,12 @@ public static class DependencyInjection
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         services.AddScoped<IGrupoContaRepository, GrupoContaRepository>();
         services.AddScoped<ILancamentoRepository, LancamentoRepository>();
-        services.AddScoped<IProdutoServicoRepository, ProdutoServicoRepository>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+        services.AddScoped<IProdutoServicoService, ProdutoServicoService>();
+        services.AddScoped<ICategoriaService, CategoriaService>();
+
+        services.AddAutoMapper(typeof(DTOMappingProfile));
 
         return services;
     }
