@@ -9,4 +9,5 @@ public interface IGrupoContaService
     Task Add(GrupoContaDTO dto);
     Task Update(GrupoContaDTO dto);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

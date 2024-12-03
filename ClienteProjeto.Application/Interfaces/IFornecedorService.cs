@@ -9,4 +9,5 @@ public interface IFornecedorService
     Task Add(FornecedorDTO fornecedorDTO);
     Task Update(FornecedorDTO fornecedorDTO);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

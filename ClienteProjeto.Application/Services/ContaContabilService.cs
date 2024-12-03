@@ -45,4 +45,9 @@ public class ContaContabilService : IContaContabilService
     {
         throw new NotImplementedException();
     }
+
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

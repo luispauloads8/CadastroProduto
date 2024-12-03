@@ -9,4 +9,5 @@ public interface IUsuarioService
     Task Add(UsuarioDTO usuarioDTO);
     Task Update(UsuarioDTO usuarioDTO);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

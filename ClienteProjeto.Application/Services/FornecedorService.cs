@@ -40,4 +40,9 @@ public class FornecedorService : IFornecedorService
     {
         throw new NotImplementedException();
     }
+
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

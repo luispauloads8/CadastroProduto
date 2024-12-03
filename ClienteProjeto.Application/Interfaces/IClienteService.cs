@@ -9,4 +9,5 @@ public interface IClienteService
     Task Add(ClienteDTO clienteDTO);
     Task Update(ClienteDTO clienteDTO);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

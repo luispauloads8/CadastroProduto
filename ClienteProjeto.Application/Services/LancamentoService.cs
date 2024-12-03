@@ -40,4 +40,9 @@ public class LancamentoService : ILancamentoService
     {
         throw new NotImplementedException();
     }
+
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

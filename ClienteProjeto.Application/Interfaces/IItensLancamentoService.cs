@@ -9,4 +9,5 @@ public interface IItensLancamentoService
     Task Add(ItensLancamentoDTO itensLancamentoDTO);
     Task Update(ItensLancamentoDTO itensLancamentoDTO);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

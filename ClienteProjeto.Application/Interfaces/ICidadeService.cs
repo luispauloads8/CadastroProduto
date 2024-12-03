@@ -9,4 +9,5 @@ public interface ICidadeService
     Task Add(CidadeDTO cidadeDTO);
     Task Update(CidadeDTO cidadeDTO);
     Task Delete(int? id);
+    Task EnsureConnectionOpenAsync();
 }

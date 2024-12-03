@@ -40,4 +40,9 @@ public class CidadeService : ICidadeService
     {
         throw new NotImplementedException();
     }
+
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

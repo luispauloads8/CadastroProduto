@@ -40,4 +40,9 @@ public class ClienteService : IClienteService
     {
         throw new NotImplementedException();
     }
+
+    public Task EnsureConnectionOpenAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
