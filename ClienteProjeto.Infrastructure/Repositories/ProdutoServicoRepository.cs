@@ -14,28 +14,44 @@ public class ProdutoServicoRepository : IProdutoServicoRepository
         _produtoServicoContext = produtoServicoContext;
     }
 
-    public Task<ProdutoServico> CreateAsync(ProdutoServico produtoServico)
+    public async Task<ProdutoServico> CreateAsync(ProdutoServico produtoServico)
     {
-        throw new NotImplementedException();
+         _produtoServicoContext.Add(produtoServico);
+        await _produtoServicoContext.SaveChangesAsync();
+        return produtoServico;
     }
 
-    public Task<ProdutoServico> DeleteAsync(ProdutoServico produtoServico)
+    public async Task<ProdutoServico> GetByIdAsync(int? id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProdutoServico> GetByIdAsync(int? id)
-    {
-        throw new NotImplementedException();
+        return await _produtoServicoContext.ProdutoServicos.Include(c => c.Categoria)
+                .SingleOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<IEnumerable<ProdutoServico>> GetProdutoServicoAsync()
     {
-        return await _produtoServicoContext.ProdutoServicos.ToListAsync();
+        return await _produtoServicoContext.ProdutoServicos.AsNoTracking().ToListAsync();
     }
 
-    public Task<ProdutoServico> UpdateAsync(ProdutoServico produtoServico)
+    public async Task<ProdutoServico> DeleteAsync(ProdutoServico produtoServico)
     {
-        throw new NotImplementedException();
+        _produtoServicoContext.Remove(produtoServico);
+        await _produtoServicoContext.SaveChangesAsync();
+        return produtoServico;
+    }
+
+    public async Task<ProdutoServico> UpdateAsync(ProdutoServico produtoServico)
+    {
+        var local = _produtoServicoContext.Set<ProdutoServico>().Local
+                        .FirstOrDefault(entry => entry.Id == produtoServico.Id); 
+
+        if (local != null)
+        {
+            _produtoServicoContext.Entry(local).State = EntityState.Detached;
+        }
+        _produtoServicoContext.Entry(produtoServico).State = EntityState.Modified;
+
+        _produtoServicoContext.Update(produtoServico);
+        await _produtoServicoContext.SaveChangesAsync();
+        return produtoServico;
     }
 }

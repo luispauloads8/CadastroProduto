@@ -14,30 +14,45 @@ public class CategoriaRepository : ICategoriaRepository
         _categoryContext = categoryContext;
     }
 
-    public Task<Categoria> CreateAsync(Categoria categoria)
+    public async Task<Categoria> CreateAsync(Categoria categoria)
     {
-        throw new NotImplementedException();
+        _categoryContext.Add(categoria);
+        await _categoryContext.SaveChangesAsync();
+        return categoria;
     }
 
-    public Task<Categoria> DeleteAsync(Categoria categoria)
+    public async Task<Categoria> DeleteAsync(Categoria categoria)
     {
-        throw new NotImplementedException();
+        _categoryContext.Remove(categoria);
+        await _categoryContext.SaveChangesAsync();
+        return categoria;
     }
 
     public async Task<Categoria> GetByIdAsync(int? id)
     {
-        var categoria = await _categoryContext.Categorias.FindAsync(id);
-        return categoria;
+        return await _categoryContext.Categorias.Include(c => c.ProdutoServicos)
+            .SingleOrDefaultAsync(p => p.Id == id);
+        
     }
 
     public async Task<IEnumerable<Categoria>> GetCategoriaAsync()
     {
-        var categorias = await _categoryContext.Categorias.ToListAsync();
+        var categorias = await _categoryContext.Categorias.AsNoTracking().ToListAsync();
         return categorias;
     }
 
-    public Task<Categoria> UpdateAsync(Categoria categoria)
+    public async Task<Categoria> UpdateAsync(Categoria categoria)
     {
-        throw new NotImplementedException();
+        var local = _categoryContext.Set<Categoria>().Local.FirstOrDefault(entry => entry.Id == categoria.Id);
+
+        if (local != null)
+        {
+            _categoryContext.Entry(local).State = EntityState.Detached;
+        }
+        _categoryContext.Entry(categoria).State = EntityState.Modified;
+
+        _categoryContext.Update(categoria);
+        await _categoryContext.SaveChangesAsync();
+        return categoria;
     }
 }
