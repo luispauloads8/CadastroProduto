@@ -26,14 +26,19 @@ public class GrupoContaService : IGrupoContaService
         throw new NotImplementedException();
     }
 
-    public Task<GrupoContaDTO> GetByID(int? id)
+    public async Task<GrupoContaDTO> GetByID(int? id)
     {
-        throw new NotImplementedException();
+        await _grupoContaRepository.EnsureConnectionOpenAsync();
+        var grupoContaEntity = _grupoContaRepository.GetByIdAsync(id).Result;
+        return _mapper.Map<GrupoContaDTO>(grupoContaEntity);
     }
 
-    public Task<IEnumerable<GrupoContaDTO>> GetGrupoContas()
+    public async Task<IEnumerable<GrupoContaDTO>> GetGrupoContas()
     {
-        throw new NotImplementedException();
+        await _grupoContaRepository.EnsureConnectionOpenAsync();
+        var grupoContas = await _grupoContaRepository.GetGrupoContaAsync();
+        return _mapper.Map<IEnumerable<GrupoContaDTO>>(grupoContas);
+
     }
 
     public Task Update(GrupoContaDTO dto)

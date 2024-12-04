@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
@@ -16,29 +17,40 @@ public class ClienteService : IClienteService
         _mapper = mapper;
     }
 
-    public Task Add(ClienteDTO clienteDTO)
+    public async Task Add(ClienteDTO clienteDTO)
     {
-        throw new NotImplementedException();
+        await _clienteRepository.EnsureConnectionOpenAsync();
+        var clienteEntity = _mapper.Map<Cliente>(clienteDTO);
+        await _clienteRepository.CreateAsync(clienteEntity);
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _clienteRepository.EnsureConnectionOpenAsync();
+        var clienteEntity = _clienteRepository.GetByIdAsync(id).Result;
+        await _clienteRepository.DeleteAsync(clienteEntity);
     }
 
-    public Task<ClienteDTO> GetById(int? id)
+    public async Task<ClienteDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _clienteRepository.EnsureConnectionOpenAsync();
+        var clienteEntity = await _clienteRepository.GetByIdAsync(id);
+        return _mapper.Map<ClienteDTO>(clienteEntity);
     }
 
-    public Task<IEnumerable<ClienteDTO>> GetClientes()
+    public async Task<IEnumerable<ClienteDTO>> GetClientes()
     {
-        throw new NotImplementedException();
+        await _clienteRepository.EnsureConnectionOpenAsync();
+        var clienteEntity = await _clienteRepository.GetClienteAsync();
+        return _mapper.Map<IEnumerable<ClienteDTO>>(clienteEntity); 
     }
 
-    public Task Update(ClienteDTO clienteDTO)
+    public async Task Update(ClienteDTO clienteDTO)
     {
-        throw new NotImplementedException();
+        await _clienteRepository.EnsureConnectionOpenAsync();
+        var clienteEntity = _mapper.Map<Cliente>(clienteDTO);
+        await _clienteRepository.UpdateAsync(clienteEntity);
+
     }
 
 }

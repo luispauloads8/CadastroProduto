@@ -18,11 +18,12 @@ public class ClienteDTO
     public string CPF { get; set; }
 
     [Required(ErrorMessage = "Informe a data de nascimento")]
-    [MaxLength (10)]
     [DisplayFormat(DataFormatString = "mm/dd/yyyy")]
     public DateTime DataNascimento { get; set; }
 
     public string RG { get; set; }
+
+    public EnumSexo Sexo { get; set; }
 
     [Required(ErrorMessage = "Informe CEP")]
     [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "O CEP deve estar no formato 12345-678.")]
@@ -44,6 +45,8 @@ public class ClienteDTO
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
+    public EnumEstadoCivil EstadoCivil { get; set; }
+
     [Required(ErrorMessage = "Informe nacionalidade")]
     [MinLength(3)]
     [MaxLength(100)]
@@ -52,5 +55,5 @@ public class ClienteDTO
     [MaxLength(500)]
     public string Observacao { get; set; }
 
-    public int CidadeId { get; set; }
+    public int CidadeEnderecoId { get; set; }
 }

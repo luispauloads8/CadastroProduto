@@ -29,4 +29,6 @@ public class EmpresaDTO
     [Required(ErrorMessage = "Informe telefone")]
     [MaxLength(15)]
     public string Telefone { get; set; }
+
+    public int CidadeEmpresaId { get; set; }
 }

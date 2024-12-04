@@ -1,43 +1,56 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
 
 public class EmpresaService : IEmpresaService
 {
-    private IUsuarioRepository _usuarioRepository;
+    private IEmpresaRepository _empresaRepository;
     private readonly IMapper _mapper;
 
-    public EmpresaService(IUsuarioRepository usuarioRepository, IMapper mapper)
+    public EmpresaService(IEmpresaRepository empresaRepository, IMapper mapper)
     {
-        _usuarioRepository = usuarioRepository;
+        _empresaRepository = empresaRepository;
         _mapper = mapper;
     }
 
-    public Task Add(EmpresaDTO empresaDTO)
+    public async Task Add(EmpresaDTO empresaDTO)
     {
-        throw new NotImplementedException();
+        await _empresaRepository.EnsureConnectionOpenAsync();
+        var empresaEntity = _mapper.Map<Empresa>(empresaDTO);
+        await _empresaRepository.CreateAsync(empresaEntity);
+
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _empresaRepository.EnsureConnectionOpenAsync();
+        var empresaEntity = _empresaRepository.GetByIdAsync(id).Result;
+        await _empresaRepository.DeleteAsync(empresaEntity);
     }
 
-    public Task<EmpresaDTO> GetById(int? id)
+    public async Task<EmpresaDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _empresaRepository.EnsureConnectionOpenAsync();
+        var empresaEntity = await _empresaRepository.GetByIdAsync(id);
+        return _mapper.Map<EmpresaDTO>(empresaEntity);
     }
 
-    public Task<IEnumerable<EmpresaDTO>> GetEmpresas()
+    public async Task<IEnumerable<EmpresaDTO>> GetEmpresas()
     {
-        throw new NotImplementedException();
+        await _empresaRepository.EnsureConnectionOpenAsync();
+        var empresaEntity = await _empresaRepository.GetEmpresaAsync();
+        return _mapper.Map<IEnumerable<EmpresaDTO>>(empresaEntity);
     }
 
-    public Task Update(EmpresaDTO empresaDTO)
+    public async Task Update(EmpresaDTO empresaDTO)
     {
-        throw new NotImplementedException();
+        await _empresaRepository.EnsureConnectionOpenAsync();
+        var empresaEntity = _mapper.Map<Empresa>(empresaDTO);
+        await _empresaRepository.UpdateAsync(empresaEntity);
+
     }
 }

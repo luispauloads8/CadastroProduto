@@ -50,7 +50,7 @@ public class FornecedorRepository : IFornecedorRepository
 
     public async Task<Fornecedor> GetByIdAsync(int? id)
     {
-        return await _fornecedorContext.Fornecedores.FindAsync(id);
+        return await _fornecedorContext.Fornecedores.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
     }
 
     public async Task<IEnumerable<Fornecedor>> GetFornecedorAsync()
@@ -60,6 +60,15 @@ public class FornecedorRepository : IFornecedorRepository
 
     public async Task<Fornecedor> UpdateAsync(Fornecedor fornecedor)
     {
+        var local = _fornecedorContext.Set<Fornecedor>().Local
+                .FirstOrDefault(entry => entry.Id == fornecedor.Id);
+
+        if (local != null)
+        {
+            _fornecedorContext.Entry(local).State = EntityState.Detached;
+        }
+        _fornecedorContext.Entry(fornecedor).State = EntityState.Modified;
+
         _fornecedorContext.Update(fornecedor);
         await _fornecedorContext.SaveChangesAsync();
         return fornecedor;
