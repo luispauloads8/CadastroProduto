@@ -11,7 +11,7 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Nome).HasMaxLength(200).IsRequired();
         builder.Property(x => x.Endereco).HasMaxLength(300).IsRequired();
-        builder.Property(x => x.CEP).HasMaxLength(8).IsRequired();
+        builder.Property(x => x.CEP).HasMaxLength(10).IsRequired();
         builder.Property(x => x.Observacao).HasMaxLength(500);
         builder.Property(x => x.CPF).HasMaxLength(11).IsRequired();
         builder.Property(x => x.DataNascimento).HasMaxLength(10).IsRequired();

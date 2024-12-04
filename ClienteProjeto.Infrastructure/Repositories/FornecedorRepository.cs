@@ -1,37 +1,68 @@
 ﻿using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
+using ClienteProjeto.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
 
 public class FornecedorRepository : IFornecedorRepository
 {
-    public Task<Fornecedor> CreateAsync(Fornecedor fornecedor)
+    private IDbContextFactory<ApplicationDbContext> _contextFactory;
+    private ApplicationDbContext _fornecedorContext;
+
+    public FornecedorRepository(IDbContextFactory<ApplicationDbContext> contextFactory, ApplicationDbContext fornecedorContext)
     {
-        throw new NotImplementedException();
+        _contextFactory = contextFactory;
+        _fornecedorContext = fornecedorContext;
     }
 
-    public Task<Fornecedor> DeleteAsync(Fornecedor fornecedor)
+    public async Task<Fornecedor> CreateAsync(Fornecedor fornecedor)
     {
-        throw new NotImplementedException();
+        _fornecedorContext.Add(fornecedor);
+        await _fornecedorContext.SaveChangesAsync();
+        return fornecedor;
     }
 
-    public Task EnsureConnectionOpenAsync()
+    public async Task<Fornecedor> DeleteAsync(Fornecedor fornecedor)
     {
-        throw new NotImplementedException();
+        _fornecedorContext.Remove(fornecedor);
+        await _fornecedorContext.SaveChangesAsync() ;
+        return fornecedor;
     }
 
-    public Task<Fornecedor> GetByIdAsync(int? id)
+    public async Task EnsureConnectionOpenAsync()
     {
-        throw new NotImplementedException();
+        var context = _contextFactory.CreateDbContext();
+        var connection = context.Database.GetDbConnection();
+        Console.WriteLine("Estado atual da conexão: " + connection.State);
+        if (connection.State == ConnectionState.Closed || connection.State == ConnectionState.Broken)
+        {
+            Console.WriteLine("Tentando abrir a conexão...");
+            await connection.OpenAsync();
+            Console.WriteLine("Conexão aberta.");
+        }
+        else if (connection.State == ConnectionState.Connecting)
+        {
+            Console.WriteLine("A conexão já está em processo de abertura.");
+        }
     }
 
-    public Task<IEnumerable<Fornecedor>> GetFornecedorAsync()
+    public async Task<Fornecedor> GetByIdAsync(int? id)
     {
-        throw new NotImplementedException();
+        return await _fornecedorContext.Fornecedores.FindAsync(id);
     }
 
-    public Task<Fornecedor> UpdateAsync(Fornecedor fornecedor)
+    public async Task<IEnumerable<Fornecedor>> GetFornecedorAsync()
     {
-        throw new NotImplementedException();
+        return await _fornecedorContext.Fornecedores.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<Fornecedor> UpdateAsync(Fornecedor fornecedor)
+    {
+        _fornecedorContext.Update(fornecedor);
+        await _fornecedorContext.SaveChangesAsync();
+        return fornecedor;
+
     }
 }

@@ -13,7 +13,7 @@ public class FornecedorConfiguration : IEntityTypeConfiguration<Fornecedor>
         builder.Property(x => x.Endereco).HasMaxLength(300).IsRequired();
         builder.Property(x => x.Observacao).HasMaxLength(500).IsRequired();
         builder.Property(x => x.CNPJ).HasMaxLength(14).IsRequired();
-        builder.Property(x => x.CEP).HasMaxLength(8).IsRequired();
+        builder.Property(x => x.CEP).HasMaxLength(10).IsRequired();
         builder.Property(x => x.Email).HasMaxLength(150).IsRequired();
         builder.Property(x => x.Telefone).HasMaxLength(15).IsRequired();
 

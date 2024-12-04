@@ -26,8 +26,7 @@ public class ProdutoServicoRepository : IProdutoServicoRepository
 
     public async Task<ProdutoServico> GetByIdAsync(int? id)
     {
-        return await _produtoServicoContext.ProdutoServicos.Include(c => c.Categoria)
-                .SingleOrDefaultAsync(p => p.Id == id);
+        return await _produtoServicoContext.ProdutoServicos.FindAsync(id);
     }
 
     public async Task<IEnumerable<ProdutoServico>> GetProdutoServicoAsync()

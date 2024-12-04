@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
@@ -16,29 +17,38 @@ public class FornecedorService : IFornecedorService
         _mapper = mapper;
     }
 
-    public Task Add(FornecedorDTO fornecedorDTO)
+    public async Task Add(FornecedorDTO fornecedorDTO)
     {
-        throw new NotImplementedException();
+        await _fornecedorRepository.EnsureConnectionOpenAsync();
+        var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
+        await _fornecedorRepository.CreateAsync(fornecedor);
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _fornecedorRepository.EnsureConnectionOpenAsync();
+        var fornecedor = _fornecedorRepository.GetByIdAsync(id).Result;
+        await _fornecedorRepository.DeleteAsync(fornecedor);
     }
 
-    public Task<FornecedorDTO> GetById(int? id)
+    public async Task<FornecedorDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _fornecedorRepository.EnsureConnectionOpenAsync();
+        var fornecedorEntity = await _fornecedorRepository.GetByIdAsync(id);
+        return _mapper.Map<FornecedorDTO>(fornecedorEntity);
     }
 
-    public Task<IEnumerable<FornecedorDTO>> GetFornecedores()
+    public async Task<IEnumerable<FornecedorDTO>> GetFornecedores()
     {
-        throw new NotImplementedException();
+        await _fornecedorRepository.EnsureConnectionOpenAsync();
+        var fornecedoresEntity = await _fornecedorRepository.GetFornecedorAsync();
+        return _mapper.Map<IEnumerable<FornecedorDTO>>(fornecedoresEntity);
     }
 
-    public Task Update(FornecedorDTO fornecedorDTO)
+    public async Task Update(FornecedorDTO fornecedorDTO)
     {
-        throw new NotImplementedException();
+        await _fornecedorRepository.EnsureConnectionOpenAsync();
+        var fornecedorEntity = _mapper.Map<Fornecedor>(fornecedorDTO);
+        await _fornecedorRepository.UpdateAsync(fornecedorEntity);
     }
-
 }

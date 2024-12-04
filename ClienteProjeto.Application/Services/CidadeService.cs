@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
@@ -16,28 +17,38 @@ public class CidadeService : ICidadeService
         _mapper = mapper;
     }
 
-    public Task Add(CidadeDTO cidadeDTO)
+    public async Task Add(CidadeDTO cidadeDTO)
     {
-        throw new NotImplementedException();
+        await _cidadeRepository.EnsureConnectionOpenAsync();
+        var cidadeEntity = _mapper.Map<Cidade>(cidadeDTO);
+        await _cidadeRepository.CreateAsync(cidadeEntity);
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _cidadeRepository.EnsureConnectionOpenAsync();
+        var cidadeEntity = _cidadeRepository.GetByIdAsync(id).Result;
+        await _cidadeRepository.DeleteAsync(cidadeEntity);
     }
 
-    public Task<CidadeDTO> GetById(int? id)
+    public async Task<CidadeDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _cidadeRepository.EnsureConnectionOpenAsync();
+        var cidadeEntity = await _cidadeRepository.GetByIdAsync(id);
+        return _mapper.Map<CidadeDTO>(cidadeEntity);
     }
 
-    public Task<IEnumerable<CidadeDTO>> GetCidades()
+    public async Task<IEnumerable<CidadeDTO>> GetCidades()
     {
-        throw new NotImplementedException();
+        await _cidadeRepository.EnsureConnectionOpenAsync();
+        var cidadesEntity = await _cidadeRepository.GetCidadeAsync();
+        return _mapper.Map<IEnumerable<CidadeDTO>>(cidadesEntity);
     }
 
-    public Task Update(CidadeDTO cidadeDTO)
+    public async Task Update(CidadeDTO cidadeDTO)
     {
-        throw new NotImplementedException();
+        await _cidadeRepository.EnsureConnectionOpenAsync();
+        var cidadeEntity = _mapper.Map<Cidade>(cidadeDTO);
+        await _cidadeRepository.UpdateAsync(cidadeEntity);
     }
 }
