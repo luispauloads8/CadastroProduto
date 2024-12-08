@@ -6,7 +6,7 @@ public interface IGrupoContaService
 {
     Task<IEnumerable<GrupoContaDTO>> GetGrupoContas();
     Task<GrupoContaDTO> GetByID(int? id);
-    Task Add(GrupoContaDTO dto);
-    Task Update(GrupoContaDTO dto);
+    Task Add(GrupoContaDTO grupoContaDTO);
+    Task Update(GrupoContaDTO grupoContaDTO);
     Task Delete(int? id);
 }

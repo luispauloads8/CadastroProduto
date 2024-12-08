@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,29 +22,40 @@ public class ContaContabilService : IContaContabilService
         _mapper = mapper;
     }
 
-    public Task Add(ContaContabilDTO contaContabilDTO)
+    public async Task Add(ContaContabilDTO contaContabilDTO)
     {
-        throw new NotImplementedException();
+        await _contaContabilRepository.EnsureConnectionOpenAsync();
+        var contaContabilEntity = _mapper.Map<ContaContabil>(contaContabilDTO);
+        await _contaContabilRepository.CreateAsync(contaContabilEntity);
+
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _contaContabilRepository.EnsureConnectionOpenAsync();
+        var contaContabilEntity = await _contaContabilRepository.GetByIdAsync(id);
+        await _contaContabilRepository.DeleteAsync(contaContabilEntity);
     }
 
-    public Task<ContaContabilDTO> GetById(int? id)
+    public async Task<ContaContabilDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _contaContabilRepository.EnsureConnectionOpenAsync();
+        var contaContabil = _contaContabilRepository.GetByIdAsync(id).Result;
+        return _mapper.Map<ContaContabilDTO>(contaContabil);
     }
 
-    public Task<IEnumerable<ContaContabilDTO>> GetContaContabeis()
+    public async Task<IEnumerable<ContaContabilDTO>> GetContaContabeis()
     {
-        throw new NotImplementedException();
+        await _contaContabilRepository.EnsureConnectionOpenAsync();
+        var contasContabeis = await _contaContabilRepository.GetClienteAsync();
+        return _mapper.Map<IEnumerable<ContaContabilDTO>>(contasContabeis);
     }
 
-    public Task Update(ContaContabilDTO contaContabilDTO)
+    public async Task Update(ContaContabilDTO contaContabilDTO)
     {
-        throw new NotImplementedException();
+        await _contaContabilRepository.EnsureConnectionOpenAsync();
+        var contaContabilEntity = _mapper.Map<ContaContabil>(contaContabilDTO);
+        await _contaContabilRepository.UpdateAsync(contaContabilEntity);
     }
 
 }

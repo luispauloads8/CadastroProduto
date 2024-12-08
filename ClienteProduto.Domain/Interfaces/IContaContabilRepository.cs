@@ -4,10 +4,10 @@ namespace ClienteProjeto.Domain.Interfaces;
 
 public interface IContaContabilRepository
 {
-    Task<IEnumerable<Cliente>> GetClienteAsync();
-    Task<Cliente> GetByIdAsync(int? id);
-    Task<Cliente> CreateAsync(Cliente cliente);
-    Task<Cliente> UpdateAsync(Cliente cliente);
-    Task<Cliente> DeleteAsync(Cliente cliente);
+    Task<IEnumerable<ContaContabil>> GetClienteAsync();
+    Task<ContaContabil> GetByIdAsync(int? id);
+    Task<ContaContabil> CreateAsync(ContaContabil contaContabil);
+    Task<ContaContabil> UpdateAsync(ContaContabil contaContabil);
+    Task<ContaContabil> DeleteAsync(ContaContabil contaContabil);
     Task EnsureConnectionOpenAsync();
 }

@@ -33,5 +33,20 @@ namespace ClienteProjeto.API.Controllers
             }
             return Ok(grupoConta);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<GrupoContaDTO>> Post(GrupoContaDTO grupoContaDTO)
+        {
+            if (grupoContaDTO == null) 
+            { 
+                return BadRequest(); 
+            }
+            await _grupoContaService.Add(grupoContaDTO);
+
+            return new CreatedAtRouteResult("GetGrupoConta",
+                new { id = grupoContaDTO.Id }, grupoContaDTO);
+        }
+
+
     }
 }

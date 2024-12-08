@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
@@ -16,9 +17,12 @@ public class GrupoContaService : IGrupoContaService
         _mapper = mapper;
     }
 
-    public Task Add(GrupoContaDTO dto)
+    public async Task Add(GrupoContaDTO grupoContaDTO)
     {
-        throw new NotImplementedException();
+        await _grupoContaRepository.EnsureConnectionOpenAsync();
+        var grupoContaEntity = _mapper.Map<GrupoConta>(grupoContaDTO);
+        await _grupoContaRepository.CreateAsync(grupoContaEntity);
+
     }
 
     public Task Delete(int? id)

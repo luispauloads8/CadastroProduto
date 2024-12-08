@@ -18,9 +18,11 @@ public class GrupoContaRepository : IGrupoContaRepository
         _grupoContasContext = grupoContasContext;
     }
 
-    public Task<GrupoConta> CreateAsync(GrupoConta grupoConta)
+    public async Task<GrupoConta> CreateAsync(GrupoConta grupoConta)
     {
-        throw new NotImplementedException();
+        _grupoContasContext.Add(grupoConta);
+        await _grupoContasContext.SaveChangesAsync();
+        return grupoConta;
     }
 
     public Task<GrupoConta> DeleteAsync(GrupoConta grupoConta)
