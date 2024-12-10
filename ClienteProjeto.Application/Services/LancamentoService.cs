@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 
 namespace ClienteProjeto.Application.Services;
@@ -16,29 +17,39 @@ public class LancamentoService : ILancamentoService
         _mapper = mapper;
     }
 
-    public Task Add(LancamentoDTO lancamentoDTO)
+    public  async Task Add(LancamentoDTO lancamentoDTO)
     {
-        throw new NotImplementedException();
+        await _lancamentoRepository.EnsureConnectionOpenAsync();
+        var lancamentoEntity = _mapper.Map<Lancamento>(lancamentoDTO);
+        await _lancamentoRepository.CreateAsync(lancamentoEntity);
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _lancamentoRepository.EnsureConnectionOpenAsync();
+        var lancamentoEntity = _lancamentoRepository.GetByIdAsync(id).Result;
+        await _lancamentoRepository.DeleteAsync(lancamentoEntity);
     }
 
-    public Task<LancamentoDTO> GetById(int? id)
+    public async Task<LancamentoDTO> GetById(int? id)
     {
-        throw new NotImplementedException();
+        await _lancamentoRepository.EnsureConnectionOpenAsync();
+        var lancamentoEntity = _lancamentoRepository.GetByIdAsync(id).Result;
+        return _mapper.Map<LancamentoDTO>(lancamentoEntity);
     }
 
-    public Task<IEnumerable<LancamentoDTO>> GetLancamentos()
+    public async Task<IEnumerable<LancamentoDTO>> GetLancamentos()
     {
-        throw new NotImplementedException();
+        await _lancamentoRepository.EnsureConnectionOpenAsync();
+        var lancamentosEntity = _lancamentoRepository.GetLancamentoAsync().Result;
+        return _mapper.Map<IEnumerable<LancamentoDTO>>(lancamentosEntity);
     }
 
-    public Task Update(LancamentoDTO lancamentoDTO)
+    public async Task Update(LancamentoDTO lancamentoDTO)
     {
-        throw new NotImplementedException();
+        await _lancamentoRepository.EnsureConnectionOpenAsync();
+        var lancamento = _mapper.Map<Lancamento>(lancamentoDTO);
+        await _lancamentoRepository.UpdateAsync(lancamento);
     }
 
 }

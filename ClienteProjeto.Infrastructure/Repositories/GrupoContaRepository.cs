@@ -25,9 +25,11 @@ public class GrupoContaRepository : IGrupoContaRepository
         return grupoConta;
     }
 
-    public Task<GrupoConta> DeleteAsync(GrupoConta grupoConta)
+    public async Task<GrupoConta> DeleteAsync(GrupoConta grupoConta)
     {
-        throw new NotImplementedException();
+        _grupoContasContext.Remove(grupoConta);
+        await _grupoContasContext.SaveChangesAsync();
+        return grupoConta;
     }
 
     public async Task EnsureConnectionOpenAsync()
@@ -57,8 +59,19 @@ public class GrupoContaRepository : IGrupoContaRepository
         return await _grupoContasContext.GrupoContas.AsNoTracking().ToListAsync();
     }
 
-    public Task<GrupoConta> UpdateAsync(GrupoConta grupoConta)
+    public async Task<GrupoConta> UpdateAsync(GrupoConta grupoConta)
     {
-        throw new NotImplementedException();
+        var local = _grupoContasContext.Set<Fornecedor>().Local
+               .FirstOrDefault(entry => entry.Id == grupoConta.Id);
+
+        if (local != null)
+        {
+            _grupoContasContext.Entry(local).State = EntityState.Detached;
+        }
+        _grupoContasContext.Entry(grupoConta).State = EntityState.Modified;
+
+        _grupoContasContext.Update(grupoConta);
+        await _grupoContasContext.SaveChangesAsync();
+        return grupoConta;
     }
 }

@@ -25,9 +25,11 @@ public class GrupoContaService : IGrupoContaService
 
     }
 
-    public Task Delete(int? id)
+    public async Task Delete(int? id)
     {
-        throw new NotImplementedException();
+        await _grupoContaRepository.EnsureConnectionOpenAsync();
+        var grupoContaEntity = _grupoContaRepository.GetByIdAsync(id).Result;
+        await _grupoContaRepository.DeleteAsync(grupoContaEntity);
     }
 
     public async Task<GrupoContaDTO> GetByID(int? id)
@@ -45,9 +47,11 @@ public class GrupoContaService : IGrupoContaService
 
     }
 
-    public Task Update(GrupoContaDTO dto)
+    public async Task Update(GrupoContaDTO grupoContaDTO)
     {
-        throw new NotImplementedException();
+        await _grupoContaRepository.EnsureConnectionOpenAsync();
+        var grupoContaEntity = _mapper.Map<GrupoConta>(grupoContaDTO);
+        await _grupoContaRepository.UpdateAsync(grupoContaEntity);
     }
 
 }

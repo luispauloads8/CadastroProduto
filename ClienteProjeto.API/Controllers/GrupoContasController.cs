@@ -47,6 +47,29 @@ namespace ClienteProjeto.API.Controllers
                 new { id = grupoContaDTO.Id }, grupoContaDTO);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(int id, GrupoContaDTO grupoContaDTO)
+        {
+            if (id != grupoContaDTO.Id)
+            {
+                return BadRequest();
+            }
+            await _grupoContaService.Update(grupoContaDTO);
+            return Ok(grupoContaDTO);
+        }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<GrupoContaDTO>> Delete(int id)
+        {
+            var grupoContaDTO = await _grupoContaService.GetByID(id);
+
+            if (grupoContaDTO == null)
+            {
+                return BadRequest();
+            }
+
+            await _grupoContaService.Delete(id);
+            return Ok(grupoContaDTO);
+        }
     }
 }

@@ -10,7 +10,6 @@ public class LancamentoDTO
     public string Observacao { get; set; }
 
     [Required(ErrorMessage = "Informar a data do lançamento")]
-    [MaxLength(10)]
     [DisplayFormat(DataFormatString = "mm/dd/yyyy")]
     public DateTime DataLancamento { get; set; }
 
@@ -21,4 +20,5 @@ public class LancamentoDTO
     public int EmpresaId { get; set; }
     public int ContaContabilId { get; set; }
     public int ProdutoServicoId { get; set; }
+    public int ClienteId { get; set; }
 }
