@@ -28,7 +28,7 @@ public class EmpresaService : IEmpresaService
     public async Task Delete(int? id)
     {
         await _empresaRepository.EnsureConnectionOpenAsync();
-        var empresaEntity = _empresaRepository.GetByIdAsync(id).Result;
+        var empresaEntity = await _empresaRepository.GetByIdAsync(id);
         await _empresaRepository.DeleteAsync(empresaEntity);
     }
 

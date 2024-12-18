@@ -28,7 +28,7 @@ public class ProdutoServicoService : IProdutoServicoService
     public async Task Delete(int? id)
     {
         await _produtoServicoRepository.EnsureConnectionOpenAsync();
-        var produto = _produtoServicoRepository.GetByIdAsync(id).Result;
+        var produto = await _produtoServicoRepository.GetByIdAsync(id);
         await _produtoServicoRepository.DeleteAsync(produto);
     }
 

@@ -27,7 +27,7 @@ public class FornecedorService : IFornecedorService
     public async Task Delete(int? id)
     {
         await _fornecedorRepository.EnsureConnectionOpenAsync();
-        var fornecedor = _fornecedorRepository.GetByIdAsync(id).Result;
+        var fornecedor = await _fornecedorRepository.GetByIdAsync(id);
         await _fornecedorRepository.DeleteAsync(fornecedor);
     }
 

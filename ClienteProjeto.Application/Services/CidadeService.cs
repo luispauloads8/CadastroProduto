@@ -27,7 +27,7 @@ public class CidadeService : ICidadeService
     public async Task Delete(int? id)
     {
         await _cidadeRepository.EnsureConnectionOpenAsync();
-        var cidadeEntity = _cidadeRepository.GetByIdAsync(id).Result;
+        var cidadeEntity = await _cidadeRepository.GetByIdAsync(id);
         await _cidadeRepository.DeleteAsync(cidadeEntity);
     }
 

@@ -28,14 +28,14 @@ public class GrupoContaService : IGrupoContaService
     public async Task Delete(int? id)
     {
         await _grupoContaRepository.EnsureConnectionOpenAsync();
-        var grupoContaEntity = _grupoContaRepository.GetByIdAsync(id).Result;
+        var grupoContaEntity = await _grupoContaRepository.GetByIdAsync(id);
         await _grupoContaRepository.DeleteAsync(grupoContaEntity);
     }
 
     public async Task<GrupoContaDTO> GetByID(int? id)
     {
         await _grupoContaRepository.EnsureConnectionOpenAsync();
-        var grupoContaEntity = _grupoContaRepository.GetByIdAsync(id).Result;
+        var grupoContaEntity = await _grupoContaRepository.GetByIdAsync(id);
         return _mapper.Map<GrupoContaDTO>(grupoContaEntity);
     }
 

@@ -27,14 +27,14 @@ public class LancamentoService : ILancamentoService
     public async Task Delete(int? id)
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
-        var lancamentoEntity = _lancamentoRepository.GetByIdAsync(id).Result;
+        var lancamentoEntity = await _lancamentoRepository.GetByIdAsync(id);
         await _lancamentoRepository.DeleteAsync(lancamentoEntity);
     }
 
     public async Task<LancamentoDTO> GetById(int? id)
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
-        var lancamentoEntity = _lancamentoRepository.GetByIdAsync(id).Result;
+        var lancamentoEntity = await _lancamentoRepository.GetByIdAsync(id);
         return _mapper.Map<LancamentoDTO>(lancamentoEntity);
     }
 

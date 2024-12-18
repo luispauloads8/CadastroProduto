@@ -41,7 +41,7 @@ public class CategoriaService : ICategoriaService
     public async Task Delete(int? id)
     {
         await _categoriaRepository.EnsureConnectionOpenAsync();
-        var categoriaEntity = _categoriaRepository.GetByIdAsync(id).Result;
+        var categoriaEntity = await _categoriaRepository.GetByIdAsync(id);
         await _categoriaRepository.DeleteAsync(categoriaEntity);
     }
 
@@ -51,21 +51,4 @@ public class CategoriaService : ICategoriaService
         var categoriaEntity = _mapper.Map<Categoria>(categoriaDTO);
         await _categoriaRepository.UpdateAsync(categoriaEntity);
     }
-
-    //public async Task EnsureConnectionOpenAsync()
-    //{
-    //    var context = _contextFactory.CreateDbContext();
-    //    var connection = context.Database.GetDbConnection();
-    //    Console.WriteLine("Estado atual da conexão: " + connection.State);
-    //    if (connection.State == ConnectionState.Closed || connection.State == ConnectionState.Broken)
-    //    {
-    //        Console.WriteLine("Tentando abrir a conexão...");
-    //        await connection.OpenAsync();
-    //        Console.WriteLine("Conexão aberta.");
-    //    }
-    //    else if (connection.State == ConnectionState.Connecting)
-    //    {
-    //        Console.WriteLine("A conexão já está em processo de abertura.");
-    //    }
-    //}
 }

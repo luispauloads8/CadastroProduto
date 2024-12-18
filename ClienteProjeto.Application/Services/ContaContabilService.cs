@@ -40,7 +40,7 @@ public class ContaContabilService : IContaContabilService
     public async Task<ContaContabilDTO> GetById(int? id)
     {
         await _contaContabilRepository.EnsureConnectionOpenAsync();
-        var contaContabil = _contaContabilRepository.GetByIdAsync(id).Result;
+        var contaContabil = await _contaContabilRepository.GetByIdAsync(id);
         return _mapper.Map<ContaContabilDTO>(contaContabil);
     }
 

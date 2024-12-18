@@ -27,7 +27,7 @@ public class ClienteService : IClienteService
     public async Task Delete(int? id)
     {
         await _clienteRepository.EnsureConnectionOpenAsync();
-        var clienteEntity = _clienteRepository.GetByIdAsync(id).Result;
+        var clienteEntity = await _clienteRepository.GetByIdAsync(id);
         await _clienteRepository.DeleteAsync(clienteEntity);
     }
 
