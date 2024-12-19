@@ -64,3 +64,10 @@ obj/
 node_modules/
 dist/
 
+# Ignorar cache do Angular
+.angular/cache/
+
+# Ignorar dependências do Vite
+vite/deps/
+
+
