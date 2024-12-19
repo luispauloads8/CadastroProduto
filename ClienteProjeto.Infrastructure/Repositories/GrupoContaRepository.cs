@@ -2,7 +2,6 @@
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System.Data;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
