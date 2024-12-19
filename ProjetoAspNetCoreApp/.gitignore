@@ -54,3 +54,12 @@ Thumbs.db
 /EscolarManager/Binarios
 /EscolarManager/EMWeb/EscolarManager.Web/DiplomaDigital
 /Binarios/Outros
+
+# ASP.NET Core
+bin/
+obj/
+
+# Angular
+node_modules/
+dist/
+

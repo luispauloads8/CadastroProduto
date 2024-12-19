@@ -1,0 +1,66 @@
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# Build results
+# [Dd]ebug/
+# [Rr]elease/
+# x64/
+[Bb]in/
+[Oo]bj/
+Release/Publicacao/EMSmart.ETL/*
+
+/Binarios/*
+!/Binarios/Outros/
+!/Binarios/Esquemas/
+!/Binarios/Conversor/
+!/Binarios/Publish/
+
+/Binarios/Conversor/*
+!/Binarios/Conversor/ScriptsAdicionais/
+/Binarios/Conversor/ScriptsAdicionais/*
+!/Binarios/Conversor/ScriptsAdicionais/*.sql
+!/Binarios/Conversor/ScriptsAdicionais/*.gitkeep
+
+/Binarios/Publish/*
+!/Binarios/Publish/EMSmart/
+/Binarios/Publish/EMSmart/*
+!/Binarios/Publish/EMSmart/EM.Conversor/
+/Binarios/Publish/EMSmart/EM.Conversor/*
+!/Binarios/Publish/EMSmart/EM.Conversor/ScriptsAdicionais/
+/Binarios/Publish/EMSmart/EM.Conversor/ScriptsAdicionais/*
+!/Binarios/Publish/EMSmart/EM.Conversor/ScriptsAdicionais/*.sql
+!/Binarios/Publish/EMSmart/EM.Conversor/ScriptsAdicionais/*.gitkeep
+
+# NuGet Packages Directory
+packages/
+
+# VS
+.vs/
+
+# Build
+/Build/Logs/
+/Build/Setup/
+/Build/InspectCode/
+
+# Logs
+erros/
+logs/
+
+# Windows image file caches
+Thumbs.db
+/EscolarManager/EMWeb/EscolarManager.Web/Relatorios
+/EscolarManager/Binarios
+/EscolarManager/EMWeb/EscolarManager.Web/DiplomaDigital
+/Binarios/Outros
+node_modules
+
+# ASP.NET Core
+bin/
+obj/
+
+# Angular
+node_modules/
+dist/
+
