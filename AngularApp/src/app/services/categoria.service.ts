@@ -13,7 +13,24 @@ export class CategoriaService {
 
   constructor(private http: HttpClient) { }
 
-  public GetCategoria(): Observable<Categoria> {
-      return this.http.get<Categoria>(this.ApiUrl);
+  public GetCategorias(): Observable<Categoria[]> {
+      return this.http.get<Categoria[]>(`${this.ApiUrl}Categorias`);
   };
+
+  GetCategoriaId(id:Number) : Observable<Categoria> {
+    return this.http.get<Categoria>(`${this.ApiUrl}Categorias/${id}`);
+  }
+
+  CriarCategoria(categoria: Categoria) : Observable<Categoria> {
+    return this.http.post<Categoria>(`${this.ApiUrl}Categorias`,categoria);
+  }
+
+  EditarCategoria(id:Number, categoria: Categoria) : Observable<Categoria> {
+    return this.http.put<Categoria>(`${this.ApiUrl}/Categorias/${id}`, categoria);
+  }
+
+  DeletarCategoria(id:number) : Observable<Categoria> {
+      return this.http.delete<Categoria>(`${this.ApiUrl}Categorias/${id}`);
+  }
+
 }

@@ -1,1 +1,49 @@
-<h1>ProdutoServico do componete</h1>
+<div class="container mt-5">
+    <button class="btn btn-success w-100" [routerLink]="['/cadastro']" routerLinkActive="router-link-active">Cadastrar novo Produto/Serviço</button>
+    <div>
+        <label class="form-label">Pesquisar</label>
+        <input class="form-control" type="text" placeholder="Qual a produto/serviço deseja buscar" [(ngModel)]="filtroLista"/>
+    </div>
+
+    <table class="table table-hover table-bordered mt-5 ">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>imagem</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (produtosServicos && produtosServicos.length) 
+            {
+                @for (produtoServico of produtosServicosFiltrados; track $index) 
+                {
+                    <tr>
+                        <td>{{produtoServico.id}}</td>
+                        <td>{{produtoServico.descricao}}</td>
+                        <td>{{produtoServico.imagem}}</td>
+                        <td>
+                            <button class="btn btn-warning mx-2" [routerLink]="['/editar', produtoServico.id]" tooltip="Editar">
+                              <i class="fa fa-edit"></i>
+                                </button>
+                            <button class="btn btn-info mx-2" [routerLink]="['/detalhes', produtoServico.id]" tooltip="Detalhes">
+                                <i class="fa fa-info-circle"></i>  
+                                </button>
+                            <button class="btn btn-danger mx-2" (click)="deletar(produtoServico?.id)" tooltip="Excluir">
+                              <i class="fa fa-trash"></i>
+                                </button>
+                        </td>
+                    </tr>
+                }    
+            }@else {
+                <tr> 
+                    <td colspan="4" class="text-center"> 
+                        <h4>Nenhum registro encontrado</h4> 
+                    </td> 
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

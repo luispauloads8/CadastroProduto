@@ -1,18 +1,33 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CategoriaComponent } from "./categoria/categoria.component";
 import { CommonModule } from '@angular/common';
-import { ProdutoServicoComponent } from './produto-servico/produto-servico.component';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule } from '@angular/forms';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CategoriaComponent, ProdutoServicoComponent, CommonModule, NavComponent],
+  imports: [RouterOutlet, CommonModule, NavComponent, NgxSpinnerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
+  public title = '';
+  loading: boolean = true;
+
+  constructor(private spinner: NgxSpinnerService){}
+
+
+  ngOnInit() {
+    /** spinner starts on init */
+    this.spinner.show();
+
+    setTimeout(() => {
+      this.spinner.hide();
+      this.loading = false;
+    }, 3000);  // O spinner some após 3 segundos
+  }
 
 }

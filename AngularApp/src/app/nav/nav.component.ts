@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [],
+  imports: [RouterModule, BsDropdownModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
