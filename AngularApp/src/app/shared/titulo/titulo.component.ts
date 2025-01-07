@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -11,6 +11,9 @@ import { Title } from '@angular/platform-browser';
 export class TituloComponent {
   
   @Input() title = '';
+  
+  @Input() iconClass = 'fa fa-user';
+  @Input() subtitulo = 'Desde 2011';
 
   private titleService = inject(Title);
 
