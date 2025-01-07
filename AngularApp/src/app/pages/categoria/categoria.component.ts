@@ -26,65 +26,68 @@ import { CommonModule } from '@angular/common';
 
 export class CategoriaComponent implements OnInit{
 
-  modalRef?: BsModalRef;
-
-   public categorias: Categoria[] = [];
-   public categoriasFiltradas: Categoria[] = [];
-   _filtroLista: string = '';
-
-  constructor(
-    private categoriaService:CategoriaService,
-    private modalService: BsModalService,
-    private toastr: ToastrService
-  ){}
-
   ngOnInit(): void {
-    this.categoriaService.GetCategorias().subscribe(
-      (_categoria: Categoria[]) =>
-    {
-      this.categorias = _categoria;
-      this.categoriasFiltradas = this.categorias;
-    }, error => console.log(error));
-  }
-
-  public get filtroLista(): string {
-    return this._filtroLista;
-  }
-
-  public set filtroLista(value: string){
-    this._filtroLista = value;
-    this.categoriasFiltradas = this.filtroLista ? this.filtroCategoria(this.filtroLista) : this.categorias;
-  }
-
-  filtroCategoria(filtrarPor: string): Categoria[]{
-    filtrarPor = filtrarPor.toLowerCase();
-    return this.categorias.filter(
-      (categoria: Categoria) => categoria.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
-    )
-  }
-
-  deletar(id:number | undefined){
-    if(id != undefined){
-      this.categoriaService.DeletarCategoria(id).subscribe(response =>{
-      console.log(response);
-      window.location.reload();
     
-      });
-    }
   }
+  // modalRef?: BsModalRef;
 
-  openModal(template: TemplateRef<void>) {
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
-  }
+  //  public categorias: Categoria[] = [];
+  //  public categoriasFiltradas: Categoria[] = [];
+  //  _filtroLista: string = '';
+
+  // constructor(
+  //   private categoriaService:CategoriaService,
+  //   private modalService: BsModalService,
+  //   private toastr: ToastrService
+  // ){}
+
+  // ngOnInit(): void {
+  //   this.categoriaService.GetCategorias().subscribe(
+  //     (_categoria: Categoria[]) =>
+  //   {
+  //     this.categorias = _categoria;
+  //     this.categoriasFiltradas = this.categorias;
+  //   }, error => console.log(error));
+  // }
+
+  // public get filtroLista(): string {
+  //   return this._filtroLista;
+  // }
+
+  // public set filtroLista(value: string){
+  //   this._filtroLista = value;
+  //   this.categoriasFiltradas = this.filtroLista ? this.filtroCategoria(this.filtroLista) : this.categorias;
+  // }
+
+  // filtroCategoria(filtrarPor: string): Categoria[]{
+  //   filtrarPor = filtrarPor.toLowerCase();
+  //   return this.categorias.filter(
+  //     (categoria: Categoria) => categoria.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
+  //   )
+  // }
+
+  // deletar(id:number | undefined){
+  //   if(id != undefined){
+  //     this.categoriaService.DeletarCategoria(id).subscribe(response =>{
+  //     console.log(response);
+  //     window.location.reload();
+    
+  //     });
+  //   }
+  // }
+
+  // openModal(template: TemplateRef<void>) {
+  //   this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+  // }
  
-  confirm(): void {
-    this.modalRef?.hide();
-    this.toastr.success('Categoria foi Deletada com Sucesso!', 'Deletado!');
-  }
+  // confirm(): void {
+  //   this.modalRef?.hide();
+  //   this.toastr.success('Categoria foi Deletada com Sucesso!', 'Deletado!');
+  // }
  
-  decline(): void {
-    this.modalRef?.hide();
-  }
+  // decline(): void {
+  //   this.modalRef?.hide();
+  // }
 
 }
 
