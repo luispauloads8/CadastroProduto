@@ -26,7 +26,7 @@ export class CategoriaService {
   }
 
   EditarCategoria(id:Number, categoria: Categoria) : Observable<Categoria> {
-    return this.http.put<Categoria>(`${this.ApiUrl}/Categorias/${id}`, categoria);
+    return this.http.put<Categoria>(`${this.ApiUrl}Categorias/${id}`, categoria);
   }
 
   DeletarCategoria(id:number) : Observable<Categoria> {
