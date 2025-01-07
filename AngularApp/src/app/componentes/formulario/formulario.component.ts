@@ -25,8 +25,8 @@ export class FormularioComponent implements OnInit {
     });
   }
 
-submit(){
-  this.onSubmit.emit(this.categoriaForm.value);
-}
+  submit(){
+    this.onSubmit.emit(this.categoriaForm.value);
+  }
 
 }
