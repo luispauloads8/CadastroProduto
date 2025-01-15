@@ -1,0 +1,17 @@
+.idNome{
+    max-width: 292px;
+}
+
+.idSenha{
+    max-width: 292px;
+}
+
+.button{
+    border-radius: 0;
+}
+
+a.btn-link { 
+    text-decoration: none; 
+}
+
+.no-underline { text-decoration: none; }
