@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TituloComponent } from '../../../shared/titulo/titulo.component';
-import { AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ValidatorField } from '../../../helpers/ValidatorField';
 
@@ -54,5 +54,9 @@ export class PerfilComponent implements OnInit {
     event.preventDefault();
     this.form.reset();
   }
+
+    public cssValidator(campoForm: FormControl): any {
+      return {'is-invalid' : campoForm.errors && campoForm.touched}
+    }
 
 }

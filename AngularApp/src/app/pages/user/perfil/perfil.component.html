@@ -122,7 +122,7 @@
                     <div class="form-group col-sm">
                         <label>Senha</label>
                         <input type="password" class="form-control" formControlName="senha"
-                        [ngClass]="{'is-invalid' : f.senha?.errors && f.senha?.touched}"/>
+                        [ngClass]="cssValidator(f.senha)"/>
                         <div *ngIf="f.senha?.errors?.required" class="invalid-feedback">
                             senha é obrigatorio
                         </div>
@@ -133,7 +133,7 @@
                     <div class="form-group col-sm">
                         <label>Confirmar Senha</label>
                         <input type="password" class="form-control" formControlName="confirmaSenha"
-                        [ngClass]="{'is-invalid' : f.confirmaSenha?.errors && f.confirmaSenha?.touched}" />
+                        [ngClass]="cssValidator(f.confirmaSenha)" />
                         <div *ngIf="f.confirmaSenha?.errors?.required" class="invalid-feedback">
                             Confirmar senha é obrigatorio
                         </div>
