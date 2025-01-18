@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (cidade == null)
             {
-                return NotFound("Cidade não encontrada");
+                return NoContent();
             }
             return Ok(cidade);
 

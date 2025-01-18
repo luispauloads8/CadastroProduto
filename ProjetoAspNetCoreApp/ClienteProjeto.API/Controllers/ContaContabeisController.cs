@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (contaContabil == null) 
             {
-                return NotFound("Conta Contabil não encontrada");
+                return NoContent();
             }
 
             return Ok(contaContabil);
@@ -66,7 +66,7 @@ namespace ClienteProjeto.API.Controllers
             var contaContabil = _contaContabilService.GetById(id);
             if (contaContabil == null)
             {
-                return NotFound("Conta não encontrada");
+                return NoContent();
             }
             await _contaContabilService.Delete(id);
             return Ok(contaContabil);

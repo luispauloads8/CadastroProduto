@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (categoriaId == null)
             {
-                return NotFound("Categoria não encontrada");
+                return NoContent();
             }
 
             return Ok(categoriaId);
@@ -68,7 +68,7 @@ namespace ClienteProjeto.API.Controllers
             var categoria = await _categoriaService.GetById(id);
             if (categoria == null)
             {
-                return NotFound("Categoria não encontrada");
+                return NoContent();
             }
             await _categoriaService.Delete(id);
             return Ok(categoria);

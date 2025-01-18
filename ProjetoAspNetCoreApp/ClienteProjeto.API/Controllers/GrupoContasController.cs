@@ -28,7 +28,7 @@ namespace ClienteProjeto.API.Controllers
             var grupoConta = await _grupoContaService.GetByID(id);
             if (grupoConta == null)
             {
-                return NotFound("Grupo de Contas não encontrado");
+                return NoContent();
             }
             return Ok(grupoConta);
         }
@@ -64,7 +64,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (grupoContaDTO == null)
             {
-                return BadRequest();
+                return NoContent();
             }
 
             await _grupoContaService.Delete(id);

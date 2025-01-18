@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (empresa is null)
             {
-                return NotFound("Empresa não Encontrada");
+                return NoContent();
             }
 
             return Ok(empresa);
@@ -66,7 +66,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (empresa is null)
             {
-                return NotFound("Empresa não Encontrada");
+                return NoContent();
             }
 
             await _empresaService.Delete(id); 

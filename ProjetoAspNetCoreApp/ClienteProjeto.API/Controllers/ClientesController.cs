@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (cliente is null)
             {
-                return NotFound("Cliente não Encontrado");
+                return NoContent();
             }
             return Ok(cliente);
 
@@ -66,7 +66,7 @@ namespace ClienteProjeto.API.Controllers
             var cliente = await _clienteService.GetById(id);
             if (cliente is null)
             {
-                return NotFound("Cliente não encontrado");
+                return NoContent();
             }
 
             await _clienteService.Delete(id);

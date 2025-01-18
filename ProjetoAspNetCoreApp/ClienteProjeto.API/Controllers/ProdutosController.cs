@@ -30,7 +30,7 @@ public class ProdutosController : ControllerBase
 
         if (produto == null)
         {
-            return NotFound("Produto não encontrado");
+            return NoContent();
         }
 
         return Ok(produto);

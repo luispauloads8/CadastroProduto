@@ -28,7 +28,7 @@ namespace ClienteProjeto.API.Controllers
             var fornecedor = await _fornecedorService.GetById(id);
             if (fornecedor == null)
             {
-                return NotFound("Fornecedor não encontrado");
+                return NoContent();
             }
             return Ok(fornecedor);
         }
@@ -65,7 +65,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (fornecedor is null)
             {
-                return NotFound();
+                return NoContent();
             }
             await _fornecedorService.Delete(id);
             return Ok(fornecedor);

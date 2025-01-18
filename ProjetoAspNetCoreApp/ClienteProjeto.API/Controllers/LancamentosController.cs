@@ -29,7 +29,7 @@ namespace ClienteProjeto.API.Controllers
 
             if (lancamentoDTO == null)
             {
-                return NotFound("Lançamento não encontrado");
+                return NoContent();
             }
 
             return Ok(lancamentoDTO);
@@ -66,7 +66,7 @@ namespace ClienteProjeto.API.Controllers
             var lancamentoDTO = await _lancamentoService.GetById(id);
             if (lancamentoDTO == null)
             {
-                return BadRequest();
+                return NoContent();
             }
 
             await _lancamentoService.Delete(id);
