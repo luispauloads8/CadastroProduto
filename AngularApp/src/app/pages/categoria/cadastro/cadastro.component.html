@@ -39,15 +39,16 @@
                       <td>{{categoria.id}}</td>
                       <td>{{categoria.descricao}}</td>
                       <td>
-                          <button class="btn btn-warning mx-2" [routerLink]="['/categoria/editar', categoria.id]" tooltip="Editar">
+                          <!-- <button class="btn btn-warning mx-2" [routerLink]="['/categoria/detalhes/:id', categoria.id]" tooltip="Editar">
                             <i class="fa fa-edit"></i>
+                              </button> -->
+                          <button class="btn btn-warning mx-2" [routerLink]="['/categoria/detalhes', categoria.id]" tooltip="Detalhes">
+                              <i class="fa fa-edit"></i>  
                               </button>
-                          <button class="btn btn-info mx-2" [routerLink]="['/categoria/detalhes', categoria.id]" tooltip="Detalhes">
-                              <i class="fa fa-info-circle"></i>  
-                              </button>
-                          <button class="btn btn-danger mx-2" (click)="deletar(categoria?.id)" tooltip="Excluir" (click)="openModal(template)">
+                          <!-- <button class="btn btn-danger mx-2" (click)="deletar(categoria?.id)" tooltip="Excluir" (click)="openModal($event, template, categoria.id)"></button> -->
+                            <button class="btn btn-danger mx-2" tooltip="Excluir" (click)="openModal($event, template, categoria.id!)">
                             <i class="fa fa-trash"></i>
-                              </button>
+                        </button>
                       </td>
                   </tr>
               }    

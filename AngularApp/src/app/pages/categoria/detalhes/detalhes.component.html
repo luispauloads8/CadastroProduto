@@ -9,7 +9,7 @@
                     <!-- <input type="hidden" class="form-control" formControlName = "id"> -->
                     <label class="form-label" >Nome da Descrição</label>
                     <input type="text" placeholder="Informe a descrição" formControlName="descricao" class="form-control"
-                    [ngClass]="{'is-invalid' : f.descricao?.errors && f.descricao?.touched}">
+                    [ngClass]="cssValidator(f.descricao)">
                     <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
                         descrição é obrigatoria!
                     </div>
@@ -24,7 +24,7 @@
 
             <div class="card-footer">
                 <div class="d-flex mt-3">
-                    <button class="btn btn-success w-10 mx-1" type="submit">Gravar</button>
+                    <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarCategoria()">Gravar</button>
                     <a class="btn btn-info w-10" [routerLink]="['/categoria/cadastro']" >voltar</a>
                 </div>                
             </div>

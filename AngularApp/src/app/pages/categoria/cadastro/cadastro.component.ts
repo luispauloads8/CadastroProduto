@@ -5,23 +5,27 @@ import { CategoriaService } from '../../../services/categoria.service';
 import { Categoria } from '../../../models/Categoria';
 import { TituloComponent } from "../../../shared/titulo/titulo.component";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule, HttpClientModule, CommonModule],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.css'
 })
 export class CadastroComponent {
 
-  modalRef?: BsModalRef;
+  modalRef!: BsModalRef;
 
   public categorias: Categoria[] = [];
   public categoriasFiltradas: Categoria[] = [];
   _filtroLista: string = '';
+  public categoriaId!: number;
 
  constructor(
    private categoriaService:CategoriaService,
@@ -30,12 +34,13 @@ export class CadastroComponent {
  ){}
 
  ngOnInit(): void {
-   this.categoriaService.GetCategorias().subscribe(
-     (_categoria: Categoria[]) =>
-   {
-     this.categorias = _categoria;
-     this.categoriasFiltradas = this.categorias;
-   }, error => console.log(error));
+  this.carregarCategoria();
+  //  this.categoriaService.GetCategorias().subscribe(
+  //    (_categoria: Categoria[]) =>
+  //  {
+  //    this.categorias = _categoria;
+  //    this.categoriasFiltradas = this.categorias;
+  //  }, error => console.log(error));
  }
 
  public get filtroLista(): string {
@@ -54,27 +59,57 @@ export class CadastroComponent {
    )
  }
 
- deletar(id:number | undefined){
-   if(id != undefined){
-     this.categoriaService.DeletarCategoria(id).subscribe(response =>{
-     console.log(response);
-     window.location.reload();
-   
-     });
-   }
+ public carregarCategoria(): void {
+  this.categoriaService.GetCategorias().subscribe({
+    next: (categorias: Categoria[]) => {
+      this.categorias = categorias;
+      this.categoriasFiltradas = this.categorias;
+    },
+    error: (erro) => {
+      console.error('Erro ao carregar categorias:', erro);
+      this.toastr.error('Erro ao Carregar categorias', 'Erro!');
+    },
+    complete: () => {},
+  });
  }
 
- openModal(template: TemplateRef<void>) {
+
+//  deletar(id:number | undefined){
+//    if(id != undefined){
+//      this.categoriaService.DeletarCategoria(id).subscribe(response =>{
+//      console.log(response);
+//      window.location.reload();
+   
+//      });
+//    }
+//  }
+
+ openModal(event: any, template: TemplateRef<void>, categoriaId: number): void {
+  event.stopPropagation();
+  this.categoriaId = categoriaId;
    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
  }
 
- confirm(): void {
-   this.modalRef?.hide();
-   this.toastr.success('Categoria foi Deletada com Sucesso!', 'Deletado!');
- }
+  confirm(): void {
+   this.modalRef.hide();
+
+    this.categoriaService.DeletarCategoria(this.categoriaId).subscribe(
+      (result: Categoria) => {
+        if(result.id === this.categoriaId){
+          this.toastr.success('Categoria foi Deletada com Sucesso!', 'Deletado!');
+          this.carregarCategoria();
+        }
+      },
+      (error: any) => {
+        console.error(error);
+        this.toastr.error('Erro ao tentar deletar a categoria.', 'Erro');
+      },
+      () => {},
+    ); 
+  }
 
  decline(): void {
-   this.modalRef?.hide();
+   this.modalRef.hide();
  }
 
   // btnAcao = "Cadastrar";
