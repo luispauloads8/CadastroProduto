@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TituloComponent } from '../../shared/titulo/titulo.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BsDatepickerModule, BsLocaleService } from 'ngx-bootstrap/datepicker';
+
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+defineLocale('pr-br', ptBrLocale);
 
 @Component({
   selector: 'app-lancamento',
   standalone: true,
-  imports: [RouterModule, TituloComponent, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, TituloComponent, ReactiveFormsModule, CommonModule,  BsDatepickerModule],
   templateUrl: './lancamento.component.html',
   styleUrl: './lancamento.component.css'
 })
@@ -19,7 +24,17 @@ export class LancamentoComponent implements OnInit {
     return this.form.controls;
   }
 
-  constructor(private fb: FormBuilder){}
+  get bsConfig(): any {
+    return { 
+      adaptivePosition: true,
+      dateInputFormat: 'DD/MM/YYYY hh:mm a',
+      showWeekNumbers: false
+    };
+  }
+
+  constructor(private fb: FormBuilder, private localeService: BsLocaleService){
+    this.localeService.use('pr-br');
+  }
 
   ngOnInit(): void {
     this.validation();
@@ -41,5 +56,9 @@ export class LancamentoComponent implements OnInit {
   public resetForm(): void {
     this.form.reset();
   }
+
+    public cssValidator(campoForm: FormControl): any {
+      return {'is-invalid' : campoForm.errors && campoForm.touched}
+    }
 
 }

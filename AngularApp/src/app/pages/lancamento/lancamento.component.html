@@ -10,7 +10,7 @@
                 <div class="form-group col-md-12">
                     <label>Empresa</label>
                     <input type="text" class="form-control" placeholder="Informe uma empresa" formControlName="empresa"
-                    [ngClass]="{'is-invalid': f.empresa?.errors && f.empresa?.touched}">
+                    [ngClass]="cssValidator(f.empresa)">
                     <div *ngIf="f.empresa?.errors?.required" class="invalid-feedback">
                         empresa é obrigatoria.
                     </div>
@@ -20,8 +20,7 @@
                 <div class="form-group col-md-6">
                     <label>Produto / Serviço</label>
                     <input type="text" class="form-control" placeholder="Informe descrição do produto ou serviço" formControlName="produtoServico"
-                    [ngClass]="{'is-invalid': f.produtoServico?.errors && f.produtoServico?.touched}">
-
+                    [ngClass]="cssValidator(f.produtoServico)">
                     <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
                         produto e serviço obrigatorio
                     </div>
@@ -29,7 +28,7 @@
                 <div class="form-group col-md-5 idValor">
                     <label>Valor</label>
                     <input type="number" class="form-control" placeholder="Informe o Valor" formControlName="valor"
-                    [ngClass]="{'is-invalid' : f.valor?.errors && f.valor?.touched}">
+                    [ngClass]="cssValidator(f.valor)">
                     <div *ngIf="f.valor?.errors?.required" class="invalid-feedback" >
                         valor obrigatorio
                     </div>
@@ -37,7 +36,7 @@
                 <div class="form-group">
                     <label>Quantidade</label>
                     <input type="number" class="form-control" formControlName="quantidade"
-                    [ngClass]="{'is-invalid' : f.quantidade?.errors && f.quantidade?.touched}">
+                    [ngClass]="cssValidator(f.quantidade)">
                     <div *ngIf="f.quantidade?.errors?.required" class="invalid-feedback">
                         quantidade é obrigatoria
                     </div>
@@ -47,15 +46,17 @@
                 <div class="form-group col-md-8">
                     <label>Cliente</label>
                     <input type="text" class="form-control" placeholder="Informe o cliente" formControlName="cliente"
-                    [ngClass]="{'is-invalid' : f.cliente?.errors && f.cliente?.touched}">
+                    [ngClass]="cssValidator(f.cliente)">
                     <div *ngIf="f.cliente?.errors?.required" class="invalid-feedback">
                         cliente é obrigatorio
                     </div>
                 </div>
                 <div class="form-group col-md-4 dataHora">
                     <label>Data e Hora</label>
-                    <input type="datetime" class="form-control" placeholder="Informe data e hora" formControlName="dataLancamento"
-                    [ngClass]="{'is-invalid': f.dataLancamento?.errors && f.dataLancamento?.touched}">
+                    <input type="text" class="form-control" placeholder="Informe data e hora" formControlName="dataLancamento" 
+                    [bsConfig]="bsConfig"
+                    [ngClass]="cssValidator(f.dataLancamento)"
+                    bsDatepicker>
                     <div *ngIf="f.dataLancamento?.errors?.required" class="invalid-feedback">
                         data de lancamento é obrigatorio
                     </div>
@@ -65,7 +66,7 @@
                 <div class="form-group col-md-12">
                     <label>Conta Contabil</label>
                     <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="contaContabil"
-                    [ngClass]="{'is-invalid': f.contaContabil?.errors && f.contaContabil?.touched}">
+                    [ngClass]="cssValidator(f.contaContabil)">
                     <div *ngIf="f.contaContabil?.errors?.required" class="invalid-feedback">
                         conta contabil é obrigatorio
                     </div>
@@ -75,7 +76,7 @@
                 <div class="form-group col-md-12">
                     <label>observação</label>
                     <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="observacao"
-                    [ngClass]="{'is-invalid': f.observacao?.errors && f.observacao?.touched}">
+                    [ngClass]="cssValidator(f.observacao)">
                     <div *ngIf="f.observacao?.errors?.required" class="invalid-feedback">
                         observação é obrigatorio
                     </div>
