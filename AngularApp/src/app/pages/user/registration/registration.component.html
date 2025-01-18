@@ -17,7 +17,7 @@
                 <div class="form-group col-md-12">
                     <label>Nome</label>
                     <input type="text" class="form-control" placeholder="Insira o nome" formControlName="nome"
-                    [ngClass]="{'is-invalid' : f.nome?.errors && f.nome?.touched}"/>
+                    [ngClass]="cssValidator(f.nome)"/>
                     <div *ngIf="f.nome?.errors?.required" class="invalid-feedback">
                         nome é obrigatorio
                     </div>
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="">Email:</label>
                 <input class="form-control" type="text" placeholder="Insira o Nome Completo" formControlName="email" 
-                [ngClass]="{'is-invalid' : f.email?.errors && f.email?.touched}"/>
+                [ngClass]="cssValidator(f.email)"/>
                 <div *ngIf="f.email?.errors?.required" class="invalid-feedback">
                     e-mail é obrigatorio
                 </div>
@@ -47,7 +47,7 @@
             <div class="form-group">
                 <label for="">Usuario:</label>
                 <input class="form-control" type="text" placeholder="Insira o nome de Usuário" formControlName="usuario"
-                [ngClass]="{'is-invalid' : f.usuario?.errors && f.usuario?.touched}" />
+                [ngClass]="cssValidator(f.usuario)" />
                 <div *ngIf="f.usuario?.errors?.required" class="invalid-feedback">
                     usuario é obrigatorio
                 </div>      
@@ -56,7 +56,7 @@
                 <div class="form-group col-md-6">
                     <label for="">Senha:</label>
                     <input class="form-control" type="password" placeholder="Digite uma Senha" formControlName="senha"
-                    [ngClass]="{'is-invalid' : f.senha?.errors && f.senha?.touched}" />
+                    [ngClass]="cssValidator(f.senha)" />
                     <div *ngIf="f.senha?.errors?.required" class="invalid-feedback">
                         senha é obrigatorio
                     </div>
@@ -67,7 +67,7 @@
                 <div class="form-group col-md-6 idSenha">
                     <label for="">Confirmar Senha:</label>
                     <input class="form-control" type="password" placeholder="Confirme a Senha" formControlName="confirmaSenha"
-                    [ngClass]="{'is-invalid' : f.confirmaSenha?.errors && f.confirmaSenha?.touched}" />
+                    [ngClass]="cssValidator(f.confirmaSenha)" />
                     <div *ngIf="f.confirmaSenha?.errors?.required" class="invalid-feedback">
                         Confirmar senha é obrigatorio
                     </div>
