@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { CategoriaComponent } from './pages/categoria/categoria.component';
 import { CadastroComponent } from './pages/categoria/cadastro/cadastro.component';
 import { title } from 'process';
-import { EditarComponent } from './pages/categoria/editar/editar.component';
+//import { EditarComponent } from './pages/categoria/editar/editar.component';
 import { DetalhesComponent } from './pages/categoria/detalhes/detalhes.component';
 import { ProdutoServicoComponent } from './pages/produto-servico/produto-servico.component';
 import { PerfilComponent } from './pages/user/perfil/perfil.component';
@@ -25,7 +25,7 @@ export const routes: Routes = [
     {path: 'categoria', redirectTo: 'categoria/cadastro'},
     {path: 'categoria', component: CategoriaComponent, title: 'Categoria',
         children: [
-            {path: 'editar/:id', component: EditarComponent, title: 'Editar'},
+           // {path: 'editar/:id', component: EditarComponent, title: 'Editar'},
             {path: 'detalhes/:id', component: DetalhesComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesComponent, title: 'Detalhes'},
             {path: 'cadastro', component: CadastroComponent, title: 'Cadastro'}

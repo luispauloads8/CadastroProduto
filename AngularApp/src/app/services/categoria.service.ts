@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Categoria } from '../models/Categoria';
 
 @Injectable({
@@ -14,23 +14,23 @@ export class CategoriaService {
   constructor(private http: HttpClient) { }
 
   public GetCategorias(): Observable<Categoria[]> {
-      return this.http.get<Categoria[]>(`${this.ApiUrl}Categorias`);
+      return this.http.get<Categoria[]>(`${this.ApiUrl}Categorias`).pipe(take(1));
   };
 
-  GetCategoriaId(id:Number) : Observable<Categoria> {
-    return this.http.get<Categoria>(`${this.ApiUrl}Categorias/${id}`);
+  public GetCategoriaId(id:Number) : Observable<Categoria> {
+    return this.http.get<Categoria>(`${this.ApiUrl}Categorias/${id}`).pipe(take(1));
   }
 
-  CriarCategoria(categoria: Categoria) : Observable<Categoria> {
-    return this.http.post<Categoria>(`${this.ApiUrl}Categorias`,categoria);
+  public post(categoria: Categoria) : Observable<Categoria> {
+    return this.http.post<Categoria>(`${this.ApiUrl}Categorias`,categoria).pipe(take(1));
   }
 
-  EditarCategoria(id:Number, categoria: Categoria) : Observable<Categoria> {
-    return this.http.put<Categoria>(`${this.ApiUrl}Categorias/${id}`, categoria);
+  public put(categoria: Categoria) : Observable<Categoria> {
+    return this.http.put<Categoria>(`${this.ApiUrl}Categorias/${categoria.id}`, categoria).pipe(take(1));
   }
 
   DeletarCategoria(id:number) : Observable<Categoria> {
-      return this.http.delete<Categoria>(`${this.ApiUrl}Categorias/${id}`);
+      return this.http.delete<Categoria>(`${this.ApiUrl}Categorias/${id}`).pipe(take(1));
   }
 
 }
