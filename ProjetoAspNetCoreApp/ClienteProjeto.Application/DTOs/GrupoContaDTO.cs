@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClienteProjeto.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClienteProjeto.Application.DTOs;
 
@@ -10,4 +11,5 @@ public class GrupoContaDTO
     [MinLength(3)]
     [MaxLength(300)]
     public string Descricao { get; set; }
+    public ICollection<ContaContabilDTO> ContaContabeis { get; set; }
 }

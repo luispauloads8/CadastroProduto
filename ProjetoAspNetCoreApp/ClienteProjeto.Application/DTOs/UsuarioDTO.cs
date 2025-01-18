@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClienteProjeto.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClienteProjeto.Application.DTOs;
 
@@ -24,4 +25,5 @@ public class UsuarioDTO
         ErrorMessage = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.")]
     public string Password { get; set; }
     public int EmpresaId { get; set; }
+    public EmpresaDTO Empresa { get; set; }
 }

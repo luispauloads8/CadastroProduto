@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClienteProjeto.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClienteProjeto.Application.DTOs;
 
@@ -21,4 +22,10 @@ public class LancamentoDTO
     public int ContaContabilId { get; set; }
     public int ProdutoServicoId { get; set; }
     public int ClienteId { get; set; }
+
+    public ContaContabilDTO ContaContabil { get; set; }
+    public EmpresaDTO Empresa { get; set; }
+    public ClienteDTO Cliente { get; set; }
+    public ProdutoServicoDTO ProdutoServico { get; set; }
+    public ICollection<ItensLancamentoDTO> ItensLancamentos { get; set; }
 }

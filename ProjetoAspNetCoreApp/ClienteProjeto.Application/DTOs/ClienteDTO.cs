@@ -56,4 +56,7 @@ public class ClienteDTO
     public string Observacao { get; set; }
 
     public int CidadeEnderecoId { get; set; }
+
+    public CidadeDTO Cidade { get; set; }
+    public ICollection<LancamentoDTO> Lancamentos { get; set; }
 }

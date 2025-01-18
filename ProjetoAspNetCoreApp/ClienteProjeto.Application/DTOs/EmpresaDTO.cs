@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClienteProjeto.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClienteProjeto.Application.DTOs;
 
@@ -31,4 +32,8 @@ public class EmpresaDTO
     public string Telefone { get; set; }
 
     public int CidadeEmpresaId { get; set; }
+
+    public CidadeDTO Cidade { get; set; }
+    public ICollection<UsuarioDTO> Usuarios { get; set; }
+    public ICollection<LancamentoDTO> Lancamentos { get; set; }
 }

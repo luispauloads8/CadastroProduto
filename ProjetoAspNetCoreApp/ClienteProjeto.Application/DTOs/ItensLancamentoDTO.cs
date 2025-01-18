@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ClienteProjeto.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClienteProjeto.Application.DTOs;
 
@@ -12,4 +13,5 @@ public class ItensLancamentoDTO
     [Required(ErrorMessage = "Informe o valor")]
     [DisplayFormat(DataFormatString = "{0:n2}")]
     public decimal ValorItem { get; set; }
+    public LancamentoDTO Lancamento { get; set; }
 }

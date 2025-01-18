@@ -40,4 +40,6 @@ public class FornecedorDTO
     [MaxLength(150)]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
+
+    public CidadeDTO Cidade { get; set; }
 }
