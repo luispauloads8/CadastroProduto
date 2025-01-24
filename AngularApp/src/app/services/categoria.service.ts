@@ -21,6 +21,10 @@ export class CategoriaService {
     return this.http.get<Categoria>(`${this.ApiUrl}Categorias/${id}`).pipe(take(1));
   }
 
+  public GetCategoriaTermo(termo:string): Observable<Categoria[]>{
+    return this.http.get<Categoria[]>(`${this.ApiUrl}Categorias/${termo}`).pipe(take(1));
+  }
+
   public post(categoria: Categoria) : Observable<Categoria> {
     return this.http.post<Categoria>(`${this.ApiUrl}Categorias`,categoria).pipe(take(1));
   }

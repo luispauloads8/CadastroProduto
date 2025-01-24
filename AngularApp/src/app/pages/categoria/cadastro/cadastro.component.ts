@@ -35,12 +35,6 @@ export class CadastroComponent {
 
  ngOnInit(): void {
   this.carregarCategoria();
-  //  this.categoriaService.GetCategorias().subscribe(
-  //    (_categoria: Categoria[]) =>
-  //  {
-  //    this.categorias = _categoria;
-  //    this.categoriasFiltradas = this.categorias;
-  //  }, error => console.log(error));
  }
 
  public get filtroLista(): string {
@@ -73,17 +67,6 @@ export class CadastroComponent {
   });
  }
 
-
-//  deletar(id:number | undefined){
-//    if(id != undefined){
-//      this.categoriaService.DeletarCategoria(id).subscribe(response =>{
-//      console.log(response);
-//      window.location.reload();
-   
-//      });
-//    }
-//  }
-
  openModal(event: any, template: TemplateRef<void>, categoriaId: number): void {
   event.stopPropagation();
   this.categoriaId = categoriaId;
@@ -112,14 +95,4 @@ export class CadastroComponent {
    this.modalRef.hide();
  }
 
-  // btnAcao = "Cadastrar";
-  // descTitulo = "Cadastrar Categoria"
-
-  // constructor(private categoriaService: CategoriaService, private router: Router){}
-
-  // CriarCategoria(categoria: Categoria){
-  //   this.categoriaService.CriarCategoria(categoria).subscribe(response => {
-  //     this.router.navigate(['/']);
-  //   });
-  // }
 }

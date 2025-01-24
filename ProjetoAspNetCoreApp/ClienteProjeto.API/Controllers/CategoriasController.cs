@@ -1,5 +1,6 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClienteProjeto.API.Controllers
@@ -34,6 +35,20 @@ namespace ClienteProjeto.API.Controllers
 
             return Ok(categoriaId);
         }
+
+        [HttpGet("{search}", Name = "GetCategoriasTermo")]
+        public async Task<ActionResult<List<CategoriaDTO>>> Get(string search)
+        {
+            var categorias = await _categoriaService.GetCategoriasTermo(search);
+
+            if (categorias == null || categorias.Count == 0)
+            {
+                return NotFound("Nenhuma categoria encontrada.");
+            }
+
+            return Ok(categorias);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> Post(CategoriaDTO categoriaDTO)

@@ -51,4 +51,17 @@ public class CategoriaService : ICategoriaService
         var categoriaEntity = _mapper.Map<Categoria>(categoriaDTO);
         await _categoriaRepository.UpdateAsync(categoriaEntity);
     }
+
+    public async Task<List<CategoriaDTO>> GetCategoriasTermo(string termo)
+    {
+        // Validação de termos, regras de negócio, etc.
+        if (string.IsNullOrWhiteSpace(termo))
+        {
+            return new List<CategoriaDTO>();
+        }
+
+        var categoriaTermo = await _categoriaRepository.GetCategoriaTermoAsync(termo);
+
+        return _mapper.Map<List<CategoriaDTO>>(categoriaTermo);
+    }
 }

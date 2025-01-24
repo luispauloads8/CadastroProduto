@@ -3,6 +3,11 @@ using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
+using SixLabors.ImageSharp.Formats;
+
+using SixLabors.ImageSharp;
+using Image = SixLabors.ImageSharp.Image;
+
 
 namespace ClienteProjeto.Application.Services;
 
@@ -21,7 +26,11 @@ public class ProdutoServicoService : IProdutoServicoService
     public async Task Add(ProdutoServicoDTO produtoServicoDTO)
     {
         await _produtoServicoRepository.EnsureConnectionOpenAsync();
-        var produtoEntiy =  _mapper.Map<ProdutoServico>(produtoServicoDTO);
+
+        ConverteImagemBase64(produtoServicoDTO);
+
+         var produtoEntiy = _mapper.Map<ProdutoServico>(produtoServicoDTO);
+
         await _produtoServicoRepository.CreateAsync(produtoEntiy);
     }
 
@@ -43,13 +52,44 @@ public class ProdutoServicoService : IProdutoServicoService
     {
         await _produtoServicoRepository.EnsureConnectionOpenAsync();
         var produtoEntity = await _produtoServicoRepository.GetProdutoServicoAsync();
-        return _mapper.Map<IEnumerable<ProdutoServicoDTO>>(produtoEntity);
+
+        // Converte o campo Blob para Base64
+        var produtoServicosDto = produtoEntity.Select(produto =>
+        {
+            var dto = _mapper.Map<ProdutoServicoDTO>(produto);
+            if (produto.Imagem != null)
+            {
+                dto.Imagem = Convert.ToBase64String(produto.Imagem);
+            }
+            return dto;
+        });
+
+        return produtoServicosDto;
     }
 
     public async Task Update(ProdutoServicoDTO produtoDTO)
     {
         await _produtoServicoRepository.EnsureConnectionOpenAsync();
+
+        ConverteImagemBase64(produtoDTO);
+
         var produtoEntity = _mapper.Map<ProdutoServico>(produtoDTO);
         await _produtoServicoRepository.UpdateAsync(produtoEntity);
     }
+
+    private static void ConverteImagemBase64(ProdutoServicoDTO produtoDTO)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(produtoDTO.Imagem))
+            {
+                produtoDTO.ImagemByteArray = Convert.FromBase64String(produtoDTO.Imagem);
+            }
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine($"Erro ao converter imagem: {ex.Message}");
+        }
+    }
+
 }

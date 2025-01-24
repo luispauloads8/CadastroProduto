@@ -75,4 +75,11 @@ public class CategoriaRepository : ICategoriaRepository
             Console.WriteLine("A conexão já está em processo de abertura.");
         }
     }
+
+    public async Task<List<Categoria>> GetCategoriaTermoAsync(string search)
+    {
+        return await _categoryContext.Categorias
+         .Where(c => c.Descricao.Contains(search))
+         .ToListAsync();
+    }
 }

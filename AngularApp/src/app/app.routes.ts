@@ -11,6 +11,8 @@ import { UserComponent } from './pages/user/user.component';
 import { LoginComponent } from './pages/user/login/login.component';
 import { RegistrationComponent } from './pages/user/registration/registration.component';
 import { LancamentoComponent } from './pages/lancamento/lancamento.component';
+import { DetalhesProdutoServicoComponent } from './pages/produto-servico/detalhes/detalhesProdutoServico.component';
+import { CadastroProdutoServicoComponent } from './pages/produto-servico/cadastro/cadastroProdutoServico.component';
 
 
 export const routes: Routes = [
@@ -32,7 +34,13 @@ export const routes: Routes = [
         ]
     },
     {path: 'lancamento', component: LancamentoComponent, title: 'Lancamentos'},
-    {path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços'},
+    {path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro'},
+        ]
+    },
     {path: 'dashboard', component: DashboardComponent, title: 'Dashboard'},
     {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}

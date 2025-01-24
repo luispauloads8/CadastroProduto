@@ -7,6 +7,7 @@ using ClienteProjeto.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace ClienteProjeto.CrossCutting.IoC;
 

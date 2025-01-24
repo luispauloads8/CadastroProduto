@@ -2,7 +2,10 @@
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Logging;
 using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ClienteProjeto.Infrastructure.Repositories;
 
@@ -26,7 +29,12 @@ public class ProdutoServicoRepository : IProdutoServicoRepository
 
     public async Task<ProdutoServico> GetByIdAsync(int? id)
     {
-        return await _produtoServicoContext.ProdutoServicos.FindAsync(id);
+        IQueryable<ProdutoServico> query = _produtoServicoContext.ProdutoServicos.Include(p => p.Categoria);
+
+
+        query = query.AsNoTracking().OrderBy(e => e.Id).Where(p => p.Id == id);
+
+        return  await query.FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<ProdutoServico>> GetProdutoServicoAsync()

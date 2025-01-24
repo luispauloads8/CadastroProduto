@@ -19,8 +19,6 @@ import { ToastrService } from 'ngx-toastr';
 export class DetalhesComponent implements OnInit {
 
   categoria!: Categoria;
-  descTitulo = "Detalhes Categoria";
-  
   estadoSalvar = 'post';
 
   form!: FormGroup;

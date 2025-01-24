@@ -8,7 +8,7 @@ public class DTOMappingProfile : Profile
 {
     public DTOMappingProfile()
     {
-        CreateMap<ProdutoServico, ProdutoServicoDTO>().ReverseMap();
+        CreateMap<ProdutoServico, ProdutoServicoDTO>().ReverseMap().ForMember(dest => dest.Imagem, opt => opt.MapFrom(src => src.ImagemByteArray));
         CreateMap<Categoria, CategoriaDTO>().ReverseMap();
         CreateMap<Cidade, CidadeDTO>().ReverseMap();
         CreateMap<Cliente, ClienteDTO>().ReverseMap();

@@ -1,5 +1,5 @@
-<!-- <div class="container mt-5">
-    <button class="btn btn-success w-100" [routerLink]="['/cadastro']" routerLinkActive="router-link-active">Cadastrar novo Produto/Serviço</button>
+<div class="container mt-5">
+    <button class="btn btn-success w-100" [routerLink]="['/produtoServico/detalhes']" routerLinkActive="router-link-active">Cadastrar novo Produto/Serviço</button>
 
     <div class="card rounded shadow-sm p-3" id="card" >
 
@@ -33,15 +33,16 @@
                         <tr>
                             <td>{{produtoServico.id}}</td>
                             <td>{{produtoServico.descricao}}</td>
-                            <td>{{produtoServico.imagem}}</td>
                             <td>
-                                <button class="btn btn-warning mx-2" [routerLink]="['/editar', produtoServico.id]" tooltip="Editar">
-                                <i class="fa fa-edit"></i>
+                                <img *ngIf="produtoServico.imagem" 
+                                     [src]="produtoServico.imagem" alt="Imagem do Produto"
+                                     style="width: 150px; margin: 2px; object-fit: cover;" />
+                              </td>
+                            <td>
+                                <button class="btn btn-warning mx-2" [routerLink]="['/produtoServico/detalhes', produtoServico.id]" tooltip="Detalhes">
+                                    <i class="fa fa-edit"></i>  
                                     </button>
-                                <button class="btn btn-info mx-2" [routerLink]="['/detalhes', produtoServico.id]" tooltip="Detalhes">
-                                    <i class="fa fa-info-circle"></i>  
-                                    </button>
-                                <button class="btn btn-danger mx-2" (click)="deletar(produtoServico?.id)" tooltip="Excluir">
+                                <button class="btn btn-danger mx-2" (click)="openModal($event, template, produtoServico.id!)" tooltip="Excluir">
                                 <i class="fa fa-trash"></i>
                                     </button>
                             </td>
@@ -57,6 +58,14 @@
             </tbody>
         </table>
     </div>
+
+    <ng-template #template>
+        <div class="modal-body text-center">
+          <p>Tem certeza que quer deletar a categoria?</p>
+          <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+          <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+        </div>
+    </ng-template>
+
 </div>
- -->
- <router-outlet></router-outlet>
+
