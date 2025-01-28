@@ -131,11 +131,11 @@ dotnet test
 
 ## 🖍️ Licença
 
-Este projeto está sob a licença [MIT](LICENSE).
+Este projeto está sob a licença.
 
 ---
 
 ## ✨ Contato
 
-Criado por **Seu Nome** — [seu-email@example.com](mailto:seu-email@example.com)  
-[LinkedIn](https://linkedin.com/in/seu-perfil) | [GitHub](https://github.com/seu-usuario)
+Criado por **Seu Nome** — [luispaulo.ads8@gmail.com](mailto:seu-email@example.com)  
+[LinkedIn](www.linkedin.com/in/luis-paulo-castro-031219ab) | [GitHub](https://github.com/luispauloads8)
