@@ -138,4 +138,4 @@ Este projeto está sob a licença.
 ## ✨ Contato
 
 Criado por **Seu Nome** — [luispaulo.ads8@gmail.com](mailto:seu-email@example.com)  
-[LinkedIn](www.linkedin.com/in/luis-paulo-castro-031219ab) | [GitHub](https://github.com/luispauloads8)
+[LinkedIn](https://www.linkedin.com/in/luis-paulo-castro-031219ab) | [GitHub](https://github.com/luispauloads8)
