@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { response } from 'express';
 import { CommonModule } from '@angular/common';
-import { TituloComponent } from '../../../shared/titulo/titulo.component';
 import { CategoriaService } from '../../../services/categoria.service';
 import { Categoria } from '../../../models/Categoria';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [RouterModule, CommonModule, TituloComponent, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, ReactiveFormsModule],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.css'
 })

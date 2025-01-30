@@ -14,3 +14,18 @@
   width: auto; 
   min-width: 100px; /* Define um tamanho mínimo, se necessário */
 }
+
+.no-padding-left {
+  padding-left: 0;
+  padding-right:0;
+}
+
+
+.card-move-up {
+  position: relative;
+  top: -48px;
+}
+
+.margin-right-10px {
+  margin-right: 10px;
+}

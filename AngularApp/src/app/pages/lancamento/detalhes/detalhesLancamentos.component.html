@@ -1,0 +1,112 @@
+<app-titulo title="Lançamentos"></app-titulo>
+
+<div class="card rounded shadow-sm" id="card">
+
+    <form [formGroup]="form">
+        <div class="p-3">
+            <!-- <p>Form value: {{form.value | json}}</p>
+            <p>Form valid: {{form.status| json}}</p> -->
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Empresa</label>
+                    <input type="text" class="form-control" placeholder="Informe uma empresa" formControlName="empresa"
+                    [ngClass]="cssValidator(f.empresa)">
+                    <div *ngIf="f.empresa?.errors?.required" class="invalid-feedback">
+                        empresa é obrigatoria.
+                    </div>
+                </div>
+            </div>
+            <div class="form-row d-flex">
+                <div class="form-group col-md-6">
+                    <label>Produto / Serviço</label>
+                    <input type="text" class="form-control" placeholder="Informe descrição do produto ou serviço" formControlName="produtoServico"
+                    [ngClass]="cssValidator(f.produtoServico)">
+                    <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
+                        produto e serviço obrigatorio
+                    </div>
+                </div>
+                <div class="form-group col-md-5 idValor">
+                    <label>Valor</label>
+                    <input type="number" class="form-control" placeholder="Informe o Valor" formControlName="valor"
+                    [ngClass]="cssValidator(f.valor)">
+                    <div *ngIf="f.valor?.errors?.required" class="invalid-feedback" >
+                        valor obrigatorio
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade</label>
+                    <input type="number" class="form-control" formControlName="quantidade"
+                    [ngClass]="cssValidator(f.quantidade)">
+                    <div *ngIf="f.quantidade?.errors?.required" class="invalid-feedback">
+                        quantidade é obrigatoria
+                    </div>
+                </div>
+            </div>
+            <div class="form-row d-flex">
+                <div class="form-group col-md-8">
+                    <label>Cliente</label>
+                    <input type="text" class="form-control" placeholder="Informe o cliente" formControlName="cliente"
+                    [ngClass]="cssValidator(f.cliente)">
+                    <div *ngIf="f.cliente?.errors?.required" class="invalid-feedback">
+                        cliente é obrigatorio
+                    </div>
+                </div>
+                <div class="form-group col-md-4 dataHora">
+                    <label>Data e Hora</label>
+                    <input type="text" class="form-control" placeholder="Informe data e hora" formControlName="dataLancamento" 
+                    [bsConfig]="bsConfig"
+                    [ngClass]="cssValidator(f.dataLancamento)"
+                    bsDatepicker>
+                    <div *ngIf="f.dataLancamento?.errors?.required" class="invalid-feedback">
+                        data de lancamento é obrigatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-row d-flex">
+                <div class="form-group col-md-12">
+                    <label>Conta Contabil</label>
+                    <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="contaContabil"
+                    [ngClass]="cssValidator(f.contaContabil)">
+                    <div *ngIf="f.contaContabil?.errors?.required" class="invalid-feedback">
+                        conta contabil é obrigatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-row d-flex">
+                <div class="form-group col-md-12">
+                    <label>observação</label>
+                    <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="observacao"
+                    [ngClass]="cssValidator(f.observacao)">
+                    <div *ngIf="f.observacao?.errors?.required" class="invalid-feedback">
+                        observação é obrigatorio
+                    </div>
+                    <div *ngIf="f.observacao?.errors?.minlength" class="invalid-feedback">
+                        observação deve ter no minimo 10 caracteres
+                    </div>
+                    <div *ngIf="f.observacao?.errors?.maxlength" class="invalid-feedback">
+                        observação deve ter no maximo 300 caracteres
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-secondary mr-auto border" (click)="form.reset()">
+                    Cancelar Alteração
+                </button>
+                <div>
+                    <button class="btn btn-info" style="width: 180px; margin-right: 10px;" [routerLink]="['/lancamento/cadastro']">
+                        Voltar
+                    </button>
+                    <button class="btn btn-success" [disabled]="!form.valid">
+                        <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
+                        Salvar Lançamento
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+

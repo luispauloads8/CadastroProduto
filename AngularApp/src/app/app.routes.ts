@@ -13,6 +13,8 @@ import { RegistrationComponent } from './pages/user/registration/registration.co
 import { LancamentoComponent } from './pages/lancamento/lancamento.component';
 import { DetalhesProdutoServicoComponent } from './pages/produto-servico/detalhes/detalhesProdutoServico.component';
 import { CadastroProdutoServicoComponent } from './pages/produto-servico/cadastro/cadastroProdutoServico.component';
+import { DetalhesLancamentosComponent } from './pages/lancamento/detalhes/detalhesLancamentos.component';
+import { CadastroLancamentosComponent } from './pages/lancamento/cadastro/cadastroLancamentos.component';
 
 
 export const routes: Routes = [
@@ -33,12 +35,18 @@ export const routes: Routes = [
             {path: 'cadastro', component: CadastroComponent, title: 'Cadastro'}
         ]
     },
-    {path: 'lancamento', component: LancamentoComponent, title: 'Lancamentos'},
+    {path: 'lancamento', component: LancamentoComponent, title: 'Lancamentos',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesLancamentosComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesLancamentosComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroLancamentosComponent, title: 'Cadastro'}
+        ]
+    },
     {path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços',
         children: [
             {path: 'detalhes/:id', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro'},
+            {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro'}
         ]
     },
     {path: 'dashboard', component: DashboardComponent, title: 'Dashboard'},

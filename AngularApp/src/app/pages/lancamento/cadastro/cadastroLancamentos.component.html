@@ -1,0 +1,48 @@
+<div class="container mt-5">
+    <button class="btn btn-success w-100" [routerLink]="['/lancamento/detalhes']" routerLinkActive="router-link-active">Cadastrar Lançamentos</button>
+
+
+    <div class="card rounded shadow-sm p-3" id="card" >
+
+        <div class="d-flex">
+            <div class="flex-fill">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Pesquisar</div>     
+                    </div>
+                    
+                    <input class="form-control" type="text" placeholder="Qual o lançamento deseja buscar" [(ngModel)]="filtroLista"/>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered mt-5">
+            <thead class="table-dark">
+                <tr>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+        </table>
+        <tbody>
+            @if (lancamentos && lancamentos.length) {
+                @for (lancamento of lancamentoFiltrados; track $index)
+                {
+                    <tr>
+                        <td></td>
+                    </tr>
+                }
+            }@else {
+                <tr>
+                    <td colspan="1" class="text-center">
+                        <h4>Nenhum registro encontrado</h4>
+                    </td>
+                </tr>
+            }
+
+            
+        </tbody>
+
+    </div>
+
+
+</div>

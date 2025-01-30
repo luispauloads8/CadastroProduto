@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <button class="btn btn-success w-100" [routerLink]="['/produtoServico/detalhes']" routerLinkActive="router-link-active">Cadastrar novo Produto/Serviço</button>
+    <button class="btn btn-success w-100" [routerLink]="['/produtoServico/detalhes']" routerLinkActive="router-link-active">Cadastrar Produto/Serviço</button>
 
     <div class="card rounded shadow-sm p-3" id="card" >
 
@@ -21,7 +21,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Descrição</th>
-                    <th>imagem</th>
+                    <th class="fixed-column">Imagem</th>
                     <th>Opções</th>
                 </tr>
             </thead>
@@ -33,22 +33,21 @@
                         <tr>
                             <td>{{produtoServico.id}}</td>
                             <td>{{produtoServico.descricao}}</td>
-                            <td>
+                            <td class="fixed-column">
                                 <img *ngIf="produtoServico.imagem" 
-                                     [src]="produtoServico.imagem" alt="Imagem do Produto"
-                                     style="width: 150px; margin: 2px; object-fit: cover;" />
-                              </td>
+                                     [src]="produtoServico.imagem" alt="Imagem do Produto" />
+                            </td>
                             <td>
-                                <button class="btn btn-warning mx-2" [routerLink]="['/produtoServico/detalhes', produtoServico.id]" tooltip="Detalhes">
+                                <button class="btn btn-warning mx-2" [routerLink]="['/produtoServico/detalhes', produtoServico.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>  
-                                    </button>
+                                </button>
                                 <button class="btn btn-danger mx-2" (click)="openModal($event, template, produtoServico.id!)" tooltip="Excluir">
-                                <i class="fa fa-trash"></i>
-                                    </button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     }    
-                }@else {
+                } @else {
                     <tr> 
                         <td colspan="4" class="text-center"> 
                             <h4>Nenhum registro encontrado</h4> 
@@ -57,6 +56,7 @@
                 }
             </tbody>
         </table>
+        
     </div>
 
     <ng-template #template>

@@ -13,25 +13,26 @@ import { CommonModule } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ProdutoServico } from '../../models/ProdutoServico';
 import { ProdutoServicoService } from '../../services/produto-servico.service';
+import { TituloComponent } from '../../shared/titulo/titulo.component';
 
 @Component({
   selector: 'app-produto-servico',
   standalone: true,
-  imports: [FormsModule, RouterModule, ToastrModule, CommonModule],
+  imports: [FormsModule, RouterModule, ToastrModule, CommonModule, TituloComponent],
   providers: [BsModalService],
   templateUrl: './produto-servico.component.html',
   styleUrl: './produto-servico.component.css'
 })
 export class ProdutoServicoComponent  implements OnInit {
 
-  public produtosServicos: ProdutoServico[] = [];
-  public produtosServicosFiltrados: ProdutoServico[] = [];
-  _filtroLista: string = '';
+  // public produtosServicos: ProdutoServico[] = [];
+  // public produtosServicosFiltrados: ProdutoServico[] = [];
+  // _filtroLista: string = '';
 
-  constructor(
-    private produtoServicoService: ProdutoServicoService,
-    private toastr: ToastrService
-  ){}
+  // constructor(
+  //   private produtoServicoService: ProdutoServicoService,
+  //   private toastr: ToastrService
+  // ){}
 
   ngOnInit(): void {
     // this.produtoServicoService.GetProdutoServico().subscribe(

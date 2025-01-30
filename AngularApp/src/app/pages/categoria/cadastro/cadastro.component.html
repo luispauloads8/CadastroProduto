@@ -1,12 +1,5 @@
-<!-- <div class="container mt-5">
-  <div>
-    <app-titulo [title]="'Cadastrar Categoria'" [iconClass]="'fa fa-tasks'"></app-titulo>
-    <app-formulario (onSubmit)="CriarCategoria($event)" [btnAcao]="btnAcao"></app-formulario>
-  </div>
-</div> -->
-
 <div class="container mt-5">
-  <button class="btn btn-success w-100" [routerLink]="['/categoria/detalhes']" routerLinkActive="router-link-active">Cadastrar nova Categoria</button>
+  <button class="btn btn-success w-100" [routerLink]="['/categoria/detalhes']" routerLinkActive="router-link-active">Cadastrar Categoria</button>
 
 <div class="card rounded shadow-sm p-3" id="card">
 
@@ -39,15 +32,11 @@
                       <td>{{categoria.id}}</td>
                       <td>{{categoria.descricao}}</td>
                       <td>
-                          <!-- <button class="btn btn-warning mx-2" [routerLink]="['/categoria/detalhes/:id', categoria.id]" tooltip="Editar">
-                            <i class="fa fa-edit"></i>
-                              </button> -->
-                          <button class="btn btn-warning mx-2" [routerLink]="['/categoria/detalhes', categoria.id]" tooltip="Detalhes">
-                              <i class="fa fa-edit"></i>  
-                              </button>
-                          <!-- <button class="btn btn-danger mx-2" (click)="deletar(categoria?.id)" tooltip="Excluir" (click)="openModal($event, template, categoria.id)"></button> -->
-                            <button class="btn btn-danger mx-2" tooltip="Excluir" (click)="openModal($event, template, categoria.id!)">
-                            <i class="fa fa-trash"></i>
+                        <button class="btn btn-warning mx-2" [routerLink]="['/categoria/detalhes', categoria.id]" tooltip="Detalhes">
+                            <i class="fa fa-edit"></i>  
+                            </button>
+                        <button class="btn btn-danger mx-2" tooltip="Excluir" (click)="openModal($event, template, categoria.id!)">
+                        <i class="fa fa-trash"></i>
                         </button>
                       </td>
                   </tr>
@@ -61,7 +50,6 @@
           }
       </tbody>
   </table>
-
 </div>
 
   <ng-template #template>
@@ -72,4 +60,3 @@
       </div>
   </ng-template>
 
-</div>

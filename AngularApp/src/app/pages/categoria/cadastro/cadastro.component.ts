@@ -61,7 +61,7 @@ export class CadastroComponent {
     },
     error: (erro) => {
       console.error('Erro ao carregar categorias:', erro);
-      this.toastr.error('Erro ao Carregar categorias', 'Erro!');
+     // this.toastr.error('Erro ao Carregar categorias', 'Erro!');
     },
     complete: () => {},
   });

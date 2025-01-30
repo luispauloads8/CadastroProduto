@@ -38,7 +38,7 @@ export class CadastroProdutoServicoComponent implements OnInit {
     
   public set filtroLista(value: string){
     this._filtroLista = value;
-    this.produtosServicosFiltrados = this.filtroLista ? this.filtroCategoria(this.filtroLista) : this.produtosServicos;
+    this.produtosServicosFiltrados = this.filtroLista ? this.filtroProduto(this.filtroLista) : this.produtosServicos;
   }
 
   // public carregaProdutoServico(): void {
@@ -81,48 +81,48 @@ export class CadastroProdutoServicoComponent implements OnInit {
     );
   }
     
-  public filtroCategoria(filtrarPor: string): ProdutoServico[]{
+  public filtroProduto(filtrarPor: string): ProdutoServico[]{
       filtrarPor = filtrarPor.toLowerCase();
       return this.produtosServicos.filter(
-        (categoria: ProdutoServico) => categoria.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
+        (produto: ProdutoServico) => produto.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
       )
-    }
+  }
   
-    public deletar(id:number | undefined){
-      if(id != undefined){
-        this.produtoServicoService.DeletarProdutoServico(id).subscribe(response =>{
-        console.log(response);
-        window.location.reload();
-      
-        });
-      }
+  public deletar(id:number | undefined){
+    if(id != undefined){
+      this.produtoServicoService.DeletarProdutoServico(id).subscribe(response =>{
+      console.log(response);
+      window.location.reload();
+    
+      });
     }
+  }
 
-   openModal(event: any, template: TemplateRef<void>, produtoServicoId: number): void {
-      event.stopPropagation();
-      this.produtoServicoId = produtoServicoId;
-      this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
-    }
+  openModal(event: any, template: TemplateRef<void>, produtoServicoId: number): void {
+    event.stopPropagation();
+    this.produtoServicoId = produtoServicoId;
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
 
-    confirm(){
-      this.modalRef.hide();
+  confirm(){
+    this.modalRef.hide();
 
-      this.produtoServicoService.DeletarProdutoServico(this.produtoServicoId).subscribe(
-        (result: ProdutoServico) => {
-          if(result.id === this.produtoServicoId){
-            this.toastr.success('Produto foi Deletado com Sucesso', 'Deletado!');
-            this.carregaProdutoServico();
-          }
-        },
-        (error: any) => {
-          console.error(error);
-          this.toastr.error('Error ao tentar deletar produto e serviço', 'Erro');
-        },
-        () => {}
-      );
-    }
+    this.produtoServicoService.DeletarProdutoServico(this.produtoServicoId).subscribe(
+      (result: ProdutoServico) => {
+        if(result.id === this.produtoServicoId){
+          this.toastr.success('Produto foi Deletado com Sucesso', 'Deletado!');
+          this.carregaProdutoServico();
+        }
+      },
+      (error: any) => {
+        console.error(error);
+        this.toastr.error('Error ao tentar deletar produto e serviço', 'Erro');
+      },
+      () => {}
+    );
+  }
 
-    decline(){
-      this.modalRef.hide();
-    }
+  decline(){
+    this.modalRef.hide();
+  }
 }

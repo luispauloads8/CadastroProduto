@@ -1,12 +1,9 @@
-<div class="container mt-5">
-    <app-titulo [title]="'Cadastro Categoria'" [iconClass]="'fa fa-tasks'"></app-titulo>
-
+<div class="container mt-5 no-padding-left">
     <div class="card rounded shadow-sm">
 
         <form [formGroup]="form">
             <div class="form-row">
                 <div class="form-group mt-3 col-5 p-3">
-                    <!-- <input type="hidden" class="form-control" formControlName = "id"> -->
                     <label class="form-label" >Nome da Descrição</label>
                     <input type="text" placeholder="Informe a descrição" formControlName="descricao" class="form-control"
                     [ngClass]="cssValidator(f.descricao)">

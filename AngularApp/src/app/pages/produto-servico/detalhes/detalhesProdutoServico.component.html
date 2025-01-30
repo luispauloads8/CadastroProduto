@@ -1,81 +1,84 @@
-<div class="container mt-5">
-    <app-titulo [title]="'Cadastro Produto / Serviço'" [iconClass]="'fa fa-tasks'"></app-titulo>
-
-    <div class="card rounded shadow-sm">
-
-        <form [formGroup]="form">
-            <div class="p-3">
-
-                <div class="form-row d-flex">
-                    
-
-                    <div class="form-group col-md-5" style="margin-right: 10px;">
-                        <label>Descrição</label>
-                        <input type="text" placeholder="informe descrição produto ou serviço" formControlName="descricao" class="form-control"
-                        [ngClass]="cssValidator(f.descricao)">
-                        <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
-                            descrição é obrigatoria
-                        </div>
-                        <div *ngIf="f.descricao?.errors?.minlength" class="invalid-feedback">
-                            descrição deve ter no minimo 4 caracteres
-                        </div>
-                        <div *ngIf="f.descricao?.errors?.maxlength" class="invalid-feedback">
-                            descrição deve ter no maximo 100 caracteres
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-5" style="margin-right: 10px;">
-                      <label>Foto</label>
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        formControlName="foto" 
-                        accept="image/*" 
-                        (change)="onFileSelected($event)" 
-                      />
-                      <div *ngIf="f.foto?.errors?.required" class="invalid-feedback">
-                        Foto é obrigatória
-                      </div>
-                  </div>
+<div class="row">
+    <div class="col-md-8">
+      <div class="container mt-5 no-padding-left">
+        <div class="card rounded shadow-sm card-move-up">
+            <form [formGroup]="form">
+                <div class="p-3">
                   
-                      
-                </div>
-
-                <div class="form-group col-md-5" style="margin-right: 10px;">
-                    <label>Categoria</label>
-                    <input
-                      type="text"
-                      placeholder="Digite para buscar categorias"
-                      class="form-control"
-                      [(ngModel)]="categoriaFiltro" 
-                      [ngModelOptions]="{standalone: true}"
-                      (input)="onInputChange()"
-                    />
-                    <div class="dropdown-menu show" 
-                    *ngIf="categoriasFiltradas?.length && !carregando">
-                      <button
-                        class="dropdown-item"
-                        *ngFor="let categoria of categoriasFiltradas"
-                        (click)="selecionarCategoria(categoria)"
-                      >
-                        {{ categoria.descricao }}
-                      </button>
+                    <div class="form-row d-flex">
+                        <div class="form-group col-md-12 margin-right-10px">
+                            <label>Descrição</label>
+                            <input type="text" placeholder="informe descrição produto ou serviço" formControlName="descricao" class="form-control"
+                            [ngClass]="cssValidator(f.descricao)">
+                            <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
+                                descrição é obrigatoria
+                            </div>
+                            <div *ngIf="f.descricao?.errors?.minlength" class="invalid-feedback">
+                                descrição deve ter no minimo 4 caracteres
+                            </div>
+                            <div *ngIf="f.descricao?.errors?.maxlength" class="invalid-feedback">
+                                descrição deve ter no maximo 100 caracteres
+                            </div>
+                        </div>                        
                     </div>
-                    <div *ngIf="carregando" class="text-muted mt-2">Carregando...</div>
-                    <p *ngIf="categoriaSelecionada">Categoria selecionada: {{ categoriaSelecionada.id}}</p>
-                  </div>
-  
-            </div>            
-
-            <div class="card-footer">
-                <div class="d-flex mt-3">
-                    <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarProdutoServico()">Gravar</button>
-                    <a class="btn btn-info w-10" [routerLink]="['/produtoServico/cadastro']" >voltar</a>
-                </div>                
-            </div>
-
-        </form>
-
+    
+                    <div class="form-group col-md-12 margin-right-10px">
+                        <label>Categoria</label>
+                        <input
+                          type="text"
+                          placeholder="Digite para buscar categorias"
+                          class="form-control"
+                          [(ngModel)]="categoriaFiltro" 
+                          [ngModelOptions]="{standalone: true}"
+                          (input)="onInputChange()"
+                        />
+                        <div class="dropdown-menu show" 
+                        *ngIf="categoriasFiltradas?.length && !carregando">
+                          <button
+                            class="dropdown-item"
+                            *ngFor="let categoria of categoriasFiltradas"
+                            (click)="selecionarCategoria(categoria)"
+                          >
+                            {{ categoria.descricao }}
+                          </button>
+                        </div>
+                        <div *ngIf="carregando" class="text-muted mt-2">Carregando...</div>
+                        <!-- <p *ngIf="categoriaSelecionada">Categoria selecionada: {{ categoriaSelecionada.id}}</p> -->
+                      </div>
+      
+                </div>            
+    
+                <div class="card-footer">
+                    <div class="d-flex mt-3">
+                        <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarProdutoServico()">Gravar</button>
+                        <a class="btn btn-info w-10" [routerLink]="['/produtoServico/cadastro']" >voltar</a>
+                    </div>                
+                </div>
+            </form>
+        </div>
     </div>
+  </div>
 
+    <div class="col-md-4" style="padding: 0;">
+        <div class="card card-equal-heigth" 
+            style="display: flex; align-items: center; justify-content: center; height: 230px; width: 429px; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: #f9f9f9;">
+          <div style="cursor: pointer; text-align: center; width: 100%; height: 100%;">
+            <input 
+              type="file" 
+              accept="image/*" 
+              (change)="onFileSelected($event)" 
+              #fileInput 
+              hidden
+            />
+            <img 
+              [src]="imagemPreview || '../../../../assets/imagem_recuperada.png'" 
+              alt="Clique para escolher uma imagem" 
+              style="width: 100%; height: 100%; object-fit: contain;" 
+              (click)="fileInput.click()"
+            />
+          </div>
+        </div>
+    </div>
+  
+  
 </div>

@@ -45,7 +45,15 @@ public class ProdutoServicoService : IProdutoServicoService
     {
         await _produtoServicoRepository.EnsureConnectionOpenAsync();
         var produto = await _produtoServicoRepository.GetByIdAsync(id);
-        return _mapper.Map<ProdutoServicoDTO>(produto);
+
+        var produtodto = _mapper.Map<ProdutoServicoDTO>(produto);
+
+        if (produto.Imagem != null)
+        {
+            produtodto.Imagem = Convert.ToBase64String(produto.Imagem);
+        }
+
+        return produtodto;
     }
 
     public async Task<IEnumerable<ProdutoServicoDTO>> GetProdutosServicos()
@@ -56,12 +64,12 @@ public class ProdutoServicoService : IProdutoServicoService
         // Converte o campo Blob para Base64
         var produtoServicosDto = produtoEntity.Select(produto =>
         {
-            var dto = _mapper.Map<ProdutoServicoDTO>(produto);
+            var produtoServicodto = _mapper.Map<ProdutoServicoDTO>(produto);
             if (produto.Imagem != null)
             {
-                dto.Imagem = Convert.ToBase64String(produto.Imagem);
+                produtoServicodto.Imagem = Convert.ToBase64String(produto.Imagem);
             }
-            return dto;
+            return produtoServicodto;
         });
 
         return produtoServicosDto;

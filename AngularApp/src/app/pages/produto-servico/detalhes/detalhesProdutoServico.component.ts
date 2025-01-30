@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TituloComponent } from '../../../shared/titulo/titulo.component';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -13,7 +12,7 @@ import { debounceTime, distinctUntilChanged, map, Observable, Subject, switchMap
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule,  TituloComponent, ReactiveFormsModule],
+  imports: [FormsModule, RouterModule, CommonModule,  ReactiveFormsModule],
   templateUrl: './detalhesProdutoServico.component.html',
   styleUrl: './detalhesProdutoServico.component.css'
 })
@@ -28,6 +27,7 @@ export class DetalhesProdutoServicoComponent implements OnInit {
   categoriaSelecionada: Categoria | null = null; // Categoria escolhida
   carregando: boolean = false; // Indica se está carregando os dados
   imagemSelecionada: File | null = null;
+  imagemPreview: string | null = null; // Armazena a pré-visualização da imagem
 
 
   private buscaSubject = new Subject<string>();
@@ -71,8 +71,7 @@ export class DetalhesProdutoServicoComponent implements OnInit {
 
     public validation(): void {
       this.form = this.fb.group({
-        descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-        foto: ['', [Validators.required]]
+        descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
       });
     }
 
@@ -95,9 +94,15 @@ export class DetalhesProdutoServicoComponent implements OnInit {
       this.produtoServicoService.GetProdutoServicoId(+produtoServico).subscribe(
         (produtoServico: ProdutoServico) => {
           this.produtoServico = {...produtoServico};
+
+          // Verifica se há imagem e a converte para base64 corretamente
+          if (produtoServico.imagem) {
+            this.imagemPreview = `data:image/png;base64,${produtoServico.imagem}`;
+          }
+
           this.form.patchValue(this.produtoServico);
 
-                  // Configura a categoria selecionada
+        // Configura a categoria selecionada
         if (produtoServico.categoria) {
           this.categoriaSelecionada = produtoServico.categoria; // Exibe os dados da categoria
           this.categoriaFiltro = produtoServico.categoria.descricao; // Mostra a descrição no input
@@ -182,15 +187,23 @@ private salvarProdutoServicoPut(): void {
       reader.readAsDataURL(file);
     });
   }
-  
-  
-  onFileSelected(event: Event) {
+
+  onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.imagemSelecionada = input.files[0]; // Agora está armazenando o tipo File
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.imagemSelecionada = file;
+
+      // Criar a pré-visualização da imagem
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagemPreview = reader.result as string; // Atualiza a imagem exibida
+       
+      };
+      reader.readAsDataURL(file); // Lê o arquivo selecionado como DataURL
     }
   }
-  
   
   carregarCategorias(): void {
     this.buscaSubject

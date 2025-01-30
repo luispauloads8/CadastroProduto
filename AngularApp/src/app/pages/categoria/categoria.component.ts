@@ -14,12 +14,13 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from '../../app.config';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { TituloComponent } from '../../shared/titulo/titulo.component';
 
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
-  imports: [FormsModule, RouterModule, TooltipModule, ModalModule, CommonModule, HttpClientModule],
+  imports: [FormsModule, RouterModule, TooltipModule, ModalModule, CommonModule, HttpClientModule, TituloComponent],
   providers: [BsModalService],
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css'

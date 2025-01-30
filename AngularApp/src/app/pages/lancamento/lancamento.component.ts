@@ -12,53 +12,53 @@ defineLocale('pr-br', ptBrLocale);
 @Component({
   selector: 'app-lancamento',
   standalone: true,
-  imports: [RouterModule, TituloComponent, ReactiveFormsModule, CommonModule,  BsDatepickerModule],
+  imports: [RouterModule,ReactiveFormsModule, CommonModule, TituloComponent,  BsDatepickerModule],
   templateUrl: './lancamento.component.html',
   styleUrl: './lancamento.component.css'
 })
 export class LancamentoComponent implements OnInit {
 
-  form!: FormGroup;
+  // form!: FormGroup;
 
-  get f(): any{
-    return this.form.controls;
-  }
+  // get f(): any{
+  //   return this.form.controls;
+  // }
 
-  get bsConfig(): any {
-    return { 
-      adaptivePosition: true,
-      dateInputFormat: 'DD/MM/YYYY hh:mm a',
-      showWeekNumbers: false
-    };
-  }
+  // get bsConfig(): any {
+  //   return { 
+  //     adaptivePosition: true,
+  //     dateInputFormat: 'DD/MM/YYYY hh:mm a',
+  //     showWeekNumbers: false
+  //   };
+  // }
 
-  constructor(private fb: FormBuilder, private localeService: BsLocaleService){
-    this.localeService.use('pr-br');
-  }
+  // constructor(private fb: FormBuilder, private localeService: BsLocaleService){
+  //   this.localeService.use('pr-br');
+  // }
 
   ngOnInit(): void {
-    this.validation();
+    //this.validation();
   }
 
-  public validation(): void {
-    this.form = this.fb.group({
-      empresa: ['', [Validators.required]],
-      produtoServico: ['', [ Validators.required]],
-      cliente: ['', [Validators.required]],
-      quantidade: ['', [ Validators.required]],
-      valor: ['', [Validators.required]],
-      contaContabil: ['', [ Validators.required]],
-      dataLancamento: ['', [Validators.required]],
-      observacao: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(300)]],
-    });
-  }
+  // public validation(): void {
+  //   this.form = this.fb.group({
+  //     empresa: ['', [Validators.required]],
+  //     produtoServico: ['', [ Validators.required]],
+  //     cliente: ['', [Validators.required]],
+  //     quantidade: ['', [ Validators.required]],
+  //     valor: ['', [Validators.required]],
+  //     contaContabil: ['', [ Validators.required]],
+  //     dataLancamento: ['', [Validators.required]],
+  //     observacao: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(300)]],
+  //   });
+  // }
 
-  public resetForm(): void {
-    this.form.reset();
-  }
+  // public resetForm(): void {
+  //   this.form.reset();
+  // }
 
-    public cssValidator(campoForm: FormControl): any {
-      return {'is-invalid' : campoForm.errors && campoForm.touched}
-    }
+  //   public cssValidator(campoForm: FormControl): any {
+  //     return {'is-invalid' : campoForm.errors && campoForm.touched}
+  //   }
 
 }
