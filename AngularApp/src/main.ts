@@ -7,6 +7,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
+import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 
 // bootstrapApplication(AppComponent, appConfig)
 //   .catch((err) => console.error(err));

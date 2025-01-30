@@ -19,7 +19,6 @@ import { TituloComponent } from '../../shared/titulo/titulo.component';
   selector: 'app-produto-servico',
   standalone: true,
   imports: [FormsModule, RouterModule, ToastrModule, CommonModule, TituloComponent],
-  providers: [BsModalService],
   templateUrl: './produto-servico.component.html',
   styleUrl: './produto-servico.component.css'
 })

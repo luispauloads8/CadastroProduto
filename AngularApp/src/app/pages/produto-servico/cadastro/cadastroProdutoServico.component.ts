@@ -5,12 +5,13 @@ import { ProdutoServico } from '../../../models/ProdutoServico';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
   imports: [FormsModule, RouterModule, ToastrModule, CommonModule],
+  providers:[BsModalService, ModalModule],
   templateUrl: './cadastroProdutoServico.component.html',
   styleUrl: './cadastroProdutoServico.component.css'
 })
@@ -40,26 +41,6 @@ export class CadastroProdutoServicoComponent implements OnInit {
     this._filtroLista = value;
     this.produtosServicosFiltrados = this.filtroLista ? this.filtroProduto(this.filtroLista) : this.produtosServicos;
   }
-
-  // public carregaProdutoServico(): void {
-  //   this.produtoServicoService.GetProdutoServico().subscribe(
-  //     (produtosServicos: ProdutoServico[]) => {
-  //       this.produtosServicos = produtosServicos.map(produto => {
-  //         if (produto.imagem && typeof produto.imagem === 'string') {
-  //           // Use o tipo MIME vindo do back-end para prefixar o Base64
-  //           produto.imagem = `data:${produto.imagem};base64,${produto.imagem}`;
-  //         }
-  //         return produto;
-  //       });
-  
-  //       this.produtosServicosFiltrados = this.produtosServicos;
-  //     },
-  //     (error: any) => {
-  //       console.error('Erro ao carregar produtos/serviços:', error);
-  //       this.toastr.error('Erro ao carregar produtos/serviços', 'Erro!');
-  //     }
-  //   );
-  // }
   
 
   public carregaProdutoServico(): void {

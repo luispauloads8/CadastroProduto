@@ -4,7 +4,7 @@ import { FormularioComponent } from '../../../componentes/formulario/formulario.
 import { CategoriaService } from '../../../services/categoria.service';
 import { Categoria } from '../../../models/Categoria';
 import { TituloComponent } from "../../../shared/titulo/titulo.component";
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-cadastro',
   standalone: true,
   imports: [RouterModule, FormsModule, HttpClientModule, CommonModule],
+  providers:[BsModalService, ModalModule],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.css'
 })

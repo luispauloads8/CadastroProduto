@@ -9,12 +9,14 @@ namespace ClienteProjeto.Application.Services;
 public class LancamentoService : ILancamentoService
 {
     private ILancamentoRepository _lancamentoRepository;
+    private IProdutoServicoRepository _produtoServicoRepository;
     private readonly IMapper _mapper;
 
-    public LancamentoService(ILancamentoRepository lancamentoRepository, IMapper mapper)
+    public LancamentoService(ILancamentoRepository lancamentoRepository, IMapper mapper, IProdutoServicoRepository produtoServicoRepository)
     {
         _lancamentoRepository = lancamentoRepository;
         _mapper = mapper;
+        _produtoServicoRepository = produtoServicoRepository;
     }
 
     public  async Task Add(LancamentoDTO lancamentoDTO)
@@ -42,6 +44,14 @@ public class LancamentoService : ILancamentoService
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentosEntity = _lancamentoRepository.GetLancamentoAsync().Result;
+
+        var produtoServico = _produtoServicoRepository.GetByIdAsync(lancamentosEntity.Select(x => x.ProdutoServicoId).FirstOrDefault()).Result;
+        
+        foreach(var lancamento in lancamentosEntity)
+        {
+            lancamento.ProdutoServico = produtoServico;
+        }
+        
         return _mapper.Map<IEnumerable<LancamentoDTO>>(lancamentosEntity);
     }
 

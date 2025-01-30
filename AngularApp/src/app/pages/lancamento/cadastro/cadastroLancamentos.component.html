@@ -20,27 +20,37 @@
             <thead class="table-dark">
                 <tr>
                     <th>Descrição</th>
+                    <th>Opções</th>
                 </tr>
             </thead>
-        </table>
-        <tbody>
-            @if (lancamentos && lancamentos.length) {
-                @for (lancamento of lancamentoFiltrados; track $index)
-                {
+        
+            <tbody>
+                @if (lancamentos && lancamentos.length) {
+                    @for (lancamento of lancamentoFiltrados; track $index)
+                    {
+                        <tr>
+                            <td>{{lancamento.produtoServico.descricao}}</td>
+                            <td>
+                                <button class="btn btn-warning mx-2" [routerLink]="['/lancamento/detalhes', lancamento.id]" tooltip="Editar">
+                                    <i class="fa fa-edit"></i>  
+                                </button>
+                                <button class="btn btn-danger mx-2" (click)="openModal($event, template, lancamento.id!)" tooltip="Excluir">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }@else {
                     <tr>
-                        <td></td>
+                        <td colspan="2" class="text-center">
+                            <h4>Nenhum registro encontrado</h4>
+                        </td>
                     </tr>
                 }
-            }@else {
-                <tr>
-                    <td colspan="1" class="text-center">
-                        <h4>Nenhum registro encontrado</h4>
-                    </td>
-                </tr>
-            }
 
-            
-        </tbody>
+                
+            </tbody>    
+        </table>
 
     </div>
 

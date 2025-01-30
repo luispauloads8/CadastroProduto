@@ -21,7 +21,6 @@ import { TituloComponent } from '../../shared/titulo/titulo.component';
   selector: 'app-categoria',
   standalone: true,
   imports: [FormsModule, RouterModule, TooltipModule, ModalModule, CommonModule, HttpClientModule, TituloComponent],
-  providers: [BsModalService],
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css'
 })
