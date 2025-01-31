@@ -54,5 +54,12 @@
 
     </div>
 
+    <ng-template #template>
+        <div class="modal-body text-center">
+          <p>Tem certeza que quer deletar a categoria?</p>
+          <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+          <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+        </div>
+    </ng-template>
 
 </div>

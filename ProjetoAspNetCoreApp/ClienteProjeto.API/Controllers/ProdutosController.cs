@@ -24,7 +24,7 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet("{id:int}", Name = "GetProdutosServico")]
-    public async Task<ActionResult<ProdutoServico>> Get(int id)
+    public async Task<ActionResult<ProdutoServicoDTO>> Get(int id)
     {
         var produto = await _produtoServicoService.GetById(id);
 
@@ -35,6 +35,20 @@ public class ProdutosController : ControllerBase
 
         return Ok(produto);
     }
+
+    [HttpGet("{search}", Name ="GetProdutoServicoTermo")]
+    public async Task<ActionResult<List<ProdutoServicoDTO>>> Get(string search)
+    {
+        var produtosServicos = await _produtoServicoService.GetProdutoServicoTermo(search);
+
+        if (produtosServicos == null || produtosServicos.Count == 0) 
+        {
+            return NoContent();
+        }
+
+        return Ok(produtosServicos);
+    }
+
 
     [HttpPost]
     public async Task<ActionResult> Post(ProdutoServicoDTO produtoServicoDTO)

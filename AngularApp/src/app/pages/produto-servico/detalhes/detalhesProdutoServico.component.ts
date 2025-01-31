@@ -53,9 +53,9 @@ export class DetalhesProdutoServicoComponent implements OnInit {
 
   
   onInputChange() {
-  if (this.categoriaFiltro.trim() === '') {
-    this.categoriasFiltradas = [];
-  }
+    if (this.categoriaFiltro.trim() === '') {
+      this.categoriasFiltradas = [];
+    }
 
     this.carregando = true;
     this.buscaSubject.next(this.categoriaFiltro);
@@ -69,21 +69,21 @@ export class DetalhesProdutoServicoComponent implements OnInit {
     return this.categoriaService.GetCategoriaTermo(termo);
   }
 
-    public validation(): void {
-      this.form = this.fb.group({
-        descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
-      });
-    }
+  public validation(): void {
+    this.form = this.fb.group({
+      descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
+    });
+  }
 
-    selecionarCategoria(categoria: Categoria) {
-      this.categoriaSelecionada = categoria;
-      this.categoriaFiltro = categoria.descricao; // Exibe o valor selecionado no input
-      this.categoriasFiltradas = []; // Limpa o dropdown após seleção
-    }
+  selecionarCategoria(categoria: Categoria) {
+    this.categoriaSelecionada = categoria;
+    this.categoriaFiltro = categoria.descricao; // Exibe o valor selecionado no input
+    this.categoriasFiltradas = []; // Limpa o dropdown após seleção
+  }
 
-    public cssValidator(campoForm: FormControl): any {
-      return {'is-invalid' : campoForm.errors && campoForm.touched}
-    }
+  public cssValidator(campoForm: FormControl): any {
+    return {'is-invalid' : campoForm.errors && campoForm.touched}
+  }
 
   public carregarProdutoServico() : void {
     const produtoServico = this.route.snapshot.paramMap.get('id');
@@ -152,19 +152,19 @@ export class DetalhesProdutoServicoComponent implements OnInit {
             this.salvarProdutoServicoPut();
         }
     }
-}
+  }
 
-private salvarProdutoServicoPost(): void {
-    this.produtoServicoService.post(this.produtoServico).subscribe(
-        () => this.toastr.success('Produto Serviço gravado com sucesso', 'Sucesso'),
-        (error: any) => {
-            console.error('Erro ao salvar o produto/serviço:', error);
-            this.toastr.error('Erro ao salvar o produto/serviço', 'Erro');
-        }
-    );
-}
+  private salvarProdutoServicoPost(): void {
+      this.produtoServicoService.post(this.produtoServico).subscribe(
+          () => this.toastr.success('Produto Serviço gravado com sucesso', 'Sucesso'),
+          (error: any) => {
+              console.error('Erro ao salvar o produto/serviço:', error);
+              this.toastr.error('Erro ao salvar o produto/serviço', 'Erro');
+          }
+      );
+  }
 
-private salvarProdutoServicoPut(): void {
+  private salvarProdutoServicoPut(): void {
     console.log('Atualizando produto/serviço:', this.produtoServico); // Log de depuração
 
     this.produtoServicoService.put(this.produtoServico.id!, this.produtoServico).subscribe(
@@ -174,7 +174,7 @@ private salvarProdutoServicoPut(): void {
             this.toastr.error('Erro ao atualizar o produto/serviço', 'Erro');
         }
     );
-}
+  }
 
   
   convertImageToBase64(file: File): Promise<string> {

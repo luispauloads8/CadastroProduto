@@ -100,4 +100,15 @@ public class ProdutoServicoService : IProdutoServicoService
         }
     }
 
+    public async Task<List<ProdutoServicoDTO>> GetProdutoServicoTermo(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return new List<ProdutoServicoDTO>();
+        }
+
+        var produtoServicoTermo = await _produtoServicoRepository.GetProdutoServicoTermoAsync(search);
+
+        return _mapper.Map<List<ProdutoServicoDTO>>(produtoServicoTermo);
+    }
 }

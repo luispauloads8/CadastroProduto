@@ -81,4 +81,11 @@ public class ProdutoServicoRepository : IProdutoServicoRepository
             Console.WriteLine("A conexão já está em processo de abertura.");
         }
     }
+
+    public async Task<List<ProdutoServico>> GetProdutoServicoTermoAsync(string search)
+    {
+        return await _produtoServicoContext.ProdutoServicos
+            .Where(p => p.Descricao.Contains(search))
+            .ToListAsync();
+    }
 }

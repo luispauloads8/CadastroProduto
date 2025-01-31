@@ -19,8 +19,26 @@
             <div class="form-row d-flex">
                 <div class="form-group col-md-6">
                     <label>Produto / Serviço</label>
-                    <input type="text" class="form-control" placeholder="Informe descrição do produto ou serviço" formControlName="produtoServico"
-                    [ngClass]="cssValidator(f.produtoServico)">
+                    <input type="text" 
+                    class="form-control" 
+                    placeholder="Informe descrição do produto ou serviço" 
+                    class="form-control"
+                    [(ngModel)]="produtoServicoFiltro"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="onInputChange()"
+                    [ngClass]="cssValidator(f.produtoServico)"
+                    />
+                    <div class="dropdown-menu show"
+                    *ngIf="produtosServicosFiltrados?.length && !carregando">
+                     <button
+                     class="dropdown-item"
+                     *ngFor="let produtoServico of produtosServicosFiltrados"
+                     (click)="selecionarProdutoServico(produtoServico)"
+                     >
+                        {{produtoServico.descricao}}
+                     </button>
+                     <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
+                    </div>
                     <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
                         produto e serviço obrigatorio
                     </div>
@@ -95,9 +113,7 @@
                     Cancelar Alteração
                 </button>
                 <div>
-                    <button class="btn btn-info" style="width: 180px; margin-right: 10px;" [routerLink]="['/lancamento/cadastro']">
-                        Voltar
-                    </button>
+                    <a class="btn btn-info" style="width: 180px; margin-right: 10px;" [routerLink]="['/lancamento/cadastro']" >voltar</a>
                     <button class="btn btn-success" [disabled]="!form.valid">
                         <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
                         Salvar Lançamento

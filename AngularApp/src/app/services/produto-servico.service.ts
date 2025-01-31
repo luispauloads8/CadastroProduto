@@ -21,15 +21,19 @@ export class ProdutoServicoService {
     return this.http.get<ProdutoServico>(`${this.ApiUrl}Produtos/${id}`).pipe(take(1));
   }
 
-    public post(produtoServico: ProdutoServico) : Observable<ProdutoServico> {
+  public GetProdutoServicoTermo(termo:string): Observable<ProdutoServico[]>{
+    return this.http.get<ProdutoServico[]>(`${this.ApiUrl}Produtos/${termo}`).pipe(take(1));
+  }
+
+  public post(produtoServico: ProdutoServico) : Observable<ProdutoServico> {
       return this.http.post<ProdutoServico>(`${this.ApiUrl}Produtos`,produtoServico).pipe(take(1));
-    }
+  }
 
   public put(id: number, produtoServico: ProdutoServico): Observable<ProdutoServico>{
     return this.http.put<ProdutoServico>(`${this.ApiUrl}Produtos/${id}`, produtoServico).pipe(take(1));
   }
 
-  DeletarProdutoServico(id: number) :Observable<ProdutoServico> { 
+  public DeletarProdutoServico(id: number) :Observable<ProdutoServico> { 
     return this.http.delete<ProdutoServico>(`${this.ApiUrl}Produtos/${id}`).pipe(take(1));
   }
 }
