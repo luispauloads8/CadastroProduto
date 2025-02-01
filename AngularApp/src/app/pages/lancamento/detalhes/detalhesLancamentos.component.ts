@@ -63,6 +63,11 @@ export class DetalhesLancamentosComponent {
   }
 
   onInputChange(){
+
+    if(this.produtoServicoFiltro.trim() ===''){
+      this.produtosServicosFiltrados = []
+    }
+
     this.carregando = true;
     this.buscaSubject.next(this.produtoServicoFiltro);
   }

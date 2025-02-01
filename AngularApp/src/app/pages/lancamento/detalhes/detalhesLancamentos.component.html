@@ -25,9 +25,7 @@
                     class="form-control"
                     [(ngModel)]="produtoServicoFiltro"
                     [ngModelOptions]="{standalone: true}"
-                    (input)="onInputChange()"
-                    [ngClass]="cssValidator(f.produtoServico)"
-                    />
+                    (input)="onInputChange()"/>
                     <div class="dropdown-menu show"
                     *ngIf="produtosServicosFiltrados?.length && !carregando">
                      <button
@@ -37,11 +35,11 @@
                      >
                         {{produtoServico.descricao}}
                      </button>
-                     <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
                     </div>
-                    <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
+                    <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
+                    <!-- <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
                         produto e serviço obrigatorio
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-group col-md-5 idValor">
                     <label>Valor</label>
