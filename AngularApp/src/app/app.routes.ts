@@ -15,6 +15,9 @@ import { DetalhesProdutoServicoComponent } from './pages/produto-servico/detalhe
 import { CadastroProdutoServicoComponent } from './pages/produto-servico/cadastro/cadastroProdutoServico.component';
 import { DetalhesLancamentosComponent } from './pages/lancamento/detalhes/detalhesLancamentos.component';
 import { CadastroLancamentosComponent } from './pages/lancamento/cadastro/cadastroLancamentos.component';
+import { CidadeComponent } from './pages/cidade/cidade.component';
+import { DetalhesCidadeComponent } from './pages/cidade/detalhes/detalhesCidade.component';
+import { CadastroCidadeComponent } from './pages/cidade/cadastro/cadastroCidade.component';
 
 
 export const routes: Routes = [
@@ -49,6 +52,14 @@ export const routes: Routes = [
             {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro'}
         ]
     },
+    {path: 'cidade', component: CidadeComponent, title: 'Cidades',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesCidadeComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesCidadeComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroCidadeComponent, title: 'Cadastro'},
+        ]
+    },
+
     {path: 'dashboard', component: DashboardComponent, title: 'Dashboard'},
     {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
