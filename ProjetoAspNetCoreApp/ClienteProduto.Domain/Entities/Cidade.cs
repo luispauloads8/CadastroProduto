@@ -9,6 +9,7 @@ public class Cidade : Entity
     }
 
     public string Descricao { get; set; }
+    public EnumEstado Estado { get; set;}
     public ICollection<Cliente> ClientesEndereco { get; set; }
     public ICollection<Empresa> Empresas { get; set; }
     public ICollection<Fornecedor> Fornecedores { get; set; }
