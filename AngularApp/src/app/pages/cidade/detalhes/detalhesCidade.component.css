@@ -1,0 +1,10 @@
+.no-padding-left {
+    padding-left: 0;
+    padding-right:0;
+  }
+  
+  
+  .card-move-up {
+    position: relative;
+    top: -48px;
+  }

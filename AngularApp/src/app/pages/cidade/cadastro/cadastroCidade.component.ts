@@ -6,6 +6,7 @@ import { Cidade } from '../../../models/Cidade';
 import { CidadeService } from '../../../services/cidade.service';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { EnumEstado } from '../../../models/EnumEstado';
 
 @Component({
   selector: 'app-cadastro',
@@ -22,6 +23,7 @@ export class CadastroCidadeComponent implements OnInit {
   public cidadesFiltradas: Cidade[] = [];
   public cidadeId!: number;
   public modalRef!: BsModalRef;
+  EnumEstado!: EnumEstado;
 
    constructor(
     private cidadeService: CidadeService,
@@ -89,5 +91,10 @@ export class CadastroCidadeComponent implements OnInit {
   decline(){
     this.modalRef.hide();
   }
+
+  //retira os espaços do enumEstado, para montar na pagina html
+  EnumEstadoMap = Object.fromEntries(
+    Object.entries(EnumEstado).map(([key, value]) => [value, key])
+  );
 
 }

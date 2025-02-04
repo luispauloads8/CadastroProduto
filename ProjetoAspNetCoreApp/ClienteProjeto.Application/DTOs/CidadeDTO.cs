@@ -11,6 +11,7 @@ public class CidadeDTO
     [MinLength(3)]
     [MaxLength(50)]
     public string Descricao { get; set; }
+    public EnumEstado Estado { get; set; }
 
     public ICollection<ClienteDTO> ClientesEndereco { get; set; }
     public ICollection<EmpresaDTO> Empresas { get; set; }

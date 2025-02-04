@@ -1,1 +1,34 @@
-<p>detalhes works!</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="container mt-5 no-padding-left">
+            <div class="card rounded shadow-sm card-move-up">
+                <form [formGroup]="form">
+                    <div class="p-3">
+
+                        <div class="form-row d-flex">
+                            <div class="form-group col-md-6">
+                                <label>Descrição</label>
+                                <input type="text" placeholder="Informe descrição da cidade"
+                                class="form-control"
+                                formControlName="descricao"
+                                [ngClass]="cssValidator(f.descricao)"
+                                />
+                                <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
+                                    descrição é obrigatoria
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex mt-3">
+                            <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarCidade()">Gravar</button>
+                            <a class="btn btn-info w-10" [routerLink]="['/cidade/cadastro']" >voltar</a>
+                        </div>                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
