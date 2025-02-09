@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Cidade } from '../../../models/Cidade';
 import { CidadeService } from '../../../services/cidade.service';
 import { ToastrService } from 'ngx-toastr';
+import { EnumEstado } from '../../../models/EnumEstado';
 
 @Component({
   selector: 'app-detalhes',
@@ -18,6 +19,7 @@ export class DetalhesCidadeComponent implements OnInit {
   form!: FormGroup;
   cidade!: Cidade;
   estadoSalvar = 'post';
+  estados: { key: number; value: string }[] = [];
 
   get f(): any{
     return this.form.controls;
@@ -27,11 +29,22 @@ export class DetalhesCidadeComponent implements OnInit {
     private fb: FormBuilder,
     private cidaddeService: CidadeService,
     private toastr: ToastrService,
+    private route: ActivatedRoute
   ){}
 
   ngOnInit(): void {
     this.validation();
+    this.enumEstado();
+    this.carregarCidade();
   }
+
+  public enumEstado(): void{
+    // Converter Enum para Array utilizável no Select
+    this.estados = Object.keys(EnumEstado)
+    .filter(key => isNaN(Number(key))) // Filtra apenas as chaves textuais
+    .map(key => ({ key: EnumEstado[key as keyof typeof EnumEstado], value: key }));
+  }
+  
 
   public cssValidator(campoForm: FormControl): any {
     return {'is-invalid' : campoForm.errors && campoForm.touched}
@@ -39,7 +52,8 @@ export class DetalhesCidadeComponent implements OnInit {
 
   public validation(): void{
     this.form = this.fb.group({
-      descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(150)]]
+      descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(150)]],
+      estado: [null, Validators.required]
     })
   }
 
@@ -49,9 +63,11 @@ export class DetalhesCidadeComponent implements OnInit {
     }
 
     this.cidade = {
+      id: this.estadoSalvar === 'put' ? this.cidade.id : undefined,
       ...this.form.value,
-      estado: this.cidade.estado
-    }
+      estado: +this.form.value.estado // O operador "+" converte para número de forma simplificada
+    };
+    
 
     if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put')  {
       this.cidaddeService[this.estadoSalvar](this.cidade).subscribe(
@@ -62,6 +78,30 @@ export class DetalhesCidadeComponent implements OnInit {
         },
         () => {}
       );
+    }
+  }
+
+  public carregarCidade(): void{
+    const cidade = this.route.snapshot.paramMap.get('id');
+
+    if(cidade != null){
+      this.estadoSalvar = 'put';
+
+      this.cidaddeService.GetCidadeId(+cidade).subscribe(
+        (cidade: Cidade) => {
+          this.cidade = {...cidade};
+
+        this.form.patchValue({
+          ...this.cidade,
+          estados: this.cidade.estado
+        });
+
+        },
+        (error: any) => {
+          console.error(error);
+        },
+        () => {}
+      )
     }
   }
 

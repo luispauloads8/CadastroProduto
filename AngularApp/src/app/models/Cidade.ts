@@ -7,6 +7,7 @@ export interface Cidade{
     id?: number;
     descricao: string;
     estado: EnumEstado;
+    estadoDescricao: string,
     clientesEndereco: Cliente;
     empresa: Empresa;
     fornecedor: Fornecedor;

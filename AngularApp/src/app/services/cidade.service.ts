@@ -30,7 +30,7 @@ export class CidadeService {
   }
 
   public put(cidade: Cidade): Observable<Cidade>{
-    return this.htpp.put<Cidade>(`${this.ApiUrl}Cidades`, cidade).pipe(take(1));
+    return this.htpp.put<Cidade>(`${this.ApiUrl}Cidades/${cidade.id}`, cidade).pipe(take(1));
   }
 
   public DeletarCidade(id: number): Observable<Cidade>{

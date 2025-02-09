@@ -24,6 +24,7 @@ export class CadastroCidadeComponent implements OnInit {
   public cidadeId!: number;
   public modalRef!: BsModalRef;
   EnumEstado!: EnumEstado;
+  estadoKey: string | undefined
 
    constructor(
     private cidadeService: CidadeService,
@@ -53,8 +54,11 @@ export class CadastroCidadeComponent implements OnInit {
     this.cidadeService.GetCidade().subscribe(
       (cidade: Cidade[]) => {
         this.cidades = cidade.map(cid => {
-          return {...cid};
+          return {...cid,
+          estadoDescricao: EnumEstado[cid.estado] // Convertendo código numérico para nome
+          };
         });
+
         this.cidadesFiltradas = this.cidades;
       },
       (error: any) => {
@@ -91,10 +95,4 @@ export class CadastroCidadeComponent implements OnInit {
   decline(){
     this.modalRef.hide();
   }
-
-  //retira os espaços do enumEstado, para montar na pagina html
-  EnumEstadoMap = Object.fromEntries(
-    Object.entries(EnumEstado).map(([key, value]) => [value, key])
-  );
-
 }

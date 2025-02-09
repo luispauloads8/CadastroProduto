@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{cidade.id}}</td>
                             <td>{{cidade.descricao}}</td>
-                            <td>{{ EnumEstadoMap[cidade.estado]}}</td>
+                            <td>{{cidade.estadoDescricao}}</td>
                             <td>
                                 <button class="btn btn-warning mx-2" [routerLink]="['/cidade/detalhes', cidade.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ClienteProjeto.Domain.Entities;
 
-public enum EnumEstado
+public enum EnumEstado : int
 {
     AC, // Acre
     AL, // Alagoas

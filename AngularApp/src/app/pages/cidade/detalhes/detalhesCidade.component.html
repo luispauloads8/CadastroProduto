@@ -6,6 +6,7 @@
                     <div class="p-3">
 
                         <div class="form-row d-flex">
+
                             <div class="form-group col-md-6">
                                 <label>Descrição</label>
                                 <input type="text" placeholder="Informe descrição da cidade"
@@ -15,6 +16,20 @@
                                 />
                                 <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
                                     descrição é obrigatoria
+                                </div>
+                            </div>
+                            
+                             <!-- Campo de Seleção de Estado -->
+                            <div class="form-group col-md-6">
+                                <label>Estado</label>
+                                <select class="form-control" formControlName="estado" [ngClass]="cssValidator(f.estado)">
+                                    <option value="" disabled>Selecione um estado</option>
+                                    <option *ngFor="let estado of estados" [value]="estado.key">
+                                        {{ estado.value }}
+                                    </option>
+                                </select>
+                                <div *ngIf="f.estado?.errors?.required" class="invalid-feedback">
+                                    Estado é obrigatório
                                 </div>
                             </div>
                         </div>
