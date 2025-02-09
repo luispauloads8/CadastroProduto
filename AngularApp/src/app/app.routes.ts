@@ -18,6 +18,9 @@ import { CadastroLancamentosComponent } from './pages/lancamento/cadastro/cadast
 import { CidadeComponent } from './pages/cidade/cidade.component';
 import { DetalhesCidadeComponent } from './pages/cidade/detalhes/detalhesCidade.component';
 import { CadastroCidadeComponent } from './pages/cidade/cadastro/cadastroCidade.component';
+import { EmpresaComponent } from './pages/empresa/empresa.component';
+import { DetalhesEmpresaComponent } from './pages/empresa/detalhes/detalhes-empresa.component';
+import { CadastroEmpresaComponent } from './pages/empresa/cadastro/cadastro-empresa.component';
 
 
 export const routes: Routes = [
@@ -57,6 +60,13 @@ export const routes: Routes = [
             {path: 'detalhes/:id', component: DetalhesCidadeComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesCidadeComponent, title: 'Detalhes'},
             {path: 'cadastro', component: CadastroCidadeComponent, title: 'Cadastro'},
+        ]
+    },
+    {path: 'empresa', component: EmpresaComponent, title: 'Empresa',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesEmpresaComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesEmpresaComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroEmpresaComponent, title: 'Cadastro'},
         ]
     },
 

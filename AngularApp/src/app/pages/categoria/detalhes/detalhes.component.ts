@@ -35,13 +35,6 @@ export class DetalhesComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-
-    // const id = Number(this.route.snapshot.paramMap.get('id'));
-
-    // this.categoriaService.GetCategoriaId(id).subscribe(response => {
-    //   this.categoria = response;
-    // });
-
     this.validation();
     this.carregaCategoria();
   }
