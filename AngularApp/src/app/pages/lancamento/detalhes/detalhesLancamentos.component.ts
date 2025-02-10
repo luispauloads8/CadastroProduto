@@ -17,7 +17,7 @@ defineLocale('pr-br', ptBrLocale);
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [FormsModule, RouterModule, TituloComponent, ReactiveFormsModule, CommonModule,  BsDatepickerModule],
+  imports: [FormsModule, RouterModule, ReactiveFormsModule, CommonModule,  BsDatepickerModule],
   templateUrl: './detalhesLancamentos.component.html',
   styleUrl: './detalhesLancamentos.component.css'
 })

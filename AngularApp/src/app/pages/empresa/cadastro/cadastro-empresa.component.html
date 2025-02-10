@@ -31,7 +31,7 @@
                             <td>{{empresa.id}}</td>
                             <td>{{empresa.nomeFantasia}}</td>
                             <td>
-                                <button class="btn btn-warning mx-2" [routerLink]="['/cidade/detalhes', empresa.id]" tooltip="Editar">
+                                <button class="btn btn-warning mx-2" [routerLink]="['/empresa/detalhes', empresa.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger mx-2" (click)="openModal($event, template, empresa.id!)" tooltip="Excluir">

@@ -8,9 +8,7 @@ import { routes } from './app/app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
-
-// bootstrapApplication(AppComponent, appConfig)
-//   .catch((err) => console.error(err));
+import { provideNgxMask } from 'ngx-mask';
 
   bootstrapApplication(AppComponent, {
     providers: [
@@ -20,6 +18,7 @@ import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
       importProvidersFrom(BrowserModule),
       importProvidersFrom(ToastrModule), 
       provideToastr(),
-      provideAnimations()
+      provideAnimations(),
+      provideNgxMask()
     ],
   }).catch((err) => console.error(err));

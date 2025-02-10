@@ -30,7 +30,6 @@ export class DetalhesComponent implements OnInit {
     private categoriaService: CategoriaService, 
     private route: ActivatedRoute, 
     private fb: FormBuilder,
-    private router: Router,
     private toastr: ToastrService
   ){}
 
@@ -68,31 +67,26 @@ export class DetalhesComponent implements OnInit {
     return {'is-invalid' : campoForm.errors && campoForm.touched}
   }
 
-  // public editarCategoria(id: Number, categoria: Categoria): void {
-  //   this.categoriaService.(id, categoria).subscribe(response =>{
-  //     this.router.navigate(['/categoria']);
-  //   });
-  // }
-
   public salvarCategoria(): void {
-    if(this.form.valid){
-      
-      
-      this.categoria = (this.estadoSalvar === 'post') 
-                    ? {...this.form.value} //passagem por referencia
-                    : {id: this.categoria.id, ...this.form.value};
-      
-      if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put')  {
-        this.categoriaService[this.estadoSalvar](this.categoria).subscribe(
-          () => this.toastr.success('Categoria grava com Sucesso!', 'Sucesso'),
-          (error: any) => {
-            console.error(error);
-            this.toastr.error('Error ao salvar a categoria', 'Erro');
-          },
-          () => {}
-        );
-      }
-
+    if(!this.form.valid){
+      return;
     }
+      
+    this.categoria = (this.estadoSalvar === 'post') 
+                  ? {...this.form.value} //passagem por referencia
+                  : {id: this.categoria.id, ...this.form.value};
+    
+    if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put')  {
+      this.categoriaService[this.estadoSalvar](this.categoria).subscribe(
+        () => this.toastr.success('Categoria gravada com Sucesso!', 'Sucesso'),
+        (error: any) => {
+          console.error(error);
+          this.toastr.error('Error ao salvar a categoria', 'Erro');
+        },
+        () => {}
+      );
+    }
+
   }
+  
 }

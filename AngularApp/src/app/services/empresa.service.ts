@@ -18,22 +18,22 @@ export class EmpresaService {
   }
 
   public GetEmpresaId(id: number): Observable<Empresa>{
-    return this.http.get<Empresa>(`${this.ApiUrl}empresas/${id}`).pipe(take(1));
+    return this.http.get<Empresa>(`${this.ApiUrl}Empresas/${id}`).pipe(take(1));
   }
 
   public GetCidadeTermo(termo: string): Observable<Empresa[]>{
-    return this.http.get<Empresa[]>(`${this.ApiUrl}empresas/${termo}`).pipe(take(1));
+    return this.http.get<Empresa[]>(`${this.ApiUrl}Empresas/${termo}`).pipe(take(1));
   }
 
   public post(empresa: Empresa): Observable<Empresa>{
-    return this.http.post<Empresa>(`${this.ApiUrl}empresas`, empresa).pipe(take(1));
+    return this.http.post<Empresa>(`${this.ApiUrl}Empresas`, empresa).pipe(take(1));
   }
 
   public put(empresa: Empresa): Observable<Empresa>{
-    return this.http.put<Empresa>(`${this.ApiUrl}empresas/${empresa.id}`, empresa).pipe(take(1));
+    return this.http.put<Empresa>(`${this.ApiUrl}Empresas/${empresa.id}`, empresa).pipe(take(1));
   }
 
   public DeletarEmpresa(id: number): Observable<Empresa>{
-    return this.http.delete<Empresa>(`${this.ApiUrl}empresas/${id}`).pipe(take(1));
+    return this.http.delete<Empresa>(`${this.ApiUrl}Empresas/${id}`).pipe(take(1));
   }
 }
