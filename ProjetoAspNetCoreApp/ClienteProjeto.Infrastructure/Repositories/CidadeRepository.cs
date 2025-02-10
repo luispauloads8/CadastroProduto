@@ -73,4 +73,11 @@ public class CidadeRepository : ICidadeRepository
         await _cidadeContext.SaveChangesAsync();
         return cidade;
     }
+
+    public async Task<List<Cidade>> GetCidadeTermoAsync(string termo)
+    {
+        return await _cidadeContext.Cidades
+           .Where(p => p.Descricao.Contains(termo))
+           .ToListAsync();
+    }
 }

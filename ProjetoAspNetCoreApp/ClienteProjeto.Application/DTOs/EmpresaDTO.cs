@@ -31,7 +31,7 @@ public class EmpresaDTO
     [MaxLength(15)]
     public string Telefone { get; set; }
 
-    public int CidadeEmpresaId { get; set; }
+    public int CidadeId { get; set; }
 
     public CidadeDTO Cidade { get; set; }
     public ICollection<UsuarioDTO> Usuarios { get; set; }

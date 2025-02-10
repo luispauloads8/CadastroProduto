@@ -109,6 +109,9 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     b.Property<int>("CidadeEnderecoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CidadeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DataNascimento")
                         .HasMaxLength(10)
                         .HasColumnType("datetime(6)");
@@ -198,7 +201,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("char(14");
 
-                    b.Property<int>("CidadeEmpresaId")
+                    b.Property<int>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -223,7 +226,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CidadeEmpresaId");
+                    b.HasIndex("CidadeId");
 
                     b.ToTable("Empresas");
                 });
@@ -459,7 +462,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                 {
                     b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
                         .WithMany("Empresas")
-                        .HasForeignKey("CidadeEmpresaId")
+                        .HasForeignKey("CidadeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

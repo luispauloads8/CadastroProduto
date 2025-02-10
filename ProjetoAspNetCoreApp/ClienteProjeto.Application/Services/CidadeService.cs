@@ -51,4 +51,16 @@ public class CidadeService : ICidadeService
         var cidadeEntity = _mapper.Map<Cidade>(cidadeDTO);
         await _cidadeRepository.UpdateAsync(cidadeEntity);
     }
+
+    public async Task<List<CidadeDTO>> GetCidadeTermo(string termo)
+    {
+        if (string.IsNullOrWhiteSpace(termo))
+        {
+            return new List<CidadeDTO>();
+        }
+
+        var cidadeTermo = await _cidadeRepository.GetCidadeTermoAsync(termo);
+
+        return _mapper.Map<List<CidadeDTO>>(cidadeTermo);
+    }
 }

@@ -35,6 +35,19 @@ namespace ClienteProjeto.API.Controllers
 
         }
 
+        [HttpGet("{search}", Name = "GetCidadeTermo")]
+        public async Task<ActionResult<List<EmpresaDTO>>> Get(string search)
+        {
+            var cidade = await _cidadeService.GetCidadeTermo(search);
+
+            if (cidade == null || cidade.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(cidade);
+        }
+
         [HttpPost]
         public async Task<ActionResult<CidadeDTO>> Post(CidadeDTO cidadeDTO)
         {

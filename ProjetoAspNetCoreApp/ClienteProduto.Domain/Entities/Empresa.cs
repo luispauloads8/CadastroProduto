@@ -8,8 +8,8 @@ public class Empresa : Entity
     public string CNPJ { get; set; }
     public string Email { get; set; }
     public string Telefone { get; set; }
-    public int CidadeEmpresaId { get; set; }
     public Cidade Cidade { get; set; }
+    public int CidadeId { get; set; }
     public ICollection<Usuario> Usuarios { get; set; }
     public ICollection<Lancamento> Lancamentos { get; set; }
 
