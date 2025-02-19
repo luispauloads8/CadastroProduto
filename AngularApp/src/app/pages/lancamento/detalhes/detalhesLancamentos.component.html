@@ -7,11 +7,20 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Empresa</label>
-                    <input type="text" class="form-control" placeholder="Informe uma empresa" formControlName="empresa"
-                    [ngClass]="cssValidator(f.empresa)">
-                    <div *ngIf="f.empresa?.errors?.required" class="invalid-feedback">
-                        empresa é obrigatoria.
+                    <input type="text" class="form-control" placeholder="Informe uma empresa"
+                    [(ngModel)]="empresaFiltro"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="OnIputChangeEmpresa()"/>
+                    <div class="dropdown-menu show"
+                    *ngIf="empresasFiltradas?.length && !carregando">
+                    <button
+                    class="dropdown-item"
+                    *ngFor="let empresa of empresasFiltradas"
+                    (click)="selecionarEmpresa(empresa)">
+                        {{empresa.razaoSocial}}
+                    </button>
                     </div>
+                    <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
                 </div>
             </div>
             <div class="form-row d-flex">
@@ -20,7 +29,6 @@
                     <input type="text" 
                     class="form-control" 
                     placeholder="Informe descrição do produto ou serviço" 
-                    class="form-control"
                     [(ngModel)]="produtoServicoFiltro"
                     [ngModelOptions]="{standalone: true}"
                     (input)="onInputChange()"/>

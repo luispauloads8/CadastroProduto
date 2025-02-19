@@ -21,7 +21,7 @@ export class EmpresaService {
     return this.http.get<Empresa>(`${this.ApiUrl}Empresas/${id}`).pipe(take(1));
   }
 
-  public GetCidadeTermo(termo: string): Observable<Empresa[]>{
+  public GetEmpresaTermo(termo: string): Observable<Empresa[]>{
     return this.http.get<Empresa[]>(`${this.ApiUrl}Empresas/${termo}`).pipe(take(1));
   }
 

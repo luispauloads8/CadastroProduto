@@ -23,8 +23,8 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
         builder.Property(x => x.EstadoCivil).HasMaxLength(1).IsRequired();        
             
         builder.HasOne(c => c.Cidade)
-            .WithMany(c => c.ClientesEndereco)
-            .HasForeignKey(c => c.CidadeEnderecoId)
+            .WithMany(c => c.Clientes)
+            .HasForeignKey(c => c.CidadeId)
             .OnDelete(DeleteBehavior.Restrict);
 
     }

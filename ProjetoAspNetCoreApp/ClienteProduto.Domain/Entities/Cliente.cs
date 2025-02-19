@@ -14,7 +14,6 @@ public class Cliente : Entity
     public EnumEstadoCivil EstadoCivil { get; set; }
     public string Nacionalidade { get; set; }
     public string Observacao { get; set; }
-    public int CidadeEnderecoId { get; set; }
     public Cidade Cidade { get; set; }
     public int CidadeId { get; set; }
     public ICollection<Lancamento> Lancamentos { get; set; }

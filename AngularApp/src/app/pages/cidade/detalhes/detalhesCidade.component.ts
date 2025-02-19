@@ -21,7 +21,7 @@ export class DetalhesCidadeComponent implements OnInit {
   estadoSalvar = 'post';
   estados: { key: number; value: string }[] = [];
 
-  get f(): any{
+  public get f(): any{
     return this.form.controls;
   }
 
@@ -45,7 +45,6 @@ export class DetalhesCidadeComponent implements OnInit {
     .map(key => ({ key: EnumEstado[key as keyof typeof EnumEstado], value: key }));
   }
   
-
   public cssValidator(campoForm: FormControl): any {
     return {'is-invalid' : campoForm.errors && campoForm.touched}
   }
@@ -71,7 +70,7 @@ export class DetalhesCidadeComponent implements OnInit {
 
     if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put')  {
       this.cidaddeService[this.estadoSalvar](this.cidade).subscribe(
-        () => this.toastr.success('Cidade grava com Sucesso!', 'Sucesso'),
+        () => this.toastr.success('Cidade gravado com Sucesso!', 'Sucesso'),
         (error: any) => {
           console.error(error);
           this.toastr.error('Error ao salvar a cidade', 'Erro');

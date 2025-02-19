@@ -10,8 +10,10 @@ import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { LancamentoService } from '../../../services/lancamento.service';
 import { Lancamento } from '../../../models/Lancamento';
 import { ProdutoServico } from '../../../models/ProdutoServico';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
 import { ProdutoServicoService } from '../../../services/produto-servico.service';
+import { Empresa } from '../../../models/Empresa';
+import { EmpresaService } from '../../../services/empresa.service';
 defineLocale('pr-br', ptBrLocale);
 
 @Component({
@@ -32,14 +34,20 @@ export class DetalhesLancamentosComponent {
   produtosServicosFiltrados: ProdutoServico[] = []; // resultado da busca
   carregando: boolean = false; // Indica se está carregando os dados
 
+  empresas: Empresa[] = [];
+  empresasFiltradas: Empresa[] = [];
+  empresaSelecionado: Empresa | null = null;// produto escolhido
+  empresaFiltro: string = ''; //valor digitado no campo
+
   private buscaSubject = new Subject<string>();
-  
+  private buscaEmpresaSubject = new Subject<string>();
+
   get f(): any{
     return this.form.controls;
   }
 
   get bsConfig(): any {
-    return { 
+    return {
       adaptivePosition: true,
       dateInputFormat: 'DD/MM/YYYY hh:mm a',
       showWeekNumbers: false
@@ -47,11 +55,12 @@ export class DetalhesLancamentosComponent {
   }
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private localeService: BsLocaleService,
     private route: ActivatedRoute,
     private lancamentoService: LancamentoService,
-    private produtoServicoService: ProdutoServicoService)
+    private produtoServicoService: ProdutoServicoService,
+    private empresaService: EmpresaService)
   {
     this.localeService.use('pr-br');
   }
@@ -60,6 +69,17 @@ export class DetalhesLancamentosComponent {
     this.validation();
     this.carregarLancamento();
     this.carregarProdutoServico();
+    this.carregarEmpresa();
+  }
+
+  OnIputChangeEmpresa(){
+
+     if(this.empresaFiltro.trim() === ''){
+       this.empresasFiltradas = []
+      }
+
+    this.carregando = true;
+    this.buscaEmpresaSubject.next(this.empresaFiltro);
   }
 
   onInputChange(){
@@ -91,6 +111,12 @@ export class DetalhesLancamentosComponent {
     this.produtosServicosFiltrados = []; // Limpa o dropdown após seleção
   }
 
+  selecionarEmpresa(empresa: Empresa){
+    this.empresaSelecionado = empresa;
+    this.empresaFiltro = empresa.razaoSocial;
+    this.empresasFiltradas = [];
+  }
+
   public resetForm(): void {
     this.form.reset();
   }
@@ -104,15 +130,17 @@ export class DetalhesLancamentosComponent {
 
     if(lancamento != null){
       this.estadoSalvar = 'put';
-    
+
       this.lancamentoService.GetLancamentoId(+lancamento).subscribe(
         (lancamento: Lancamento) => {
           this.lancamento = {...lancamento};
           this.form.patchValue(this.lancamento);
 
-
           //configurar para exibir empresa
-         if(lancamento.empresa){}
+         if(lancamento.empresa){
+          this.empresaSelecionado = lancamento.empresa;
+          this.empresaFiltro = lancamento.empresa.razaoSocial;
+         }
         //configurar para exibir produto
          if(lancamento.produtoServico){
           this.produtoServicoSelecionando = lancamento.produtoServico; // exibie os dados do produto
@@ -120,6 +148,9 @@ export class DetalhesLancamentosComponent {
          }
         //configurar para exibir cliente
          if(lancamento.cliente){}
+
+        //configurar conta contabil
+        if(lancamento.contaContabil){} 
 
 
         },
@@ -134,7 +165,7 @@ export class DetalhesLancamentosComponent {
   buscarProdutosServicos(termo: string) {
     if (!termo.trim()) {
       this.carregando = false;
-      return [];
+      return of([]); // Retorna um Observable vazio
     }
     return this.produtoServicoService.GetProdutoServicoTermo(termo);
   }
@@ -148,6 +179,27 @@ export class DetalhesLancamentosComponent {
       )
       .subscribe((produtosServicos) => {
         this.produtosServicosFiltrados = produtosServicos;
+        this.carregando = false;
+      });
+  }
+
+  buscarEmpresa(termo: string){
+    if(!termo.trim()){
+      this.carregando = false;
+      return of([]); // Retorna um Observable vazio
+    }
+    return this.empresaService.GetEmpresaTermo(termo);
+  }
+
+  carregarEmpresa(): void{
+    this.buscaEmpresaSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((termo) => this.buscarEmpresa(termo))
+      )
+      .subscribe((empresas) => {
+        this.empresasFiltradas = empresas;
         this.carregando = false;
       });
   }

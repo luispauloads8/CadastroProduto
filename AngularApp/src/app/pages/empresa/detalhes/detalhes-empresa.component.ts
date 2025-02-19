@@ -57,7 +57,7 @@ export class DetalhesEmpresaComponent implements OnInit {
     }
 
     this.carregando = true;
-    this.buscaSubject.next(this.cidadeFiltro)
+    this.buscaSubject.next(this.cidadeFiltro);
   }
 
     public cssValidator(campoForm: FormControl): any {

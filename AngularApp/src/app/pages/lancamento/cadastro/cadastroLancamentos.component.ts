@@ -70,15 +70,6 @@ export class CadastroLancamentosComponent implements OnInit{
       )
   }
 
-  public deletar(id: number | undefined){
-    if(id != undefined){
-      this.lancamentoService.DeletarLancamento(id).subscribe(response => {
-        console.log(response);
-        window.location.reload();
-      })
-    }
-  }
-
   confirm(){
     this.modalRef.hide();
 

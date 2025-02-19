@@ -37,7 +37,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
 
                     b.HasData(
                         new
@@ -65,7 +65,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cidades");
+                    b.ToTable("Cidades", (string)null);
 
                     b.HasData(
                         new
@@ -162,7 +162,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CidadeEnderecoId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ContaContabil", b =>
@@ -185,7 +185,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("GrupoContaId");
 
-                    b.ToTable("ContaContabeis");
+                    b.ToTable("ContaContabeis", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Empresa", b =>
@@ -228,7 +228,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("Empresas");
+                    b.ToTable("Empresas", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Fornecedor", b =>
@@ -281,7 +281,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("Fornecedores");
+                    b.ToTable("Fornecedores", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.GrupoConta", b =>
@@ -299,7 +299,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupoContas");
+                    b.ToTable("GrupoContas", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ItensLancamento", b =>
@@ -328,7 +328,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("LancamentoId");
 
-                    b.ToTable("ItensLancamentos");
+                    b.ToTable("ItensLancamentos", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Lancamento", b =>
@@ -374,7 +374,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("ProdutoServicoId");
 
-                    b.ToTable("Lancamentos");
+                    b.ToTable("Lancamentos", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ProdutoServico", b =>
@@ -400,7 +400,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.ToTable("ProdutoServicos");
+                    b.ToTable("ProdutoServicos", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Usuario", b =>
@@ -433,7 +433,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("EmpresaId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cliente", b =>

@@ -9,11 +9,13 @@ namespace ClienteProjeto.Application.Services;
 public class ClienteService : IClienteService
 {
     private IClienteRepository _clienteRepository;
+    private ICidadeRepository _cidadeRepository;
     private readonly IMapper _mapper;
 
-    public ClienteService(IClienteRepository clienteRepository, IMapper mapper)
+    public ClienteService(IClienteRepository clienteRepository, ICidadeRepository cidadeRepository, IMapper mapper)
     {
         _clienteRepository = clienteRepository;
+        _cidadeRepository = cidadeRepository;
         _mapper = mapper;
     }
 
@@ -35,6 +37,11 @@ public class ClienteService : IClienteService
     {
         await _clienteRepository.EnsureConnectionOpenAsync();
         var clienteEntity = await _clienteRepository.GetByIdAsync(id);
+
+        var cidade = await _cidadeRepository.GetByIdAsync(clienteEntity.CidadeId);
+        clienteEntity.Cidade = cidade;
+            
+
         return _mapper.Map<ClienteDTO>(clienteEntity);
     }
 

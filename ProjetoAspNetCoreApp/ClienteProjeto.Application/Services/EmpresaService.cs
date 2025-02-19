@@ -59,4 +59,17 @@ public class EmpresaService : IEmpresaService
         await _empresaRepository.UpdateAsync(empresaEntity);
 
     }
+
+    public async Task<List<EmpresaDTO>> GetEmpresaTermo(string termo)
+    {
+        if (string.IsNullOrWhiteSpace(termo))
+        {
+            return new List<EmpresaDTO>();
+        }
+
+        var empresaTermo = await _empresaRepository.GetEmpresaTermoAsync(termo);
+
+        return _mapper.Map<List<EmpresaDTO>>(empresaTermo);
+
+    }
 }

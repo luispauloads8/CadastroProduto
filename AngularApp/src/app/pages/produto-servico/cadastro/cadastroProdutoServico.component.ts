@@ -56,7 +56,6 @@ export class CadastroProdutoServicoComponent implements OnInit {
       },
       (error : any) => {
         console.error('Erro ao carregar produto serviço:', error);
-        //this.toastr.error('Erro ao carragar produto serviço:', 'Erro!');
       },
       () => {}
     );
@@ -67,16 +66,6 @@ export class CadastroProdutoServicoComponent implements OnInit {
       return this.produtosServicos.filter(
         (produto: ProdutoServico) => produto.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
       )
-  }
-  
-  public deletar(id:number | undefined){
-    if(id != undefined){
-      this.produtoServicoService.DeletarProdutoServico(id).subscribe(response =>{
-      console.log(response);
-      window.location.reload();
-    
-      });
-    }
   }
 
   openModal(event: any, template: TemplateRef<void>, produtoServicoId: number): void {

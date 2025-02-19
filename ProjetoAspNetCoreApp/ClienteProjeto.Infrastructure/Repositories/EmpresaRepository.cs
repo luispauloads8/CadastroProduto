@@ -74,4 +74,12 @@ public class EmpresaRepository : IEmpresaRepository
         await _empresaContext.SaveChangesAsync();
         return empresa;
     }
+
+    public async Task<List<Empresa>> GetEmpresaTermoAsync(string termo)
+    {
+        return await _empresaContext.Empresas
+           .Where(p => p.NomeFantasia.Contains(termo))
+           .ToListAsync();
+    }
+
 }

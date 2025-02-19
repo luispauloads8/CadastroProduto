@@ -21,6 +21,9 @@ import { CadastroCidadeComponent } from './pages/cidade/cadastro/cadastroCidade.
 import { EmpresaComponent } from './pages/empresa/empresa.component';
 import { DetalhesEmpresaComponent } from './pages/empresa/detalhes/detalhes-empresa.component';
 import { CadastroEmpresaComponent } from './pages/empresa/cadastro/cadastro-empresa.component';
+import { ClienteComponent } from './pages/cliente/cliente.component';
+import { DetalhesClienteComponent } from './pages/cliente/detalhes/detalhesCliente.component';
+import { CadastroClienteComponent } from './pages/cliente/cadastro/cadastroCliente.component';
 
 
 export const routes: Routes = [
@@ -67,6 +70,13 @@ export const routes: Routes = [
             {path: 'detalhes/:id', component: DetalhesEmpresaComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesEmpresaComponent, title: 'Detalhes'},
             {path: 'cadastro', component: CadastroEmpresaComponent, title: 'Cadastro'},
+        ]
+    },
+    {path: 'cliente', component: ClienteComponent, title: 'Cliente',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesClienteComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesClienteComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroClienteComponent, title: 'Cadastro'},
         ]
     },
 

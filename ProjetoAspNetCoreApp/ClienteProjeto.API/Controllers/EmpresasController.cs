@@ -35,6 +35,19 @@ namespace ClienteProjeto.API.Controllers
             return Ok(empresa);
         }
 
+        [HttpGet("{search}", Name ="GetEmpresaTermo")]
+        public async Task<ActionResult<List<EmpresaDTO>>> Get(string search)
+        {
+            var empresa = await _empresaService.GetEmpresaTermo(search);
+
+            if (empresa == null || empresa.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(empresa);
+        }
+
         [HttpPost]
         public async Task<ActionResult<EmpresaDTO>> Post(EmpresaDTO empresaDTO)
         {

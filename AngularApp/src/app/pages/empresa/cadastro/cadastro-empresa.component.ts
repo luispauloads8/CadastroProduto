@@ -34,7 +34,9 @@ export class CadastroEmpresaComponent implements OnInit {
 
   public set filtroLista(value: string){
     this._filtroLista = value;
-    this.empresaFiltradas = this.filtroLista ? this.filtroEmpresa(this.filtroLista) : this.empresas;
+    this.empresaFiltradas = this.filtroLista 
+                            ? this.filtroEmpresa(this.filtroLista) 
+                            : this.empresas;
   }
 
   public filtroEmpresa(filtrarPor: string): Empresa[]{
@@ -65,30 +67,30 @@ export class CadastroEmpresaComponent implements OnInit {
   }
 
   openModal(event: any, template: TemplateRef<void>, empresaId: number): void{
-    event.stopPropagation();
-    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
-
+  event.stopPropagation();
+  this.empresaId = empresaId;
+  this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
-    confirm(){
-      this.modalRef.hide();
+  confirm(){
+    this.modalRef.hide();
+
+    this.empresaService.DeletarEmpresa(this.empresaId).subscribe(
+      (result: Empresa) => {
+        if(result.id === this.empresaId){
+          this.toastr.success('Empresa foi Deletado com Sucesso', 'Deletado!');
+          this.carregaEmpresa();
+        }
+      },
+      (error: any) => {
+        console.error(error);
+        this.toastr.error('Error ao tentar deletar empresa', 'Erro');
+      },
+      () => {}
+    );
+  }
   
-      this.empresaService.DeletarEmpresa(this.empresaId).subscribe(
-        (result: Empresa) => {
-          if(result.id === this.empresaId){
-            this.toastr.success('Empresa foi Deletado com Sucesso', 'Deletado!');
-            this.carregaEmpresa();
-          }
-        },
-        (error: any) => {
-          console.error(error);
-          this.toastr.error('Error ao tentar deletar empresa', 'Erro');
-        },
-        () => {}
-      );
-    }
-  
-    decline(){
-      this.modalRef.hide();
-    }
+  decline(){
+    this.modalRef.hide();
+  }
 }
