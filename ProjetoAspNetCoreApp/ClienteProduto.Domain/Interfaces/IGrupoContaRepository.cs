@@ -6,6 +6,7 @@ public interface IGrupoContaRepository
 {
     Task<IEnumerable<GrupoConta>> GetGrupoContaAsync();
     Task<GrupoConta> GetByIdAsync(int? id);
+    Task<List<GrupoConta>> GetGrupoContaTermoAsync(string search);
     Task<GrupoConta> CreateAsync(GrupoConta grupoConta);
     Task<GrupoConta> UpdateAsync(GrupoConta grupoConta);
     Task<GrupoConta> DeleteAsync(GrupoConta grupoConta);

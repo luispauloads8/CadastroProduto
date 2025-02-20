@@ -73,4 +73,11 @@ public class GrupoContaRepository : IGrupoContaRepository
         await _grupoContasContext.SaveChangesAsync();
         return grupoConta;
     }
+
+    public async Task<List<GrupoConta>> GetGrupoContaTermoAsync(string search)
+    {
+        return await _grupoContasContext.GrupoContas
+       .Where(p => p.Descricao.Contains(search))
+       .ToListAsync();
+    }
 }

@@ -33,6 +33,20 @@ namespace ClienteProjeto.API.Controllers
             return Ok(grupoConta);
         }
 
+        [HttpGet("{search}", Name ="GetGrupoContaTermo")]
+        public async Task<ActionResult<List<GrupoContaDTO>>> Get(string search)
+        {
+            var grupoConta = await _grupoContaService.GetGrupoContaTermo(search);
+
+            if (grupoConta == null || grupoConta.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(grupoConta);
+
+        }
+
         [HttpPost]
         public async Task<ActionResult<GrupoContaDTO>> Post(GrupoContaDTO grupoContaDTO)
         {

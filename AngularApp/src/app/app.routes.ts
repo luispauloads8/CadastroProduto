@@ -24,6 +24,10 @@ import { CadastroEmpresaComponent } from './pages/empresa/cadastro/cadastro-empr
 import { ClienteComponent } from './pages/cliente/cliente.component';
 import { DetalhesClienteComponent } from './pages/cliente/detalhes/detalhesCliente.component';
 import { CadastroClienteComponent } from './pages/cliente/cadastro/cadastroCliente.component';
+import { combineLatest } from 'rxjs';
+import { ContaComponent } from './pages/conta/conta.component';
+import { DetalhesContaComponent } from './pages/conta/detalhes/detalhesConta.component';
+import { CadastroContaComponent } from './pages/conta/cadastro/cadastroConta.component';
 
 
 export const routes: Routes = [
@@ -77,6 +81,13 @@ export const routes: Routes = [
             {path: 'detalhes/:id', component: DetalhesClienteComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesClienteComponent, title: 'Detalhes'},
             {path: 'cadastro', component: CadastroClienteComponent, title: 'Cadastro'},
+        ]
+    },
+    {path: 'contaContabil', component: ContaComponent, title: 'Conta',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesContaComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesContaComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroContaComponent, title: 'Cadastro'},
         ]
     },
 

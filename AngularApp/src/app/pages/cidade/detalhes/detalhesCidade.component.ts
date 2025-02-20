@@ -27,7 +27,7 @@ export class DetalhesCidadeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private cidaddeService: CidadeService,
+    private cidadeService: CidadeService,
     private toastr: ToastrService,
     private route: ActivatedRoute
   ){}
@@ -69,7 +69,7 @@ export class DetalhesCidadeComponent implements OnInit {
     
 
     if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put')  {
-      this.cidaddeService[this.estadoSalvar](this.cidade).subscribe(
+      this.cidadeService[this.estadoSalvar](this.cidade).subscribe(
         () => this.toastr.success('Cidade gravado com Sucesso!', 'Sucesso'),
         (error: any) => {
           console.error(error);
@@ -86,7 +86,7 @@ export class DetalhesCidadeComponent implements OnInit {
     if(cidade != null){
       this.estadoSalvar = 'put';
 
-      this.cidaddeService.GetCidadeId(+cidade).subscribe(
+      this.cidadeService.GetCidadeId(+cidade).subscribe(
         (cidade: Cidade) => {
           this.cidade = {...cidade};
 

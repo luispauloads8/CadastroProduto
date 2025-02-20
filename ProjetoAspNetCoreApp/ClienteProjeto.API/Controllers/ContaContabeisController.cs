@@ -63,7 +63,7 @@ namespace ClienteProjeto.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ContaContabilDTO>> Delete(int id)
         {
-            var contaContabil = _contaContabilService.GetById(id);
+            var contaContabil = await _contaContabilService.GetById(id);
             if (contaContabil == null)
             {
                 return NoContent();

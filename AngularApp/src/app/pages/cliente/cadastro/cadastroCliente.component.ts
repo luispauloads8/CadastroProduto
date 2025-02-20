@@ -85,7 +85,7 @@ export class CadastroClienteComponent implements OnInit {
       },
       (error: any) => {
         console.error(error);
-        this.toastr.error('Error ao tentar deletar empresa', 'Erro');
+        this.toastr.error('Error ao tentar deletar Cliente', 'Erro');
       },
       () => {}
     );

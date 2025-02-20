@@ -54,4 +54,15 @@ public class GrupoContaService : IGrupoContaService
         await _grupoContaRepository.UpdateAsync(grupoContaEntity);
     }
 
+    public async Task<List<GrupoContaDTO>> GetGrupoContaTermo(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return new List<GrupoContaDTO>();
+        }
+
+        var grupoContaTermo = await _grupoContaRepository.GetGrupoContaTermoAsync(search);
+
+        return _mapper.Map<List<GrupoContaDTO>>(grupoContaTermo);
+    }
 }
