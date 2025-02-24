@@ -73,4 +73,11 @@ public class ClienteRepository : IClienteRepository
         await _clienteContext.SaveChangesAsync();
         return cliente;
     }
+
+    public Task<List<Cliente>> GetClienteTermoAsync(string search)
+    {
+        return _clienteContext.Clientes
+            .Where(c => c.Nome.Contains(search))
+            .ToListAsync();
+    }
 }

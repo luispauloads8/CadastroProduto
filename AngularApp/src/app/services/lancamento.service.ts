@@ -19,15 +19,15 @@ export class LancamentoService {
   }
 
   public GetLancamentoId(id: number): Observable<Lancamento>{
-    return this.http.get<Lancamento>(`${this.ApiUrl}Lancametos/${id}`).pipe(take(1));
+    return this.http.get<Lancamento>(`${this.ApiUrl}Lancamentos/${id}`).pipe(take(1));
   }
 
   public post(lancamento: Lancamento): Observable<Lancamento>{
     return this.http.post<Lancamento>(`${this.ApiUrl}Lancamentos`, lancamento).pipe(take(1));
   }
 
-  public put(id: number, lancamento: Lancamento): Observable<Lancamento>{
-    return this.http.put<Lancamento>(`${this.ApiUrl}Lancamentos/${id}`, lancamento).pipe(take(1));
+  public put(lancamento: Lancamento): Observable<Lancamento>{
+    return this.http.put<Lancamento>(`${this.ApiUrl}Lancamentos/${lancamento.id}`, lancamento).pipe(take(1));
   }
 
   public DeletarLancamento(id: number): Observable<Lancamento>{

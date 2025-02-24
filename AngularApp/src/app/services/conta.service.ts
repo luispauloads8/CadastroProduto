@@ -21,8 +21,8 @@ export class ContaService {
     return this.http.get<ContaContabil>(`${this.ApiUrl}ContaContabeis/${id}`).pipe(take(1));
   }
 
-  public GetContaContabilTermo(termo: string): Observable<ContaContabil>{
-    return this.http.get<ContaContabil>(`${this.ApiUrl}ContaContabeis/${termo}`).pipe(take(1));
+  public GetContaContabilTermo(termo: string): Observable<ContaContabil[]>{
+    return this.http.get<ContaContabil[]>(`${this.ApiUrl}ContaContabeis/${termo}`).pipe(take(1));
   }
 
   public post(contaContabil: ContaContabil): Observable<ContaContabil>{

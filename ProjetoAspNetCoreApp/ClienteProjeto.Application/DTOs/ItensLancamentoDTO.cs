@@ -13,5 +13,6 @@ public class ItensLancamentoDTO
     [Required(ErrorMessage = "Informe o valor")]
     [DisplayFormat(DataFormatString = "{0:n2}")]
     public decimal ValorItem { get; set; }
+    public int LancamentoId { get; set; }
     public LancamentoDTO Lancamento { get; set; }
 }

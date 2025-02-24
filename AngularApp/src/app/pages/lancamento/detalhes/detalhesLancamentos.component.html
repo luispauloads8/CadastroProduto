@@ -31,7 +31,7 @@
                     placeholder="Informe descrição do produto ou serviço" 
                     [(ngModel)]="produtoServicoFiltro"
                     [ngModelOptions]="{standalone: true}"
-                    (input)="onInputChange()"/>
+                    (input)="onInputChangeProdutoServico()"/>
                     <div class="dropdown-menu show"
                     *ngIf="produtosServicosFiltrados?.length && !carregando">
                      <button
@@ -43,39 +43,54 @@
                      </button>
                     </div>
                     <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
-                    <!-- <div *ngIf="f.produtoServico?.errors?.required" class="invalid-feedback">
-                        produto e serviço obrigatorio
-                    </div> -->
                 </div>
-                <div class="form-group col-md-5 idValor">
-                    <label>Valor</label>
-                    <input type="number" class="form-control" placeholder="Informe o Valor" formControlName="valor"
-                    [ngClass]="cssValidator(f.valor)">
-                    <div *ngIf="f.valor?.errors?.required" class="invalid-feedback" >
-                        valor obrigatorio
-                    </div>
+
+            <div class="form-group col-md-5 idValor">
+                <label>Valor</label>
+                <input type="number" class="form-control" 
+                placeholder="Informe o Valor" 
+                formControlName="valorItem"
+                [ngClass]="cssValidator(f.valorItem)">
+                <div *ngIf="f.valorItem?.errors?.required" class="invalid-feedback" >
+                    valor obrigatorio
                 </div>
-                <div class="form-group">
-                    <label>Quantidade</label>
-                    <input type="number" class="form-control" formControlName="quantidade"
-                    [ngClass]="cssValidator(f.quantidade)">
-                    <div *ngIf="f.quantidade?.errors?.required" class="invalid-feedback">
-                        quantidade é obrigatoria
-                    </div>
+            </div>
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input type="number" class="form-control" 
+                formControlName="quantidade"
+                [ngClass]="cssValidator(f.quantidade)">
+                <div *ngIf="f.quantidade?.errors?.required" class="invalid-feedback">
+                    quantidade é obrigatoria
                 </div>
+            </div>
+                
             </div>
             <div class="form-row d-flex">
                 <div class="form-group col-md-8">
                     <label>Cliente</label>
-                    <input type="text" class="form-control" placeholder="Informe o cliente" formControlName="cliente"
-                    [ngClass]="cssValidator(f.cliente)">
-                    <div *ngIf="f.cliente?.errors?.required" class="invalid-feedback">
-                        cliente é obrigatorio
+                    <input type="text" class="form-control" 
+                    placeholder="Informe o cliente" 
+                    [(ngModel)]="clienteFiltro"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="onInputChangeCliente()"/>
+                    <div class="dropdown-menu show"
+                    *ngIf="clientesFiltrados?.length && !carregando">
+                     <button
+                     class="dropdown-item"
+                     *ngFor="let cliente of clientesFiltrados"
+                     (click)="selecionarCliente(cliente)"
+                     >
+                        {{cliente.nome}}
+                     </button>
                     </div>
+                    <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
                 </div>
                 <div class="form-group col-md-4 dataHora">
                     <label>Data e Hora</label>
-                    <input type="text" class="form-control" placeholder="Informe data e hora" formControlName="dataLancamento" 
+                    <input type="text" class="form-control" 
+                    placeholder="Informe data e hora" 
+                    formControlName="dataLancamento" 
                     [bsConfig]="bsConfig"
                     [ngClass]="cssValidator(f.dataLancamento)"
                     bsDatepicker>
@@ -87,17 +102,31 @@
             <div class="form-row d-flex">
                 <div class="form-group col-md-12">
                     <label>Conta Contabil</label>
-                    <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="contaContabil"
-                    [ngClass]="cssValidator(f.contaContabil)">
-                    <div *ngIf="f.contaContabil?.errors?.required" class="invalid-feedback">
-                        conta contabil é obrigatorio
+                    <input type="text" class="form-control" 
+                    placeholder="Informe conta contabil"
+                    [(ngModel)]="contaContabilFiltro"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="onInputChangeContaContabil()"/>
+                    <div class="dropdown-menu show"
+                    *ngIf="contaContabilFiltrados?.length && !carregando">
+                     <button
+                     class="dropdown-item"
+                     *ngFor="let contaContabil of contaContabilFiltrados"
+                     (click)="selecionarContaContabil(contaContabil)"
+                     >
+                        {{contaContabil.descricao}}
+                     </button>
                     </div>
+                    <!-- <div *ngIf="f.contaContabil?.errors?.required" class="invalid-feedback">
+                        conta contabil é obrigatorio
+                    </div> -->
                 </div>
             </div>
             <div class="form-row d-flex">
                 <div class="form-group col-md-12">
                     <label>observação</label>
-                    <input type="text" class="form-control" placeholder="Informe conta contabil" formControlName="observacao"
+                    <input type="text" class="form-control" placeholder="Informe observação" 
+                    formControlName="observacao"
                     [ngClass]="cssValidator(f.observacao)">
                     <div *ngIf="f.observacao?.errors?.required" class="invalid-feedback">
                         observação é obrigatorio
@@ -118,7 +147,7 @@
                 </button>
                 <div>
                     <a class="btn btn-info" style="width: 180px; margin-right: 10px;" [routerLink]="['/lancamento/cadastro']" >voltar</a>
-                    <button class="btn btn-success" [disabled]="!form.valid">
+                    <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarLancamento()">
                         <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
                         Salvar Lançamento
                     </button>

@@ -29,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         services.AddScoped<IGrupoContaRepository, GrupoContaRepository>();
         services.AddScoped<ILancamentoRepository, LancamentoRepository>();
+        services.AddScoped<IItensLancamentosRepository, ItensLancamentoRepository>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
         services.AddScoped<IProdutoServicoService, ProdutoServicoService>();
@@ -40,7 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IGrupoContaService, GrupoContaService>();
         services.AddScoped<IContaContabilService, ContaContabilService>();
         services.AddScoped<ILancamentoService, LancamentoService>();
-
+        
 
         services.AddAutoMapper(typeof(DTOMappingProfile));
 

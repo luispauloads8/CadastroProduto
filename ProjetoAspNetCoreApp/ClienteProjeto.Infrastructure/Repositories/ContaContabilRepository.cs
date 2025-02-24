@@ -73,4 +73,11 @@ public class ContaContabilRepository : IContaContabilRepository
         await _contaConbailContext.SaveChangesAsync();
         return contaContabil;
     }
+
+    public Task<List<ContaContabil>> GetContaContabilTermoAsync(string search)
+    {
+        return _contaConbailContext.ContaContabeis
+            .Where(c => c.Descricao.Contains(search))
+            .ToListAsync();
+    }
 }

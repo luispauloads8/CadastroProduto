@@ -35,6 +35,19 @@ namespace ClienteProjeto.API.Controllers
             return Ok(contaContabil);
         }
 
+        [HttpGet("{search}", Name ="GetContaContabilTermo")]
+        public async Task<ActionResult<List<ContaContabilDTO>>> Get(string search)
+        {
+            var contaContabil = await _contaContabilService.GetContaContabilTermo(search);
+
+            if (contaContabil == null || contaContabil.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(contaContabil);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ContaContabilDTO>> Post(ContaContabilDTO contaContabilDTO)
         {

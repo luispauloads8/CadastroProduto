@@ -35,6 +35,19 @@ namespace ClienteProjeto.API.Controllers
 
         }
 
+        [HttpGet("{search}", Name ="GetClienteTermo")]
+        public async Task<ActionResult<List<ClienteDTO>>> Get(string search)
+        {
+            var cliente = await _clienteService.GetClienteTermo(search);
+
+            if (cliente == null || cliente.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(cliente);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ClienteDTO>> Post(ClienteDTO clienteDTO)
         {

@@ -11,11 +11,11 @@ export interface Lancamento {
     produtoServicoId: number;
     clienteId: number; 
     observacao: string; 
-    dataLancamento?: Date;
+    dataLancamento: Date;
     valor: number;
     contaContabil: ContaContabil; 
     empresa: Empresa;
     cliente: Cliente; 
     produtoServico: ProdutoServico; 
-    itensLancamento: ItensLancamentos[]; 
+    itensLancamentos: ItensLancamentos[]; 
 }

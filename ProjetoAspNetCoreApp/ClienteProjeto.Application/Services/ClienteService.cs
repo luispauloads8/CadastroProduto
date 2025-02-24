@@ -60,4 +60,15 @@ public class ClienteService : IClienteService
 
     }
 
+    public async Task<List<ClienteDTO>> GetClienteTermo(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return new List<ClienteDTO>();
+        }
+
+        var clienteTermo = await _clienteRepository.GetClienteTermoAsync(search);
+
+        return _mapper.Map<List<ClienteDTO>>(clienteTermo);
+    }
 }

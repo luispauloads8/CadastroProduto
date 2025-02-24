@@ -64,4 +64,15 @@ public class ContaContabilService : IContaContabilService
         await _contaContabilRepository.UpdateAsync(contaContabilEntity);
     }
 
+    public async Task<List<ContaContabilDTO>> GetContaContabilTermo(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return new List<ContaContabilDTO>();
+        }
+
+        var contaContabilTermo = await _contaContabilRepository.GetContaContabilTermoAsync(search);
+
+        return _mapper.Map<List<ContaContabilDTO>>(contaContabilTermo);
+    }
 }

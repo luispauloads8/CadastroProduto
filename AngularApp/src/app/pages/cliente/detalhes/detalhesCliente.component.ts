@@ -155,15 +155,15 @@ export class DetalhesClienteComponent implements OnInit {
     const dadosCliente = {
       ...this.form.value,
       cep: cepFormatado,
+      cidadeId: this.cidadeSelecionada?.id,
+      estadoCivil: +this.form.value.estadoCivil,
+      sexo: +this.form.value.sexo,
       dataNascimento
     };
 
     if (this.estadoSalvar === 'post') {
       this.cliente = {
-        ...dadosCliente,
-        cidadeId: this.cidadeSelecionada?.id,
-        estadoCivil: +this.form.value.estadoCivil,
-        sexo: +this.form.value.sexo
+        ...dadosCliente
       };
     } else {
       this.cliente = {
