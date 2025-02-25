@@ -19,7 +19,7 @@ imports: [FormsModule, RouterModule, CommonModule, ReactiveFormsModule],
 export class DetalhesContaComponent implements OnInit {
 
   form!: FormGroup;
-  ContaContabil!: ContaContabil;
+  contaContabil!: ContaContabil;
   grupoContabeis: GrupoConta[] = [];
   grupoContabilFiltradas: GrupoConta[] = [];
   grupoFiltro: string = '';
@@ -77,14 +77,14 @@ export class DetalhesContaComponent implements OnInit {
       return;
     }
 
-    this.ContaContabil = {
-      id: this.estadoSalvar == 'put' ? this.ContaContabil.id : undefined,
+    this.contaContabil = {
+      id: this.estadoSalvar == 'put' ? this.contaContabil.id : undefined,
       ...this.form.value,
       grupoContaId: this.grupoContabilSelecionada?.id
     };
 
     if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put'){
-      this.contaService[this.estadoSalvar](this.ContaContabil).subscribe(
+      this.contaService[this.estadoSalvar](this.contaContabil).subscribe(
         () => this.toastr.success('Conta Contabil gravada com Sucesso!', 'Sucesso'),
         (error: any) => {
           console.error(error);
@@ -104,9 +104,9 @@ export class DetalhesContaComponent implements OnInit {
 
       this.contaService.GetContaContabilId(+contaContabil).subscribe(
         (contaContabil: ContaContabil) => {
-          this.ContaContabil = {...contaContabil};
+          this.contaContabil = {...contaContabil};
 
-          this.form.patchValue({...this.ContaContabil});
+          this.form.patchValue({...this.contaContabil});
 
           if(contaContabil.grupoConta){
             this.grupoContabilSelecionada = contaContabil.grupoConta; // exibe os dados do grupo

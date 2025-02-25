@@ -28,6 +28,9 @@ import { combineLatest } from 'rxjs';
 import { ContaComponent } from './pages/conta/conta.component';
 import { DetalhesContaComponent } from './pages/conta/detalhes/detalhesConta.component';
 import { CadastroContaComponent } from './pages/conta/cadastro/cadastroConta.component';
+import { GrupoComponent } from './pages/grupo/grupo.component';
+import { DetalhesGrupoComponent } from './pages/grupo/detalhes/detalhesGrupo.component';
+import { CadastroGrupoComponent } from './pages/grupo/cadastro/cadastroGrupo.component';
 
 
 export const routes: Routes = [
@@ -88,6 +91,13 @@ export const routes: Routes = [
             {path: 'detalhes/:id', component: DetalhesContaComponent, title: 'Detalhes'},
             {path: 'detalhes', component: DetalhesContaComponent, title: 'Detalhes'},
             {path: 'cadastro', component: CadastroContaComponent, title: 'Cadastro'},
+        ]
+    },
+    {path: 'grupoConta', component: GrupoComponent, title: 'Grupo',
+        children: [
+            {path: 'detalhes/:id', component: DetalhesGrupoComponent, title: 'Detalhes'},
+            {path: 'detalhes', component: DetalhesGrupoComponent, title: 'Detalhes'},
+            {path: 'cadastro', component: CadastroGrupoComponent, title: 'Cadastro'},
         ]
     },
 
