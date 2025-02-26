@@ -118,7 +118,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Clientes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clientes_Cidades_CidadeEnderecoId",
+                        name: "FK_Clientes_Cidades_CidadeId",
                         column: x => x.CidadeEnderecoId,
                         principalTable: "Cidades",
                         principalColumn: "Id",

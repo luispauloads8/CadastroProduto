@@ -13,7 +13,7 @@ public class CidadeDTO
     public string Descricao { get; set; }
     public EnumEstado Estado { get; set; }
 
-    public ICollection<ClienteDTO> ClientesEndereco { get; set; }
+    public ICollection<ClienteDTO> Clientes { get; set; }
     public ICollection<EmpresaDTO> Empresas { get; set; }
     public ICollection<FornecedorDTO> Fornecedores { get; set; }
 }

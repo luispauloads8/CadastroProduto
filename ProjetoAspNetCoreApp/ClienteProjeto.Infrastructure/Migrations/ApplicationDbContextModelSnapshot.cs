@@ -17,7 +17,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -37,7 +37,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias", (string)null);
+                    b.ToTable("Categorias");
 
                     b.HasData(
                         new
@@ -65,7 +65,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cidades", (string)null);
+                    b.ToTable("Cidades");
 
                     b.HasData(
                         new
@@ -105,9 +105,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
-
-                    b.Property<int>("CidadeEnderecoId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CidadeId")
                         .HasColumnType("int");
@@ -160,9 +157,9 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CidadeEnderecoId");
+                    b.HasIndex("CidadeId");
 
-                    b.ToTable("Clientes", (string)null);
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ContaContabil", b =>
@@ -185,7 +182,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("GrupoContaId");
 
-                    b.ToTable("ContaContabeis", (string)null);
+                    b.ToTable("ContaContabeis");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Empresa", b =>
@@ -228,7 +225,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("Empresas", (string)null);
+                    b.ToTable("Empresas");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Fornecedor", b =>
@@ -281,7 +278,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("Fornecedores", (string)null);
+                    b.ToTable("Fornecedores");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.GrupoConta", b =>
@@ -299,7 +296,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupoContas", (string)null);
+                    b.ToTable("GrupoContas");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ItensLancamento", b =>
@@ -328,7 +325,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("LancamentoId");
 
-                    b.ToTable("ItensLancamentos", (string)null);
+                    b.ToTable("ItensLancamentos");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Lancamento", b =>
@@ -374,7 +371,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("ProdutoServicoId");
 
-                    b.ToTable("Lancamentos", (string)null);
+                    b.ToTable("Lancamentos");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ProdutoServico", b =>
@@ -400,7 +397,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.ToTable("ProdutoServicos", (string)null);
+                    b.ToTable("ProdutoServicos");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Usuario", b =>
@@ -433,14 +430,14 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("EmpresaId");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cliente", b =>
                 {
                     b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
-                        .WithMany("ClientesEndereco")
-                        .HasForeignKey("CidadeEnderecoId")
+                        .WithMany("Clientes")
+                        .HasForeignKey("CidadeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -555,7 +552,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cidade", b =>
                 {
-                    b.Navigation("ClientesEndereco");
+                    b.Navigation("Clientes");
 
                     b.Navigation("Empresas");
 

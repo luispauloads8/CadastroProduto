@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClienteProjeto.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250210202157_removeIdCidade")]
-    partial class removeIdCidade
+    [Migration("20250226022722_Ajuste")]
+    partial class Ajuste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -109,9 +109,6 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
 
-                    b.Property<int>("CidadeEnderecoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CidadeId")
                         .HasColumnType("int");
 
@@ -163,7 +160,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CidadeEnderecoId");
+                    b.HasIndex("CidadeId");
 
                     b.ToTable("Clientes");
                 });
@@ -442,8 +439,8 @@ namespace ClienteProjeto.Infrastructure.Migrations
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cliente", b =>
                 {
                     b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
-                        .WithMany("ClientesEndereco")
-                        .HasForeignKey("CidadeEnderecoId")
+                        .WithMany("Clientes")
+                        .HasForeignKey("CidadeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -558,7 +555,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cidade", b =>
                 {
-                    b.Navigation("ClientesEndereco");
+                    b.Navigation("Clientes");
 
                     b.Navigation("Empresas");
 
