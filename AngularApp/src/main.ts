@@ -5,10 +5,12 @@ import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-br
 import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { provideNgxMask } from 'ngx-mask';
+import { authInterceptor } from './app/interceptors/auth.interceptor';
+
 
   bootstrapApplication(AppComponent, {
     providers: [
@@ -19,6 +21,8 @@ import { provideNgxMask } from 'ngx-mask';
       importProvidersFrom(ToastrModule), 
       provideToastr(),
       provideAnimations(),
-      provideNgxMask()
+      provideNgxMask(),
+      provideHttpClient(withInterceptors([authInterceptor])),
+      provideHttpClient(withFetch()) // Habilita o uso da API fetch
     ],
   }).catch((err) => console.error(err));

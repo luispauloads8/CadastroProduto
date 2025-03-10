@@ -31,77 +31,78 @@ import { CadastroContaComponent } from './pages/conta/cadastro/cadastroConta.com
 import { GrupoComponent } from './pages/grupo/grupo.component';
 import { DetalhesGrupoComponent } from './pages/grupo/detalhes/detalhesGrupo.component';
 import { CadastroGrupoComponent } from './pages/grupo/cadastro/cadastroGrupo.component';
+import { authGuard } from './guard/auth.guard';
 
 
 export const routes: Routes = [
     {
         path: 'user', component: UserComponent,
         children: [
-            {path: 'login', component: LoginComponent},
-            {path: 'registration', component: RegistrationComponent}
+            {path: 'login', component: LoginComponent, title: 'Login'},
+            {path: 'registration', component: RegistrationComponent, title: "Registra"}
         ]
     },
     {path: 'user/perfil', component: PerfilComponent, title: 'Perfil'},
     {path: 'categoria', redirectTo: 'categoria/cadastro'},
-    {path: 'categoria', component: CategoriaComponent, title: 'Categoria',
+
+    {path: 'categoria', component: CategoriaComponent, title: 'Categoria', canActivate: [authGuard],
         children: [
-           // {path: 'editar/:id', component: EditarComponent, title: 'Editar'},
-            {path: 'detalhes/:id', component: DetalhesComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroComponent, title: 'Cadastro'}
+            {path: 'detalhes/:id', component: DetalhesComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroComponent, title: 'Cadastro', canActivate: [authGuard]}
         ]
     },
-    {path: 'lancamento', component: LancamentoComponent, title: 'Lancamentos',
+    {path: 'lancamento', component: LancamentoComponent, title: 'Lancamentos', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesLancamentosComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesLancamentosComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroLancamentosComponent, title: 'Cadastro'}
+            {path: 'detalhes/:id', component: DetalhesLancamentosComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesLancamentosComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroLancamentosComponent, title: 'Cadastro', canActivate: [authGuard]}
         ]
     },
-    {path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços',
+    {path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesProdutoServicoComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro'}
+            {path: 'detalhes/:id', component: DetalhesProdutoServicoComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesProdutoServicoComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroProdutoServicoComponent, title: 'Cadastro', canActivate: [authGuard]}
         ]
     },
-    {path: 'cidade', component: CidadeComponent, title: 'Cidades',
+    {path: 'cidade', component: CidadeComponent, title: 'Cidades', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesCidadeComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesCidadeComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroCidadeComponent, title: 'Cadastro'},
+            {path: 'detalhes/:id', component: DetalhesCidadeComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesCidadeComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroCidadeComponent, title: 'Cadastro', canActivate: [authGuard]},
         ]
     },
-    {path: 'empresa', component: EmpresaComponent, title: 'Empresa',
+    {path: 'empresa', component: EmpresaComponent, title: 'Empresa', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesEmpresaComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesEmpresaComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroEmpresaComponent, title: 'Cadastro'},
+            {path: 'detalhes/:id', component: DetalhesEmpresaComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesEmpresaComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroEmpresaComponent, title: 'Cadastro', canActivate: [authGuard]},
         ]
     },
-    {path: 'cliente', component: ClienteComponent, title: 'Cliente',
+    {path: 'cliente', component: ClienteComponent, title: 'Cliente', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesClienteComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesClienteComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroClienteComponent, title: 'Cadastro'},
+            {path: 'detalhes/:id', component: DetalhesClienteComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesClienteComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroClienteComponent, title: 'Cadastro', canActivate: [authGuard]},
         ]
     },
-    {path: 'contaContabil', component: ContaComponent, title: 'Conta',
+    {path: 'contaContabil', component: ContaComponent, title: 'Conta', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesContaComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesContaComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroContaComponent, title: 'Cadastro'},
+            {path: 'detalhes/:id', component: DetalhesContaComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesContaComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroContaComponent, title: 'Cadastro', canActivate: [authGuard]},
         ]
     },
-    {path: 'grupoConta', component: GrupoComponent, title: 'Grupo',
+    {path: 'grupoConta', component: GrupoComponent, title: 'Grupo', canActivate: [authGuard],
         children: [
-            {path: 'detalhes/:id', component: DetalhesGrupoComponent, title: 'Detalhes'},
-            {path: 'detalhes', component: DetalhesGrupoComponent, title: 'Detalhes'},
-            {path: 'cadastro', component: CadastroGrupoComponent, title: 'Cadastro'},
+            {path: 'detalhes/:id', component: DetalhesGrupoComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'detalhes', component: DetalhesGrupoComponent, title: 'Detalhes', canActivate: [authGuard]},
+            {path: 'cadastro', component: CadastroGrupoComponent, title: 'Cadastro', canActivate: [authGuard]},
         ]
     },
 
-    {path: 'dashboard', component: DashboardComponent, title: 'Dashboard'},
+    {path: 'dashboard', component: DashboardComponent, title: 'Dashboard' , canActivate: [authGuard]},
     {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
 ];

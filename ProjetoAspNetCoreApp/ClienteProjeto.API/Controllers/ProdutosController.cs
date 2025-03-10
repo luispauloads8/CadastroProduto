@@ -1,6 +1,7 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClienteProjeto.API.Controllers;
@@ -17,6 +18,7 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy="UserOnly")]
     public async Task<ActionResult<IEnumerable<ProdutoServicoDTO>>> Get()
     {
         var produtos = await _produtoServicoService.GetProdutosServicos();

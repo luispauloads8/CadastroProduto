@@ -18,6 +18,7 @@ namespace ClienteProjeto.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
             var categoria = await _categoriaService.GetCategorias();
@@ -79,6 +80,7 @@ namespace ClienteProjeto.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Policy ="AdminOnly")]
         public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
             var categoria = await _categoriaService.GetById(id);

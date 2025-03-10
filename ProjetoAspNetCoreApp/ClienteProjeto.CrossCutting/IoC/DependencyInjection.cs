@@ -41,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped<IGrupoContaService, GrupoContaService>();
         services.AddScoped<IContaContabilService, ContaContabilService>();
         services.AddScoped<ILancamentoService, LancamentoService>();
+
+        services.AddScoped<ITokenService, TokenService>();
         
 
         services.AddAutoMapper(typeof(DTOMappingProfile));
