@@ -73,6 +73,8 @@ public class LancamentoService : ILancamentoService
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentosEntity = await _lancamentoRepository.GetLancamentoAsync();
 
+        var cliente = new Cliente();
+
         // Dicionário para armazenar ProdutoServico por ID
         var produtoServicoDictionary = new Dictionary<int, ProdutoServico>();
 
@@ -83,10 +85,19 @@ public class LancamentoService : ILancamentoService
                 // Obter ProdutoServico e adicionar ao dicionário
                 var produtoServico = await _produtoServicoRepository.GetByIdAsync(itemProduto.ProdutoServicoId);
                 produtoServicoDictionary[itemProduto.ProdutoServicoId] = produtoServico;
+
+                //recupera cliente
+                var clienteReposistory = await _clienteRepository.GetByIdAsync(itemProduto.ClienteId);
+                cliente = clienteReposistory;
             }
+
+            
 
             // Atribuir ProdutoServico correspondente à instância de Lancamento
             itemProduto.ProdutoServico = produtoServicoDictionary[itemProduto.ProdutoServicoId];
+
+            //atribui cliente 
+            itemProduto.Cliente = cliente;
         }
 
         return _mapper.Map<IEnumerable<LancamentoDTO>>(lancamentosEntity);

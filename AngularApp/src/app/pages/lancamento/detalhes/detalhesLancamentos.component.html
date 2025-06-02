@@ -45,16 +45,26 @@
                     <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
                 </div>
 
-            <div class="form-group col-md-5 idValor">
+                <div class="form-group col-md-5 idValor">
                 <label>Valor</label>
-                <input type="number" class="form-control" 
-                placeholder="Informe o Valor" 
-                formControlName="valorItem"
+                <input type="text"
+                class="form-control"
+                placeholder="Informe o Valor"
+                [value]="formatarNumero(f.valorItem.value || 0)"
+                (keydown)="permitirApenasNumeros($event)"
+                [value]="formatarValorItem()"
+                (input)="onInput($event)"
+                (blur)="onBlur($event)"
                 [ngClass]="cssValidator(f.valorItem)">
-                <div *ngIf="f.valorItem?.errors?.required" class="invalid-feedback" >
-                    valor obrigatorio
+                        
+                <div *ngIf="f.valorItem?.errors?.required && (f.valorItem.touched || f.valorItem.dirty)" class="invalid-feedback">
+                    valor obrigatório
                 </div>
-            </div>
+                <div *ngIf="f.valorItem?.errors?.menorOuIgualZero && (f.valorItem.touched || f.valorItem.dirty)" class="invalid-feedback">
+                    o valor deve ser maior que zero
+                </div>
+                </div>
+
             <div class="form-group">
                 <label>Quantidade</label>
                 <input type="number" class="form-control" 

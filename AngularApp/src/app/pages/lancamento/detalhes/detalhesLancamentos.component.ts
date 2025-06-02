@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TituloComponent } from '../../../shared/titulo/titulo.component';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { BsDatepickerModule, BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 import { defineLocale } from 'ngx-bootstrap/chronos';
@@ -26,6 +26,7 @@ defineLocale('pr-br', ptBrLocale);
   selector: 'app-detalhes',
   standalone: true,
   imports: [FormsModule, RouterModule, ReactiveFormsModule, CommonModule,  BsDatepickerModule],
+  providers: [CurrencyPipe],  // 👈 Forneça o CurrencyPipe aqui!
   templateUrl: './detalhesLancamentos.component.html',
   styleUrl: './detalhesLancamentos.component.css'
 })
@@ -35,8 +36,8 @@ export class DetalhesLancamentosComponent {
   estadoSalvar = 'post';
   lancamento!: Lancamento;
   carregando: boolean = false; // Indica se está carregando os dados
-  valorItem: number | null = null;
   quantidade: number | null = null;
+  valorItem: string = '0,00';
 
   produtosServicos: ProdutoServico[] = [];
   produtosServicosFiltrados: ProdutoServico[] = []; // resultado da busca
@@ -84,11 +85,16 @@ export class DetalhesLancamentosComponent {
     private produtoServicoService: ProdutoServicoService,
     private empresaService: EmpresaService,
     private clienteService: ClienteService,
-    private contaContabilService: ContaService
+    private contaContabilService: ContaService,
+    private currencyPipe: CurrencyPipe
   )
     
   {
     this.localeService.use('pr-br');
+
+    this.form = this.fb.group({
+      valorItem: [0, [Validators.required, this.valorMaiorQueZeroValidator()]]
+    });
   }
 
   ngOnInit(): void {
@@ -140,13 +146,8 @@ export class DetalhesLancamentosComponent {
 
   public validation(): void {
     this.form = this.fb.group({
-      //empresa: ['', [Validators.required]],
-      //produtoServico: ['', [ Validators.required]],
-      //cliente: ['', [Validators.required]],
       quantidade: ['', [ Validators.required]],
       valorItem: ['', [Validators.required]],
-      //itensLancamentosGet: this.fb.array([]), // Usando FormArray para lista de itens
-      //contaContabil: ['', [ Validators.required]],
       dataLancamento: ['', [Validators.required]],
       observacao: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(300)]]
     });
@@ -180,8 +181,82 @@ export class DetalhesLancamentosComponent {
     this.form.reset();
   }
 
-  public cssValidator(campoForm: FormControl): any {
-    return {'is-invalid' : campoForm.errors && campoForm.touched}
+  permitirApenasNumeros(event: KeyboardEvent) {
+    const tecla = event.key;
+
+    // Permite números, backspace e setas
+    if (
+      !/[\d]/.test(tecla) &&
+      tecla !== 'Backspace' &&
+      tecla !== 'ArrowLeft' &&
+      tecla !== 'ArrowRight' &&
+      tecla !== 'Delete' &&
+      tecla !== 'Tab'
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  onInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    // Só permite números e vírgula/ponto no input (mas não remove direto, só ignora no controle)
+    const valorOriginal = input.value;
+
+    // Extrai apenas números do valor para o controle
+    const valorNumerico = valorOriginal.replace(/\D/g, '');
+    const numero = valorNumerico.length ? parseFloat(valorNumerico) / 100 : 0;
+
+    // Atualiza o controle com o valor numérico
+    this.form.get('valorItem')?.setValue(numero);
+  }
+
+  onBlur(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const numero = this.form.get('valorItem')?.value || 0;
+
+    if(!numero || numero <= 0)
+    {
+      input.value = ''; // Deixa o campo vazio
+      this.form.get('valorItem')?.setValue(null); // Opcional: limpa também no form
+    }else{
+      // Formata o valor como moeda no blur
+    input.value = this.formatarNumero(numero);  
+    }
+  }
+
+  // Getter para exibir o valor formatado no input
+  formatarValorItem(): string {
+    const valor = this.form.get('valorItem')?.value ?? 0;
+    return this.formatarNumero(valor);
+  }
+
+  // Função para formatar número como moeda brasileira
+  formatarNumero(valor: number): string {
+    return valor.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  // Validador personalizado: valor maior que zero
+  valorMaiorQueZeroValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      const rawValue = control.value;
+
+      if (rawValue == null || rawValue === '') return null;
+
+      // Se for número direto, usa; se for string, remove máscara e parseia
+      let valorNumerico = typeof rawValue === 'number'
+        ? rawValue
+        : parseFloat(rawValue.toString().replace(/\./g, '').replace(',', '.')) || 0;
+
+      return valorNumerico > 0 ? null : { menorOuIgualZero: true };
+    };
+  }
+
+  public cssValidator(campo: AbstractControl | null): string {
+    return campo && campo.invalid && (campo.dirty || campo.touched) ? 'is-invalid' : '';
   }
 
   public carregarLancamento(): void{
@@ -241,6 +316,7 @@ export class DetalhesLancamentosComponent {
   }
 
   public salvarLancamento(): void{
+
     if(!this.form.valid){
       return;
     }

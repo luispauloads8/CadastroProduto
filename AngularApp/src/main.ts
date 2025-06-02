@@ -5,20 +5,21 @@ import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-br
 import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
-import { HttpClientModule, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient,  withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { provideNgxMask } from 'ngx-mask';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { CurrencyPipe } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
   bootstrapApplication(AppComponent, {
     providers: [
       provideRouter(routes),
       importProvidersFrom(BrowserAnimationsModule), // Importando animações
-      importProvidersFrom(HttpClientModule),
       importProvidersFrom(BrowserModule),
-      importProvidersFrom(ToastrModule), 
+      importProvidersFrom(ToastrModule),
       provideToastr(),
       provideAnimations(),
       provideNgxMask(),

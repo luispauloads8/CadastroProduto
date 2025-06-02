@@ -24,47 +24,47 @@ import { TituloComponent } from '../../shared/titulo/titulo.component';
 })
 export class ProdutoServicoComponent  implements OnInit {
 
-  // public produtosServicos: ProdutoServico[] = [];
-  // public produtosServicosFiltrados: ProdutoServico[] = [];
-  // _filtroLista: string = '';
+  public produtosServicos: ProdutoServico[] = [];
+  public produtosServicosFiltrados: ProdutoServico[] = [];
+  _filtroLista: string = '';
 
-  // constructor(
-  //   private produtoServicoService: ProdutoServicoService,
-  //   private toastr: ToastrService
-  // ){}
+  constructor(
+    private produtoServicoService: ProdutoServicoService,
+    private toastr: ToastrService
+  ){}
 
   ngOnInit(): void {
-    // this.produtoServicoService.GetProdutoServico().subscribe(
-    //   (_produtoServico: ProdutoServico[]) => {
-    //    this.produtosServicos = _produtoServico;
-    //    this.produtosServicosFiltrados = this.produtosServicos;
-    // }, error => console.log(error));
+    this.produtoServicoService.GetProdutoServico().subscribe(
+      (_produtoServico: ProdutoServico[]) => {
+       this.produtosServicos = _produtoServico;
+       this.produtosServicosFiltrados = this.produtosServicos;
+    }, error => console.log(error));
   }
 
-  //   public get filtroLista(): string {
-  //     return this._filtroLista;
-  //   }
+    public get filtroLista(): string {
+      return this._filtroLista;
+    }
   
-  //   public set filtroLista(value: string){
-  //     this._filtroLista = value;
-  //     this.produtosServicosFiltrados = this.filtroLista ? this.filtroCategoria(this.filtroLista) : this.produtosServicos;
-  //   }
+    public set filtroLista(value: string){
+      this._filtroLista = value;
+      this.produtosServicosFiltrados = this.filtroLista ? this.filtroCategoria(this.filtroLista) : this.produtosServicos;
+    }
   
-  //   filtroCategoria(filtrarPor: string): ProdutoServico[]{
-  //     filtrarPor = filtrarPor.toLowerCase();
-  //     return this.produtosServicos.filter(
-  //       (categoria: ProdutoServico) => categoria.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
-  //     )
-  //   }
+    filtroCategoria(filtrarPor: string): ProdutoServico[]{
+      filtrarPor = filtrarPor.toLowerCase();
+      return this.produtosServicos.filter(
+        (categoria: ProdutoServico) => categoria.descricao.toLocaleLowerCase().indexOf(filtrarPor) !== - 1
+      )
+    }
 
-  // deletar(id:number | undefined){
-  //   if(id != undefined){
-  //     this.produtoServicoService.DeletarProdutoServico(id).subscribe(response =>{
-  //     console.log(response);
-  //     window.location.reload();
+  deletar(id:number | undefined){
+    if(id != undefined){
+      this.produtoServicoService.DeletarProdutoServico(id).subscribe(response =>{
+      console.log(response);
+      window.location.reload();
     
-  //     });
-  //   }
-  // }
+      });
+    }
+  }
 
 }

@@ -2,9 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserLogin } from '../models/UserLogin';
-import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, take, tap, throwError } from 'rxjs';
 import { User } from '../models/User';
 import { LOCAL_STORAGE } from './storage.token';
+import { Usuario } from '../models/Usuario';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root'
@@ -29,24 +31,26 @@ export class AuthService {
     return this.http.post<UserLogin>(`${this.ApiURL}Auth/login`, userLogin).pipe(
       tap((response) => this.setToken(response.token, response.refreshToken, response.expiration))
     );
+  } 
+
+  public register(user: User): Observable<User> {
+      return this.http.post<User>(`${this.ApiURL}Auth/register`, user).pipe(
+          tap((response) => {
+              // Supondo que você queira definir um token ou realizar alguma outra ação com a resposta
+              this.setToken(response.email, response.userName, response.password);
+          })
+      );
   }
 
-  // 🔵 Registro: Cria um novo usuário
-  // register(user: User): Observable<User> {
-  //   return this.http.post<User>(`${this.ApiURL}Auth/register`, user);
-  // }
+  public getUsuario(): Observable<Usuario>{
+    return this.http.get<Usuario>(`${this.ApiURL}Auth/GetUsuario`).pipe(take(1));
+  }
 
-  
-
-public register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.ApiURL}Auth/register`, user).pipe(
-        tap((response) => {
-            // Supondo que você queira definir um token ou realizar alguma outra ação com a resposta
-            this.setToken(response.email, response.userName, response.password);
-        })
+  public updateUsuario(userLogin: UserLogin): Observable<UserLogin> {
+    return this.http.post<UserLogin>(`${this.ApiURL}Auth/updateUsuario`, userLogin).pipe(
+      tap((response) => this.setToken(response.token, response.refreshToken, response.expiration))
     );
-}
-  
+  }    
 
   // 🔴 Logout: Remove o token
   public logout(): void {
@@ -102,4 +106,5 @@ public register(user: User): Observable<User> {
   private hasToken(): boolean {
     return !!this.getToken();
   }
+
 }

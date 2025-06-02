@@ -3,6 +3,10 @@ import { TituloComponent } from '../../../shared/titulo/titulo.component';
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ValidatorField } from '../../../helpers/ValidatorField';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Usuario } from '../../../models/Usuario';
 
 
 @Component({
@@ -14,6 +18,7 @@ import { ValidatorField } from '../../../helpers/ValidatorField';
 })
 export class PerfilComponent implements OnInit {
 
+  usuarioUpdate = {} as Usuario;
   form!: FormGroup;
 
 //captura um FormFild apenas com a letra F
@@ -21,24 +26,48 @@ export class PerfilComponent implements OnInit {
     return this.form.controls;
   }
 
-  constructor(private fb: FormBuilder){}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private toaster: ToastrService
+  ){}
 
 
   ngOnInit(): void {
     this.validation();
+    this.carregarUsuario();
   }
 
-  public validation(): void {
+  private carregarUsuario(): void {
+    this.authService.getUsuario().subscribe(
+      (userRetorno: Usuario) => {
+        console.log(userRetorno);
+        this.usuarioUpdate = userRetorno;
+        this.form.patchValue(this.usuarioUpdate);
+        this.toaster.success('Usúario Carregado', 'Sucesso');
+      },
+      (error) => {
+        console.error(error);
+        this.toaster.error('Usuário não carregado', 'Erro');
+        this.router.navigate(['/dashbord']);
+      },
+      () => {}
+    )
+  }
+
+
+  private validation(): void {
 
     const formOptions: AbstractControlOptions = {
-      validators: ValidatorField.MustMatch('senha', 'confirmaSenha')
+      validators: ValidatorField.MustMatch('password', 'confirmaPassword')
     };
 
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
       email: ['', [ Validators.required, Validators.email]],
-      senha: ['', [Validators.required, Validators.minLength(6)]],
-      confirmaSenha: ['', [Validators.required]]
+      password: ['', [Validators.required, Validators.minLength(6), Validators.nullValidator]],
+      confirmaPassword: ['', [Validators.required], Validators.nullValidator]
     }, formOptions);
   }
 
@@ -48,6 +77,12 @@ export class PerfilComponent implements OnInit {
     if(this.form.invalid){
       return;
     }
+  }
+
+  public atualizarUsuario() {
+    this.usuarioUpdate = {...this.form.value};
+
+    this.authService
   }
 
   public resetForm(event: any): void {

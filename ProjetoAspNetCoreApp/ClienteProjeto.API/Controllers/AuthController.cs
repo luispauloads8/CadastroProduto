@@ -34,6 +34,35 @@ public class AuthController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    [Route("GetUsuario")]
+    public async Task<IActionResult> GetUserData()
+    {
+        // Obtém o ID do usuário do token JWT
+        var userId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new ResponseDTO { Status = "Error", Message = "Token inválido ou usuário não autenticado!" });
+        }
+
+        // Busca o usuário pelo ID utilizando o UserManager
+        var user = await _userManager.FindByNameAsync(userId);//_userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound(new ResponseDTO { Status = "Error", Message = "Usuário não encontrado!" });
+        }
+
+        // Retorna os dados do usuário
+        return Ok(new
+        {
+            Nome = user.UserName,
+            Email = user.Email
+        });
+    }
+
+
     [HttpPost]
     [Route("CreateRole")]
     [Authorize(Policy ="SuperAdminOnly")]
