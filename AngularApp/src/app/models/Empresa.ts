@@ -3,7 +3,7 @@ import { Lancamento } from "./Lancamento";
 import { Usuario } from "./Usuario";
 
 export interface Empresa{
- id?: number;
+ id: number;
  razaoSocial: string;
  nomeFantasia: string;
  CNPJ: string;
