@@ -1,6 +1,8 @@
 ﻿using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Interfaces.Emissao;
 using ClienteProjeto.Application.Mappings;
 using ClienteProjeto.Application.Services;
+using ClienteProjeto.Application.Services.Emissao;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using ClienteProjeto.Infrastructure.Repositories;
@@ -42,10 +44,16 @@ public static class DependencyInjection
         services.AddScoped<IContaContabilService, ContaContabilService>();
         services.AddScoped<ILancamentoService, LancamentoService>();
 
+        services.AddScoped<IEmissaoLancamentoService, EmissaoLancamentoService>();
+        services.AddScoped<IEmissaoCategoriaService, EmissaoCategoriaService>();
+
         services.AddScoped<ITokenService, TokenService>();
         
 
         services.AddAutoMapper(typeof(DTOMappingProfile));
+        services.AddAutoMapper(typeof(DTOMappingProfilesViewModel));
+        services.AddAutoMapper(typeof(DTOMappingProfileFiltro));
+        services.AddAutoMapper(typeof(DTOMappingProfileViewModelEntidade));
 
         return services;
     }

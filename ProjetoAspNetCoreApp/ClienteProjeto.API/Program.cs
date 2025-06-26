@@ -1,3 +1,4 @@
+using ClienteProjeto.Application.Services.Relatorio;
 using ClienteProjeto.CrossCutting.IoC;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Infrastructure.Context;
@@ -5,8 +6,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Relatorio.Dto.Lancamento;
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +21,16 @@ builder.Services.AddInfrastructureAPI(builder.Configuration);
 
 //builder.Services.AddAuthorization();
 //builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+
+//configuracao para injecao dependencia para servico de relatorio 
+builder.Services.AddHttpClient<ChamadaRelatorioLancamentoService>();
+builder.Services.AddHttpClient<ChamadaRelatorioCategoriaService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -123,5 +136,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseDeveloperExceptionPage(); // Em ambiente de desenvolvimento
 
 app.Run();
