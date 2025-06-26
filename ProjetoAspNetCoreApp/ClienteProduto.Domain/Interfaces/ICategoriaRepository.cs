@@ -5,6 +5,8 @@ namespace ClienteProjeto.Domain.Interfaces;
 public interface ICategoriaRepository
 {
     Task<IEnumerable<Categoria>> GetCategoriaAsync();
+    Task<IEnumerable<Categoria>> GetCategoriaEmissaoAsync(
+        List<Categoria> categoria);
     Task<List<Categoria>> GetCategoriaTermoAsync(string search);
     Task<Categoria> GetByIdAsync(int? id);
     Task<Categoria> CreateAsync(Categoria categoria);

@@ -82,4 +82,18 @@ public class CategoriaRepository : ICategoriaRepository
          .Where(c => c.Descricao.Contains(search))
          .ToListAsync();
     }
+
+    public async Task<IEnumerable<Categoria>> GetCategoriaEmissaoAsync(List<Categoria> lancamentos)
+    {
+        var categoriaIds = lancamentos
+        .Select(l => l.Id)
+        .Distinct()
+        .ToList();
+
+        var categorias = await _categoryContext.Categorias
+            .Where(c => categoriaIds.Contains(c.Id))
+            .ToListAsync();
+
+        return categorias;
+    }
 }
