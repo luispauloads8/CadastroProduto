@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <form [formGroup]="form" class="card rounded shadow-sm p-3">
+    <h2>Formulário de Lançamento</h2>
+
+    <!-- Empresa -->
+    <div class="mb-3">
+      <select class="form-control" formControlName="empresaId">
+        <option [value]="null" disabled>Selecione uma empresa</option>
+        <option *ngFor="let empresa of empresas" [value]="empresa.id">
+          {{ empresa.nomeFantasia }}
+        </option>
+      </select>
+      <div *ngIf="form.get('empresaId')?.touched && form.get('empresaId')?.invalid" class="text-danger">
+        Empresa é obrigatória.
+      </div>
+    </div>
+
+    <!-- Datas -->
+    <div class="row mb-3">
+      <div class="col">
+        <label for="dataInicio" class="form-label">Data de Início</label>
+        <input type="date" class="form-control" id="dataInicio" formControlName="lancamentoInicio">
+        <div *ngIf="form.get('lancamentoInicio')?.touched && form.get('lancamentoInicio')?.invalid" class="text-danger">
+          Data de início é obrigatória.
+        </div>
+      </div>
+      <div class="col">
+        <label for="dataFim" class="form-label">Data de Fim</label>
+        <input type="date" class="form-control" id="dataFim" formControlName="lancamentoFim">
+        <div *ngIf="form.get('lancamentoFim')?.touched && form.get('lancamentoFim')?.invalid" class="text-danger">
+          Data de fim é obrigatória.
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button type="button" class="btn btn-primary" (click)="imprimir()" [disabled]="form.invalid">
+        Imprimir
+      </button>
+    </div>
+  </form>
+</div>

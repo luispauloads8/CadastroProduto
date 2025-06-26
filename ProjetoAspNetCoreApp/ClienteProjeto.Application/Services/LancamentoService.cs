@@ -3,6 +3,7 @@ using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
+using Relatorio.Dto.Modelos;
 
 namespace ClienteProjeto.Application.Services;
 
@@ -32,6 +33,10 @@ public class LancamentoService : ILancamentoService
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentoEntity = _mapper.Map<Lancamento>(lancamentoDTO);
+
+        decimal valorTotal = lancamentoEntity.ItensLancamentos.Sum(item => item.Quantidade * item.ValorItem);
+        lancamentoEntity.Valor = valorTotal;
+
         await _lancamentoRepository.CreateAsync(lancamentoEntity);
     }
 
@@ -67,13 +72,15 @@ public class LancamentoService : ILancamentoService
         return _mapper.Map<LancamentoDTO>(lancamentoEntity);
     }
 
-
     public async Task<IEnumerable<LancamentoDTO>> GetLancamentos()
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentosEntity = await _lancamentoRepository.GetLancamentoAsync();
 
         var cliente = new Cliente();
+        var empresa = new Empresa();
+        var contaContabil = new ContaContabil();
+        var itensLancamentos = new ItensLancamento();
 
         // Dicionário para armazenar ProdutoServico por ID
         var produtoServicoDictionary = new Dictionary<int, ProdutoServico>();
@@ -86,18 +93,36 @@ public class LancamentoService : ILancamentoService
                 var produtoServico = await _produtoServicoRepository.GetByIdAsync(itemProduto.ProdutoServicoId);
                 produtoServicoDictionary[itemProduto.ProdutoServicoId] = produtoServico;
 
-                //recupera cliente
-                var clienteReposistory = await _clienteRepository.GetByIdAsync(itemProduto.ClienteId);
-                cliente = clienteReposistory;
             }
 
-            
+            //recupera cliente
+            var clienteReposistory = await _clienteRepository.GetByIdAsync(itemProduto.ClienteId);
+            cliente = clienteReposistory;
+
+            var empresaRepository = await _empresaRespository.GetByIdAsync(itemProduto.EmpresaId);
+            empresa = empresaRepository;
+
+            var contaContabilRepository = await _contaContabilRepository.GetByIdAsync(itemProduto.ContaContabilId);
+            contaContabil = contaContabilRepository;
+
+            var itensLancamentoRepository = await _itensLancamentosRepository.GetByIdAsync(itemProduto.Id);
+            itensLancamentos = itensLancamentoRepository;
 
             // Atribuir ProdutoServico correspondente à instância de Lancamento
             itemProduto.ProdutoServico = produtoServicoDictionary[itemProduto.ProdutoServicoId];
 
             //atribui cliente 
             itemProduto.Cliente = cliente;
+
+            //atribui empresa 
+            itemProduto.Empresa = empresa;
+
+            //atribui conta contabil
+            itemProduto.ContaContabil = contaContabil;
+
+            //atribuindo itens lancamento
+            itemProduto.ItensLancamentos ??= new List<ItensLancamento>();
+            itemProduto.ItensLancamentos.Add(itensLancamentos);
         }
 
         return _mapper.Map<IEnumerable<LancamentoDTO>>(lancamentosEntity);
