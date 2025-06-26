@@ -1,0 +1,6 @@
+@RelatoriosProjeto_HostAddress = http://localhost:5078
+
+GET {{RelatoriosProjeto_HostAddress}}/MontadorDocumento/
+Accept: application/json
+
+###
