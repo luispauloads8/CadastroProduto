@@ -15,5 +15,10 @@ public class ContaContabilConfiguration : IEntityTypeConfiguration<ContaContabil
             .WithMany(x => x.ContaContabeis)
             .HasForeignKey(x => x.GrupoContaId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Empresa)
+           .WithMany(e => e.ContaContabils)
+           .HasForeignKey(x => x.EmpresaId)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }
