@@ -9,12 +9,11 @@ public class Cliente : Entity
     public EnumEstadoCivil EstadoCivil { get; set; }
     public string Nacionalidade { get; set; }
     public string Observacao { get; set; }
-    public Cidade Cidade { get; set; }
+
     public Pessoa Pessoa { get; set; }
     public ICollection<Lancamento> Lancamentos { get; set; }
 
     #region "EF"
-    public int CidadeId { get; set; }
     public int PessoaId { get; set; }
 
     #endregion
