@@ -4,6 +4,7 @@ using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClienteProjeto.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805143851_AtualizacaoDTOConfigurations")]
+    partial class AtualizacaoDTOConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +174,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
 
-                    b.Property<int?>("CidadeId")
+                    b.Property<int>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataNascimento")
@@ -656,15 +659,19 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cliente", b =>
                 {
-                    b.HasOne("ClienteProjeto.Domain.Entities.Cidade", null)
+                    b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
                         .WithMany("Clientes")
-                        .HasForeignKey("CidadeId");
+                        .HasForeignKey("CidadeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ClienteProjeto.Domain.Entities.Pessoa", "Pessoa")
                         .WithMany()
                         .HasForeignKey("PessoaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Cidade");
 
                     b.Navigation("Pessoa");
                 });
