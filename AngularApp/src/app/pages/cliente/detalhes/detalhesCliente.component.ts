@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Cliente } from '../../../models/Cliente';
@@ -15,12 +15,13 @@ import { CidadeService } from '../../../services/cidade.service';
 import { BsDatepickerModule, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { PessoaService } from '../../../services/pessoa.service';
 defineLocale('pr-br', ptBrLocale);
 
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [NgxMaskDirective, EmailMaskDirective, FormsModule, RouterModule, CommonModule, ReactiveFormsModule, BsDatepickerModule],
+  imports: [NgxMaskDirective, FormsModule, RouterModule, CommonModule, ReactiveFormsModule, BsDatepickerModule],
   providers: [provideNgxMask(), DatePipe],
   templateUrl: './detalhesCliente.component.html',
   styleUrl: './detalhesCliente.component.css'
@@ -38,6 +39,14 @@ export class DetalhesClienteComponent implements OnInit {
   cidadeSelecionada: Cidade | null = null;
   carregando: boolean = false;
   mask: string = '00.000.00'; // Máscara inicial para 7 dígitos
+
+  pessoaFiltro: string = '';
+  pessoasFiltradas: any[] = [];
+  pessoaSelecionada: any = null;
+  carregandoPessoa: boolean = false;
+
+  // Se estiver editando, setar como true
+  modoEdicao: boolean = false;
 
   private buscaSubject = new Subject<string>();
 
@@ -58,6 +67,7 @@ export class DetalhesClienteComponent implements OnInit {
     private localeService: BsLocaleService,
     private clienteService: ClienteService,
     private cidadeService: CidadeService,
+    private pessoaService: PessoaService,
     private toastr: ToastrService,
     private route: ActivatedRoute
   )
@@ -70,12 +80,44 @@ export class DetalhesClienteComponent implements OnInit {
     this.enumEstadoCivil();
     this.enumSexo();
     this.carregarCliente();
-    this.carregaCidade();
+    //this.carregaCidade();
   }
  //Isso ajustará automaticamente a altura do <textarea> à medida que o usuário digita.
   ajustarAltura(textarea: HTMLTextAreaElement) {
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  onInputChangePessoa() {
+  if (!this.pessoaFiltro || (this.pessoaSelecionada && this.modoEdicao)) {
+    return;
+  }
+
+  this.carregandoPessoa = true;
+  this.pessoasFiltradas = [];
+
+  // Aqui você chama seu serviço de busca de pessoas
+  this.pessoaService.GetPessoaTermo(this.pessoaFiltro).subscribe({
+    next: (dados) => {
+      this.pessoasFiltradas = dados;
+      this.carregandoPessoa = false;
+    },
+    error: () => {
+      this.carregandoPessoa = false;
+    }
+  });
+ }
+
+ selecionaPessoa(pessoa: any) {
+    this.pessoaSelecionada = pessoa;
+    this.pessoaFiltro = pessoa.nome;
+    this.form.patchValue({ pessoaId: pessoa.id });
+    this.pessoasFiltradas = [];
+
+    // Vincular no formulário reativo
+    this.form.patchValue({
+      nome: pessoa.nome
+    });
   }
 
   onInputChange(){
@@ -119,13 +161,9 @@ export class DetalhesClienteComponent implements OnInit {
     this.form.get('rg')?.updateValueAndValidity({ onlySelf: true });
   }
 
-  public validation(): void{
+  private validation(): void{
     this.form = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
-      telefone: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      cep: ['', [Validators.required]],
-      endereco: ['', [Validators.required]],
+      pessoaId: [null, Validators.required],
       nacionalidade: ['', [Validators.required]],
       estadoCivil: ['', Validators.required],
       sexo: ['', [Validators.required]],
@@ -148,14 +186,12 @@ export class DetalhesClienteComponent implements OnInit {
       ? new Date(this.form.value.dataNascimento).toISOString() // Converte para DateTime no formato ISO 8601
       : null;
 
-    // Formata o CEP como 00000-000
-    const cepFormatado = this.form.value.cep.replace(/(\d{5})(\d{3})/, '$1-$2');
+    const { nome, ...dadosSemNome } = this.form.value;
 
     // Dados comuns entre post e put
     const dadosCliente = {
-      ...this.form.value,
-      cep: cepFormatado,
-      cidadeId: this.cidadeSelecionada?.id,
+      ...dadosSemNome,
+      pessoaId: this.pessoaSelecionada.id,
       estadoCivil: +this.form.value.estadoCivil,
       sexo: +this.form.value.sexo,
       dataNascimento
@@ -199,14 +235,20 @@ export class DetalhesClienteComponent implements OnInit {
         // Formatar a data de nascimento
         this.cliente.dataNascimento = new Date(this.cliente.dataNascimento);
 
-        this.form.patchValue({...this.cliente});
-          
-        console.log(this.cliente.dataNascimento);
+        
+        if (this.modoEdicao) {
+          this.form.patchValue({
+            pessoaId: this.pessoaSelecionada.id
+          }); 
+        }
 
-        //configura a cidade selecionada
-        if(cliente.cidade){
-          this.cidadeSelecionada = cliente.cidade; //exibe os dados da empresa
-          this.cidadeFiltro = cliente.cidade.descricao; // mostra a descrição no input
+        this.form.patchValue({...this.cliente});
+
+        // Se o cliente tiver pessoa vinculada, atualiza os campos relacionados
+        if (cliente.pessoa) {
+          this.pessoaSelecionada = cliente.pessoa;
+          this.pessoaFiltro = cliente.pessoa.nome;
+          this.modoEdicao = true;
         }
 
         },
@@ -217,33 +259,5 @@ export class DetalhesClienteComponent implements OnInit {
       )
     }
   }
-
-  selecionaCidade(cidade: Cidade){
-    this.cidadeSelecionada = cidade;
-    this.cidadeFiltro = cidade.descricao;
-    this.cidadesFiltradas = [];
-  }
-
-  buscarCidades(termo: string){
-    if(!termo.trim()){
-      this.carregando = false;
-      return [];
-    }
-    return this.cidadeService.GetCidadeTermo(termo);
-  }
-
-  carregaCidade(): void{
-    this.buscaSubject
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((termo) => this.buscarCidades(termo))
-      )
-      .subscribe((cidades) => {
-        this.cidadesFiltradas = cidades;
-        this.carregando = false;
-      })
-  }
-
 
 }

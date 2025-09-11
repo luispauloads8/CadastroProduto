@@ -30,7 +30,7 @@
                     @for (lancamento of lancamentoFiltrados; track $index)
                     {
                         <tr>
-                            <td>{{lancamento.cliente.nome}}</td>
+                            <td>{{lancamento.cliente.pessoa.nome}}</td>
                             <td>{{lancamento.produtoServico.descricao}}</td>
                             <td>
                                 <button class="btn btn-warning mx-2" [routerLink]="['/lancamento/detalhes', lancamento.id]" tooltip="Editar">
