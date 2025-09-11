@@ -3,6 +3,7 @@ using ClienteProjeto.CrossCutting.IoC;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -127,6 +128,22 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var error = context.Features.Get<IExceptionHandlerFeature>();
+        if (error != null)
+        {
+            var result = JsonSerializer.Serialize(new { message = error.Error.Message });
+            await context.Response.WriteAsync(result);
+        }
+    });
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
