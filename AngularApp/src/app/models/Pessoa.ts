@@ -5,8 +5,9 @@ export interface Pessoa{
     email: string, 
     nome: string,
     telefone: string,
-    CNPJ: string,
-    endereco: Endereco
+    cnpj: string,
+    endereco: Endereco,
+    enderecoId: number
 }
         
         
