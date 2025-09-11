@@ -1,0 +1,151 @@
+<div class="card rounded shadow-sm" id="card">
+
+        <form [formGroup]="form">
+            <div class="p-3">
+                <div class="p-3">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" class="form-control"
+                            placeholder="Informe o nome"
+                            formControlName="nome"
+                            [ngClass]="cssValidator(f.nome)"/>
+                            <div *ngIf="f.nome?.errors?.required" class="invalid-feedback">
+                                nome é obrigatorio
+                            </div>
+                            <div *ngIf="f.nome?.errors?.minlength" class="invalid-feedback">
+                                nome deve ter no minimo 3 caracteres
+                            </div>
+                            <div *ngIf="f.nome?.errors?.maxlength" class="invalid-feedback">
+                                nome deve ter no maximo 200 caracteres
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="form-group col-md-3">
+                            <label>Telefone</label>
+                            <input type="text" class="form-control"
+                            placeholder="Informe o telefone"
+                            mask="(00) 00000-0000"
+                            formControlName="telefone"
+                            [ngClass]="cssValidator(f.telefone)"
+                            />
+                            <div *ngIf="f.telefone?.errors?.required" class="invalid-feedback">
+                                telefone é obrigatorio
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>E-mail</label>
+                            <input type="text" class="form-control"
+                            placeholder="Informe o e-mail" appEmailMask
+                            formControlName="email"
+                            [ngClass]="cssValidator(f.email)"
+                            />
+                            <div *ngIf="f.email?.errors?.required" class="invalid-feedback">
+                                email é obrigatorio
+                            </div>
+                            <div *ngIf="f.email?.errors?.email" class="invalid-feedback">
+                                E-mail não é válido
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>CNPJ</label>
+                            <input type="text" class="form-control"
+                            placeholder="Informe o CNPJ" formControlName="cnpj"
+                            [ngClass]="cssValidator(f.cnpj)"/>
+                            <div *ngIf="f.cnpj?.errors?.required" class="invalid-feedback">
+                                CNPJ é obrigatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+                <!-- Separador -->
+                <hr class="my-4">
+
+                <!-- Endereço -->
+               <div formGroupName="endereco" class="row g-3">
+                <h5 class="mb-3">Endereço</h5>
+
+                <div class="form-group col-md-6">
+                    <label>Logradouro</label>
+                    <input type="text" class="form-control" placeholder="Informe o logradouro"
+                        formControlName="logradouro" [ngClass]="cssValidator(f.endereco.get('logradouro'))" />
+                    <div *ngIf="f.logradouro?.errors?.required" class="invalid-feedback">
+                        logradouro é obrigatorio.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Bairro</label>
+                    <input type="text" class="form-control" placeholder="Informe o bairro"
+                        formControlName="bairro" [ngClass]="cssValidator(f.endereco.get('bairro'))" />
+                        <div *ngIf="f.bairro?.errors?.required" class="invalid-feedback">
+                            Bairro é obrigatorio
+                        </div>        
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Caixa Postal</label>
+                    <input type="text" class="form-control" placeholder="Informe a caixa postal"
+                        formControlName="caixaPostal" [ngClass]="cssValidator(f.endereco.get('caixaPostal'))" />
+                        <div *ngIf="f.caixaPostal?.errors?.required" class="invalid-feedback">
+                            Caixa Postal é obrigatorio
+                        </div>       
+                </div>
+            </div>
+
+            <div class="row g-3" formGroupName="endereco">
+                <div class="form-group col-md-6">
+                    <label>CEP</label>
+                    <input type="text" class="form-control" placeholder="Informe o CEP" formControlName="cep" [ngClass]="cssValidator(f.endereco.get('cep'))" />
+                    <div *ngIf="f.cep?.errors?.required" class="invalid-feedback">
+                        CEP é obrigatorio
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="form-group col-md-4">
+                    <label>Cidade</label>
+                    <input type="text"
+                            class="form-control"
+                            placeholder="Informe a cidade"
+                            [(ngModel)]="cidadeFiltro"
+                            [ngModelOptions]="{standalone: true}"
+                            (input)="onInputChange()"/>
+
+                    <div class="dropdown-menu show p-0"
+                        *ngIf="cidadesFiltradas.length && !carregando"
+                        style="max-height: 200px; overflow-y: auto; width: 20%;">
+                        <button class="dropdown-item"
+                                *ngFor="let cidade of cidadesFiltradas"
+                                (click)="selecionaCidade(cidade)">
+                        {{ cidade.descricao }}
+                        </button>
+                    </div>
+
+                    <div *ngIf="carregando" class="text-muted mt-2">
+                        Carregando...
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+            <div class="card-footer">
+                <div class="d-flex mt-3">
+                    <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarPessoa()">Gravar</button>
+                    <a class="btn btn-info w-10" [routerLink]="['/pessoa/cadastro']" >voltar</a>
+                </div>                
+            </div>
+            
+        </form>
+</div>
