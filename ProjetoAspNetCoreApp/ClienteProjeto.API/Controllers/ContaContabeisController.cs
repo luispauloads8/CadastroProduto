@@ -61,7 +61,7 @@ namespace ClienteProjeto.API.Controllers
                 new { id = contaContabilDTO.Id }, contaContabilDTO);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult>  Put(int id, ContaContabilDTO contaContabilDTO)
         {
             if (contaContabilDTO.Id != id)
