@@ -29,6 +29,6 @@ namespace ClienteProjeto.Application.DTOs
         public string CNPJ { get; set; }
         public EnderecoDTO Endereco { get; set; }
 
-        public int EnderecoId { get; set; }
+        public int? EnderecoId { get; set; }
     }
 }

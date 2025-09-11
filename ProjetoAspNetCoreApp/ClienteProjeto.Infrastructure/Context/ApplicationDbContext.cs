@@ -35,5 +35,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Imagem).HasColumnType("LONGBLOB")
                   .IsRequired(false); 
         });
+
+        modelBuilder.Entity<Endereco>()
+            .HasOne(e => e.Cidade)
+            .WithMany()
+            .HasForeignKey(e => e.CidadeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

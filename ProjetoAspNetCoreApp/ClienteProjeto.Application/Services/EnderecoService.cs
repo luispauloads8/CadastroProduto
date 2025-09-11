@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,11 @@ namespace ClienteProjeto.Application.Services
             _mapper = mapper;
         }
 
-        public Task Add(EnderecoDTO enderecoDTO)
+        public async Task Add(EnderecoDTO enderecoDTO)
         {
-            throw new NotImplementedException();
+            await _enderecoRepository.EnsureConnectionOpenAsync();
+            var enderecoEntity = _mapper.Map<Endereco>(enderecoDTO);
+            await _enderecoRepository.CreateAsync(enderecoEntity);
         }
 
         public Task Delete(int? id)

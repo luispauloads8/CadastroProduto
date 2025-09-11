@@ -23,14 +23,18 @@ namespace ClienteProjeto.Infrastructure.Repositories
             _enderecoContext = enderecoContext;
         }
 
-        public Task<Endereco> CreateAsync(Endereco endereco)
+        public async Task<Endereco> CreateAsync(Endereco endereco)
         {
-            throw new NotImplementedException();
+            _enderecoContext.Add(endereco);
+            await _enderecoContext.SaveChangesAsync();
+            return endereco;
         }
 
-        public Task<Endereco> DeleteAsync(Endereco endereco)
+        public async Task<Endereco> DeleteAsync(Endereco endereco)
         {
-            throw new NotImplementedException();
+            _enderecoContext.Remove(endereco);
+            await _enderecoContext.SaveChangesAsync();
+            return endereco;
         }
 
         public async Task EnsureConnectionOpenAsync()

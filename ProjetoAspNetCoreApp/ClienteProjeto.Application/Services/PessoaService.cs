@@ -15,27 +15,47 @@ namespace ClienteProjeto.Application.Services
     {
         private IPessoaRepository _pessoaRepositoy;
         private IEnderecoService _enderecoService;
+        private IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
 
-        public PessoaService(IPessoaRepository pessoaRepository, IEnderecoService enderecoService, IMapper mapper)
+        public PessoaService(IPessoaRepository pessoaRepository, IEnderecoService enderecoService,  IMapper mapper, IEnderecoRepository enderecoRepository)
         {
             _pessoaRepositoy = pessoaRepository;
             _enderecoService = enderecoService;
             _mapper = mapper;
+            _enderecoRepository = enderecoRepository;
         }
 
         public async Task Add(PessoaDTO pessoaDTO)
         {
             await _pessoaRepositoy.EnsureConnectionOpenAsync();
             var pessoaEntity = _mapper.Map<Pessoa>(pessoaDTO);
+
+            if (pessoaDTO.EnderecoId is null && pessoaEntity.Endereco != null)
+            {
+                var endereco = await _enderecoRepository.CreateAsync(pessoaEntity.Endereco);
+                pessoaEntity.EnderecoId = endereco.Id;
+
+            }
+            
             await _pessoaRepositoy.CreateAsync(pessoaEntity);
         }
 
         public async Task Delete(int? id)
         {
             await _pessoaRepositoy.EnsureConnectionOpenAsync();
-            var clienteEntity = await _pessoaRepositoy.GetByIdAsync(id);
-            await _pessoaRepositoy.DeleteAsync(clienteEntity);
+            var pessoaEntity = await _pessoaRepositoy.GetByIdAsync(id);
+            await _pessoaRepositoy.DeleteAsync(pessoaEntity);
+
+            if (pessoaEntity.EnderecoId != null) 
+            {
+                var endereco = await _enderecoRepository.GetByIdAsync(pessoaEntity.EnderecoId);
+
+                if (endereco != null)
+                {
+                    await _enderecoRepository.DeleteAsync(endereco);
+                }
+            }
         }
 
         public async Task<PessoaDTO> GetById(int? id)
