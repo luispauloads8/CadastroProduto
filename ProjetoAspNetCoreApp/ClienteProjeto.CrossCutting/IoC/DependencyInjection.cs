@@ -26,6 +26,8 @@ public static class DependencyInjection
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         services.AddScoped<ICidadeRepository, CidadeRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IPessoaRepository, PessoaRepository>();
+        services.AddScoped<IEnderecoRepository, EnderecoRepository>();
         services.AddScoped<IContaContabilRepository, ContaContabilRepository>();
         services.AddScoped<IEmpresaRepository, EmpresaRepository>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
@@ -40,6 +42,8 @@ public static class DependencyInjection
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IEmpresaService, EmpresaService>();
         services.AddScoped<IClienteService, ClienteService>();
+        services.AddScoped<IPessoaService, PessoaService>();
+        services.AddScoped<IEnderecoService, EnderecoService>();
         services.AddScoped<IGrupoContaService, GrupoContaService>();
         services.AddScoped<IContaContabilService, ContaContabilService>();
         services.AddScoped<ILancamentoService, LancamentoService>();
