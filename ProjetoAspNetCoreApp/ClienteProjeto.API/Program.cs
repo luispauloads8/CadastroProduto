@@ -1,4 +1,4 @@
-using ClienteProjeto.Application.Services.Relatorio;
+﻿using ClienteProjeto.Application.Services.Relatorio;
 using ClienteProjeto.CrossCutting.IoC;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Infrastructure.Context;
@@ -79,6 +79,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
+// 🔹 Ativar logs detalhados logo no início
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.WebHost.CaptureStartupErrors(true);
+builder.WebHost.UseSetting("detailedErrors", "true");
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjetoServico", Version = "v1" });
@@ -125,6 +131,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage(); // Em ambiente de desenvolvimento
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -133,10 +140,12 @@ app.UseCors("clienteProdutoApp");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseDeveloperExceptionPage(); // Em ambiente de desenvolvimento
+
 
 app.Run();
