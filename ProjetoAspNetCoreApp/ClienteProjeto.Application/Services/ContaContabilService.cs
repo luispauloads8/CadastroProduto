@@ -15,12 +15,14 @@ public class ContaContabilService : IContaContabilService
 {
     private IContaContabilRepository _contaContabilRepository;
     private IGrupoContaRepository _grupoContaRepository;
+    private IEmpresaRepository _empresaRepository;
     private readonly IMapper _mapper;
 
-    public ContaContabilService(IContaContabilRepository contaContabilRepository, IGrupoContaRepository grupoContaRepository, IMapper mapper)
+    public ContaContabilService(IContaContabilRepository contaContabilRepository, IGrupoContaRepository grupoContaRepository, IEmpresaRepository empresaRepository,  IMapper mapper)
     {
         _contaContabilRepository = contaContabilRepository;
         _grupoContaRepository = grupoContaRepository;
+        _empresaRepository = empresaRepository;
         _mapper = mapper;
     }
 
@@ -43,6 +45,9 @@ public class ContaContabilService : IContaContabilService
     {
         await _contaContabilRepository.EnsureConnectionOpenAsync();
         var contaContabil = await _contaContabilRepository.GetByIdAsync(id);
+
+        var empresaLancamento = await _empresaRepository.GetByIdAsync(contaContabil.EmpresaId);
+        contaContabil.Empresa = empresaLancamento;
 
         var grupoConta = await _grupoContaRepository.GetByIdAsync(contaContabil.GrupoContaId);
         contaContabil.GrupoConta = grupoConta;

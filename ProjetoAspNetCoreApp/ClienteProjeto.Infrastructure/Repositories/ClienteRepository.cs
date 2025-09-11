@@ -77,7 +77,7 @@ public class ClienteRepository : IClienteRepository
     public Task<List<Cliente>> GetClienteTermoAsync(string search)
     {
         return _clienteContext.Clientes
-            .Where(c => c.Nome.Contains(search))
+            .Where(c => c.Pessoa.Nome.Contains(search))
             .ToListAsync();
     }
 }

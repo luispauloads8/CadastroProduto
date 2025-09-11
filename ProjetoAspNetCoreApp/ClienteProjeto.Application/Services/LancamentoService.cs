@@ -12,21 +12,23 @@ public class LancamentoService : ILancamentoService
     private ILancamentoRepository _lancamentoRepository;
     private IProdutoServicoRepository _produtoServicoRepository;
     private IItensLancamentosRepository _itensLancamentosRepository;
-    private IEmpresaRepository _empresaRespository;
+    private IEmpresaRepository _empresaRepository;
     private IClienteRepository _clienteRepository;
+    private IPessoaRepository _pessoaRepository;
     private IContaContabilRepository _contaContabilRepository;
     private readonly IMapper _mapper;
 
     public LancamentoService(ILancamentoRepository lancamentoRepository, IMapper mapper, IProdutoServicoRepository produtoServicoRepository, 
-        IItensLancamentosRepository itensLancamentosRepository, IEmpresaRepository empresaRepository, IClienteRepository clienteRepository, IContaContabilRepository contaContabilRepository)
+        IItensLancamentosRepository itensLancamentosRepository, IEmpresaRepository empresaRepository, IClienteRepository clienteRepository, IContaContabilRepository contaContabilRepository, IPessoaRepository pessoaRepository)
     {
         _lancamentoRepository = lancamentoRepository;
         _mapper = mapper;
         _produtoServicoRepository = produtoServicoRepository;
         _itensLancamentosRepository = itensLancamentosRepository;
-        _empresaRespository = empresaRepository;
+        _empresaRepository = empresaRepository;
         _clienteRepository = clienteRepository;
         _contaContabilRepository = contaContabilRepository;
+        _pessoaRepository = pessoaRepository;
     }
 
     public  async Task Add(LancamentoDTO lancamentoDTO)
@@ -52,7 +54,7 @@ public class LancamentoService : ILancamentoService
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentoEntity = await _lancamentoRepository.GetByIdAsync(id);
 
-        var empresaLancamento = await _empresaRespository.GetByIdAsync(lancamentoEntity.EmpresaId);
+        var empresaLancamento = await _empresaRepository.GetByIdAsync(lancamentoEntity.EmpresaId);
         lancamentoEntity.Empresa = empresaLancamento;
 
         var produtoServico = await _produtoServicoRepository.GetByIdAsync(lancamentoEntity.ProdutoServicoId);
@@ -60,6 +62,9 @@ public class LancamentoService : ILancamentoService
 
         var cliente = await _clienteRepository.GetByIdAsync(lancamentoEntity.ClienteId);
         lancamentoEntity.Cliente = cliente;
+
+        var pessoaRepository = await _pessoaRepository.GetByIdAsync(cliente.PessoaId);
+        lancamentoEntity.Cliente.Pessoa = pessoaRepository;
 
         var contaContabil = await _contaContabilRepository.GetByIdAsync(lancamentoEntity.ContaContabilId);
         lancamentoEntity.ContaContabil = contaContabil;
@@ -76,6 +81,9 @@ public class LancamentoService : ILancamentoService
     {
         await _lancamentoRepository.EnsureConnectionOpenAsync();
         var lancamentosEntity = await _lancamentoRepository.GetLancamentoAsync();
+
+
+        var pessoaRepository = await _pessoaRepository.GetPessoaAsync();
 
         var cliente = new Cliente();
         var empresa = new Empresa();
@@ -99,7 +107,7 @@ public class LancamentoService : ILancamentoService
             var clienteReposistory = await _clienteRepository.GetByIdAsync(itemProduto.ClienteId);
             cliente = clienteReposistory;
 
-            var empresaRepository = await _empresaRespository.GetByIdAsync(itemProduto.EmpresaId);
+            var empresaRepository = await _empresaRepository.GetByIdAsync(itemProduto.EmpresaId);
             empresa = empresaRepository;
 
             var contaContabilRepository = await _contaContabilRepository.GetByIdAsync(itemProduto.ContaContabilId);
@@ -113,6 +121,14 @@ public class LancamentoService : ILancamentoService
 
             //atribui cliente 
             itemProduto.Cliente = cliente;
+
+            foreach (var pessoa in pessoaRepository)
+            {
+                if (itemProduto.Cliente.PessoaId == pessoa.Id)
+                {
+                    itemProduto.Cliente.Pessoa = pessoa;
+                }
+            }
 
             //atribui empresa 
             itemProduto.Empresa = empresa;
