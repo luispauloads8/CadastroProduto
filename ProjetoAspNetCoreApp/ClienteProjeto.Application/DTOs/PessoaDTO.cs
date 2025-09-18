@@ -10,7 +10,7 @@ namespace ClienteProjeto.Application.DTOs
 {
     public class PessoaDTO
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Email { get; set; }
 
@@ -29,6 +29,5 @@ namespace ClienteProjeto.Application.DTOs
         public string CNPJ { get; set; }
         public EnderecoDTO Endereco { get; set; }
 
-        public int? EnderecoId { get; set; }
     }
 }
