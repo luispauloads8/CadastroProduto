@@ -1,0 +1,65 @@
+<div class="container mt-5">
+    <button class="btn btn-success w-100" [routerLink]="['/pedido/detalhes']" routerLinkActive="router-link-active">Cadastro Pessoa</button>
+
+    <div class="card rounded shadow-sm p-3" id="card">
+
+        <div class="d-flex">
+            <div class="flex-fill">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Pesquisar</div>
+                    </div>
+
+                    <input class="form-control" type="text" placeholder="Qual cliente deseja buscar" [(ngModel)]="filtroLista"/>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered mt-5">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (pedidos && pedidos.length) {
+                    @for (pedido of pedidoFiltrados; track $index) 
+                    {
+                        <tr>
+                            <td>{{pedido.id}}</td>
+                            <td>{{pedido.descricao}}</td>
+                            <td>
+                                <button class="btn btn-warning mx-2" [routerLink]="['/pessoa/detalhes', pedido.id]" tooltip="Editar">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger mx-2" (click)="openModal($event, template, pedido.id!)" tooltip="Excluir">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }@else{
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <h4>Nenhum registro encontrado</h4>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    
+    <ng-template #template>
+        <div class="modal-body text-center">
+          <p>Tem certeza que quer deletar a empresa?</p>
+          <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+          <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+        </div>
+    </ng-template>
+
+</div>
+
+
