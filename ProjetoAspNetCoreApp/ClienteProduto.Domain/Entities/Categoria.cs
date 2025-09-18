@@ -4,6 +4,10 @@ namespace ClienteProjeto.Domain.Entities;
 
 public class Categoria : Entity
 {
+    public Categoria()
+    {
+    }
+
     public Categoria(int id, string descricao)
     {
         Id = id;

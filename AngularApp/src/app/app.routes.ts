@@ -34,6 +34,8 @@ import { CadastroGrupoComponent } from './pages/grupo/cadastro/cadastroGrupo.com
 import { authGuard } from './guard/auth.guard';
 import path from 'path';
 import { Component } from '@angular/core';
+import { EmissaolancamentoComponent } from './pages/lancamento/emissaolancamento/emissaolancamento.component';
+import { EmissaocategoriaComponent } from './pages/categoria/emissaocategoria/emissaocategoria.component';
 
 
 // export const routes: Routes = [
@@ -152,8 +154,8 @@ import { Component } from '@angular/core';
 
 
 const protectedRoutes = [
-    { path: 'categoria', component: CategoriaComponent, title: 'Categoria', detalhes: DetalhesComponent, cadastro: CadastroComponent },
-    { path: 'lancamento', component: LancamentoComponent, title: 'Lançamentos', detalhes: DetalhesLancamentosComponent, cadastro: CadastroLancamentosComponent },
+    { path: 'categoria', component: CategoriaComponent, title: 'Categoria', detalhes: DetalhesComponent, cadastro: CadastroComponent, emissao: EmissaocategoriaComponent },
+    { path: 'lancamento', component: LancamentoComponent, title: 'Lançamentos', detalhes: DetalhesLancamentosComponent, cadastro: CadastroLancamentosComponent, emissao: EmissaolancamentoComponent },
     { path: 'produtoServico', component: ProdutoServicoComponent, title: 'Produtos Serviços', detalhes: DetalhesProdutoServicoComponent, cadastro: CadastroProdutoServicoComponent },
     { path: 'cidade', component: CidadeComponent, title: 'Cidades', detalhes: DetalhesCidadeComponent, cadastro: CadastroCidadeComponent },
     { path: 'empresa', component: EmpresaComponent, title: 'Empresa', detalhes: DetalhesEmpresaComponent, cadastro: CadastroEmpresaComponent },
@@ -171,6 +173,7 @@ export const routes: Routes = [
             { path: 'registration', component: RegistrationComponent, title: 'Registra' }
         ]
     },
+    
 
     { path: 'categoria', redirectTo: 'categoria/cadastro' },
     { path: 'lancamento', redirectTo: 'lancamento/cadastro' },
@@ -183,21 +186,26 @@ export const routes: Routes = [
     
     {
         path: '',
-        runGuardsAndResolvers: 'always',
-        canActivate: [authGuard],
-        children: protectedRoutes.map(route => ({
+            canActivate: [authGuard],
+            runGuardsAndResolvers: 'always',
+            children: protectedRoutes.map(route => ({
             path: route.path,
             component: route.component,
             title: route.title,
             children: [
-                { path: 'detalhes/:id', component: route.detalhes, title: 'Detalhes' },
-                { path: 'detalhes', component: route.detalhes, title: 'Detalhes' },
-                { path: 'cadastro', component: route.cadastro, title: 'Cadastro' },
-                { path: 'detalhes', component: route.detalhes, title: 'Perfil'},
-                { path: 'cadastro', component: route.cadastro, title: 'Registration'}
+                ...(route.detalhes ? [
+                    { path: 'detalhes/:id', component: route.detalhes, title: 'Detalhes' },
+                    { path: 'detalhes', component: route.detalhes, title: 'Detalhes' },
+                ] : []),
+                ...(route.cadastro ? [
+                    { path: 'cadastro', component: route.cadastro, title: 'Cadastro' },
+                ] : []),
+                ...(route.emissao ? [
+                    { path: 'emissao', component: route.emissao, title: 'Emissão' },
+                ] : []),
             ]
         }))
-    },
+},
 
     { path: 'dashboard', component: DashboardComponent, title: 'Dashboard', canActivate: [authGuard] },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h2>Emissão de Lançamento</h2>
+
+  <form [formGroup]="form" (ngSubmit)="imprimir()">
+    <div formArrayName="categoriasArray">
+      <div *ngFor="let categoria of categorias; let i = index">
+        <label>
+          <input type="checkbox" [formControlName]="i" />
+          {{ categoria.descricao }}
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Emitir</button>
+  </form>
+</div>
+

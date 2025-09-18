@@ -18,7 +18,7 @@ namespace ClienteProjeto.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
             var categoria = await _categoriaService.GetCategorias();

@@ -2,6 +2,11 @@
 
 public class ItensLancamento : Entity
 {
+    public ItensLancamento()
+    {
+        
+    }
+
     public ItensLancamento(int id, int quantidade, decimal valorItem)
     {
         Id = id;

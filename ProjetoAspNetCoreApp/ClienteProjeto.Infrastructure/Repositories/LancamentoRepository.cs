@@ -48,14 +48,47 @@ public class LancamentoRepository : ILancamentoRepository
         }
     }
 
-    public async Task<Lancamento> GetByIdAsync(int? id)
+    public async Task<Lancamento?> GetByIdAsync(int? id)
     {
-        return await _lancamentosContext.Lancamentos.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
+        return await _lancamentosContext.Lancamentos
+            .Include(l => l.ContaContabil)
+            .ThenInclude(c => c.GrupoConta)
+            .FirstOrDefaultAsync(l => l.Id == id);
+            //await _lancamentosContext.Lancamentos.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
     }
 
     public async Task<IEnumerable<Lancamento>> GetLancamentoAsync()
     {
         return await _lancamentosContext.Lancamentos.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<IEnumerable<Lancamento>> GetLancamentoEmissaoAsync(int? empresaId, int? contaContabilId, DateTime? lancamentoInicio, DateTime? lancamentoFim)
+    {
+        var query = _lancamentosContext.Lancamentos
+            .Include(l => l.Empresa)
+            .Include(l => l.Cliente)
+            .Include(l => l.ContaContabil)
+            .ThenInclude(g => g.GrupoConta)
+            .Include(p => p.ProdutoServico)
+            .Include(i => i.ItensLancamentos)
+            .AsQueryable();
+
+        if (empresaId.HasValue)
+            query = query.Where(l => l.EmpresaId == empresaId.Value);
+
+        //if (contaContabilId.HasValue)
+        //    query = query.Where(l => l.ContaContabilId == contaContabilId.Value);
+
+        //if (clienteId.HasValue)
+        //    query = query.Where(l => l.ClienteId == clienteId.Value);
+
+        if (lancamentoInicio.HasValue)
+            query = query.Where(l => l.DataLancamento >= lancamentoInicio.Value);
+
+        if (lancamentoFim.HasValue)
+            query = query.Where(l => l.DataLancamento <= lancamentoFim.Value);
+
+        return await query.ToListAsync();
     }
 
     //public async Task<Lancamento> UpdateAsync(Lancamento lancamento)

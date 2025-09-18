@@ -2,6 +2,11 @@
 
 public class Lancamento : Entity
 {
+    public Lancamento()
+    {
+        
+    }
+
     public Lancamento(int id, string observacao, DateTime dataLancamento, decimal valor)
     {
         Id = id;

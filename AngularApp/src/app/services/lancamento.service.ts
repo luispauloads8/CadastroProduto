@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { Lancamento } from '../models/Lancamento';
 import { table } from 'node:console';
+import { EmissaoLancamento } from '../models/emissao/lancamento/EmissaoLancamento';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,12 @@ export class LancamentoService {
 
   public DeletarLancamento(id: number): Observable<Lancamento>{
     return this.http.delete<Lancamento>(`${this.ApiUrl}Lancamentos/${id}`).pipe(take(1));
+  }
+
+  public imprimirLancamento(lancamento: EmissaoLancamento): Observable<Blob> {
+    return this.http.post<Blob>(`${this.ApiUrl}Relatorios/emissao_lancamento`, lancamento, {
+      responseType: 'blob' as 'json'
+    });
   }
 
 }
