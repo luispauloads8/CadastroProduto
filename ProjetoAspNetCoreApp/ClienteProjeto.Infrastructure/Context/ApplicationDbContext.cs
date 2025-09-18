@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Lancamento> Lancamentos { get; set; }
     public DbSet<ProdutoServico> ProdutoServicos { get; set; }
     public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Pessoa> Pessoas { get; set; }
+    public DbSet<Endereco> Enderecos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +35,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Imagem).HasColumnType("LONGBLOB")
                   .IsRequired(false); 
         });
+
+        modelBuilder.Entity<Endereco>()
+            .HasOne(e => e.Cidade)
+            .WithMany()
+            .HasForeignKey(e => e.CidadeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

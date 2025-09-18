@@ -166,32 +166,17 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CEP")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
                     b.Property<string>("CPF")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
 
-                    b.Property<int>("CidadeId")
+                    b.Property<int?>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataNascimento")
                         .HasMaxLength(10)
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
 
                     b.Property<int>("EstadoCivil")
                         .HasMaxLength(1)
@@ -202,14 +187,12 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
                     b.Property<string>("Observacao")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RG")
                         .IsRequired()
@@ -220,14 +203,12 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(1)
                         .HasColumnType("int");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CidadeId");
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
 
                     b.ToTable("Clientes");
                 });
@@ -245,10 +226,15 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GrupoContaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpresaId");
 
                     b.HasIndex("GrupoContaId");
 
@@ -263,39 +249,63 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CNPJ")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("char(14");
-
                     b.Property<int>("CidadeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("NomeFantasia")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("RazaoSocial")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
+                    b.HasKey("Id");
+
+                    b.HasIndex("CidadeId");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("Empresas");
+                });
+
+            modelBuilder.Entity("ClienteProjeto.Domain.Entities.Endereco", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bairro")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("CEP")
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
+
+                    b.Property<string>("CaixaPostal")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("CidadeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Logradouro")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("Empresas");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Fornecedor", b =>
@@ -306,47 +316,22 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CEP")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("CNPJ")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)");
-
                     b.Property<int>("CidadeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
 
                     b.Property<string>("Observacao")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CidadeId");
+
+                    b.HasIndex("PessoaId");
 
                     b.ToTable("Fornecedores");
                 });
@@ -442,6 +427,40 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     b.HasIndex("ProdutoServicoId");
 
                     b.ToTable("Lancamentos");
+                });
+
+            modelBuilder.Entity("ClienteProjeto.Domain.Entities.Pessoa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CNPJ")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<int>("EnderecoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnderecoId");
+
+                    b.ToTable("Pessoas");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ProdutoServico", b =>
@@ -637,22 +656,34 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Cliente", b =>
                 {
-                    b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
+                    b.HasOne("ClienteProjeto.Domain.Entities.Cidade", null)
                         .WithMany("Clientes")
-                        .HasForeignKey("CidadeId")
+                        .HasForeignKey("CidadeId");
+
+                    b.HasOne("ClienteProjeto.Domain.Entities.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Cidade");
+                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ContaContabil", b =>
                 {
+                    b.HasOne("ClienteProjeto.Domain.Entities.Empresa", "Empresa")
+                        .WithMany("ContaContabils")
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClienteProjeto.Domain.Entities.GrupoConta", "GrupoConta")
                         .WithMany("ContaContabeis")
                         .HasForeignKey("GrupoContaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Empresa");
 
                     b.Navigation("GrupoConta");
                 });
@@ -663,6 +694,25 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .WithMany("Empresas")
                         .HasForeignKey("CidadeId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ClienteProjeto.Domain.Entities.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cidade");
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("ClienteProjeto.Domain.Entities.Endereco", b =>
+                {
+                    b.HasOne("ClienteProjeto.Domain.Entities.Cidade", "Cidade")
+                        .WithMany()
+                        .HasForeignKey("CidadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cidade");
@@ -676,7 +726,15 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ClienteProjeto.Domain.Entities.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cidade");
+
+                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ItensLancamento", b =>
@@ -723,6 +781,17 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     b.Navigation("Empresa");
 
                     b.Navigation("ProdutoServico");
+                });
+
+            modelBuilder.Entity("ClienteProjeto.Domain.Entities.Pessoa", b =>
+                {
+                    b.HasOne("ClienteProjeto.Domain.Entities.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.ProdutoServico", b =>
@@ -824,6 +893,8 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
             modelBuilder.Entity("ClienteProjeto.Domain.Entities.Empresa", b =>
                 {
+                    b.Navigation("ContaContabils");
+
                     b.Navigation("Lancamentos");
 
                     b.Navigation("Usuarios");

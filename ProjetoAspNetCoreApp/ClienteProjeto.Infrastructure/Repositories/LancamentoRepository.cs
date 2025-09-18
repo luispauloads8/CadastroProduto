@@ -83,78 +83,18 @@ public class LancamentoRepository : ILancamentoRepository
         //    query = query.Where(l => l.ClienteId == clienteId.Value);
 
         if (lancamentoInicio.HasValue)
-            query = query.Where(l => l.DataLancamento >= lancamentoInicio.Value);
+        {
+            query = query.Where(l => l.DataLancamento >= lancamentoInicio.Value.Date);
+        }
 
         if (lancamentoFim.HasValue)
-            query = query.Where(l => l.DataLancamento <= lancamentoFim.Value);
+        {
+            var fim = lancamentoFim.Value.Date.AddDays(1); // dia seguinte à meia-noite
+            query = query.Where(l => l.DataLancamento < fim);
+        }
 
         return await query.ToListAsync();
     }
-
-    //public async Task<Lancamento> UpdateAsync(Lancamento lancamento)
-    //{
-    //    var local = _lancamentosContext.Set<Fornecedor>().Local
-    //          .FirstOrDefault(entry => entry.Id == lancamento.Id);
-
-    //    if (local != null)
-    //    {
-    //        _lancamentosContext.Entry(local).State = EntityState.Detached;
-    //    }
-
-    //    _lancamentosContext.Entry(lancamento).State = EntityState.Modified;
-    //    _lancamentosContext.Update(lancamento);
-    //    await _lancamentosContext.SaveChangesAsync();
-
-    //    return lancamento;
-    //}
-
-    //public async Task<Lancamento> UpdateAsync(Lancamento lancamento)
-    //{
-    //    var lancamentoExistente = await _lancamentosContext.Lancamentos
-    //        .Include(l => l.ItensLancamentos)
-    //        .FirstOrDefaultAsync(l => l.Id == lancamento.Id);
-
-    //    if (lancamentoExistente == null)
-    //    {
-    //        throw new KeyNotFoundException("Lançamento não encontrado");
-    //    }
-
-    //    // Atualiza os campos do lançamento
-    //    _lancamentosContext.Entry(lancamentoExistente).CurrentValues.SetValues(lancamento);
-
-    //    // IDs dos itens recebidos na atualização
-    //    var itensRecebidosIds = lancamento.ItensLancamentos.Select(i => i.Id).ToList();
-
-    //    // Remover itens que não estão mais na lista
-    //    foreach (var itemExistente in lancamentoExistente.ItensLancamentos.ToList())
-    //    {
-    //        if (!itensRecebidosIds.Contains(itemExistente.Id))
-    //        {
-    //            _lancamentosContext.ItensLancamentos.Remove(itemExistente);
-    //        }
-    //    }
-
-    //    // Atualizar ou adicionar novos itens
-    //    foreach (var item in lancamento.ItensLancamentos)
-    //    {
-    //        var itemExistente = lancamentoExistente.ItensLancamentos
-    //            .FirstOrDefault(i => i.Id == item.Id);
-
-    //        if (itemExistente != null)
-    //        {
-    //            // Atualiza o item existente
-    //            _lancamentosContext.Entry(itemExistente).CurrentValues.SetValues(item);
-    //        }
-    //        else
-    //        {
-    //            // Adiciona um novo item
-    //            lancamentoExistente.ItensLancamentos.Add(item);
-    //        }
-    //    }
-
-    //    await _lancamentosContext.SaveChangesAsync();
-    //    return lancamentoExistente;
-    //}
 
     public async Task<Lancamento> UpdateAsync(Lancamento lancamento)
     {
@@ -192,44 +132,5 @@ public class LancamentoRepository : ILancamentoRepository
         await _lancamentosContext.SaveChangesAsync();
         return lancamentoExistente;
     }
-
-
-
-    //public async Task<Lancamento> UpdateAsync(Lancamento lancamento)
-    //{
-    //    using (var transaction = await _lancamentosContext.Database.BeginTransactionAsync())
-    //    {
-    //        try
-    //        {
-    //            var local = _lancamentosContext.Set<Lancamento>().Local
-    //                .FirstOrDefault(entry => entry.Id == lancamento.Id);
-
-    //            if (local != null)
-    //            {
-    //                _lancamentosContext.Entry(local).State = EntityState.Detached;
-    //            }
-
-    //            _lancamentosContext.Entry(lancamento).State = EntityState.Modified;
-    //            _lancamentosContext.Update(lancamento);
-    //            await _lancamentosContext.SaveChangesAsync();
-
-    //            foreach (var item in lancamento.ItensLancamentos)
-    //            {
-    //                _itensLancamentosContext.Entry(item).State = EntityState.Modified;
-    //                _itensLancamentosContext.Update(item);
-    //            }
-    //            await _itensLancamentosContext.SaveChangesAsync();
-
-    //            //await transaction.CommitAsync();
-    //        }
-    //        catch (Exception)
-    //        {
-    //            await transaction.RollbackAsync();
-    //            throw;
-    //        }
-    //    }
-    //    return lancamento;
-    //}
-
 
 }

@@ -10,12 +10,14 @@ public class ClienteService : IClienteService
 {
     private IClienteRepository _clienteRepository;
     private ICidadeRepository _cidadeRepository;
+    private IPessoaRepository _pessoaRepository;
     private readonly IMapper _mapper;
 
-    public ClienteService(IClienteRepository clienteRepository, ICidadeRepository cidadeRepository, IMapper mapper)
+    public ClienteService(IClienteRepository clienteRepository, ICidadeRepository cidadeRepository, IPessoaRepository pessoaRepository, IMapper mapper)
     {
         _clienteRepository = clienteRepository;
         _cidadeRepository = cidadeRepository;
+        _pessoaRepository = pessoaRepository;
         _mapper = mapper;
     }
 
@@ -38,8 +40,8 @@ public class ClienteService : IClienteService
         await _clienteRepository.EnsureConnectionOpenAsync();
         var clienteEntity = await _clienteRepository.GetByIdAsync(id);
 
-        var cidade = await _cidadeRepository.GetByIdAsync(clienteEntity.CidadeId);
-        clienteEntity.Cidade = cidade;
+        var pessoa = await _pessoaRepository.GetByIdAsync(clienteEntity.PessoaId);
+        clienteEntity.Pessoa = pessoa;
             
 
         return _mapper.Map<ClienteDTO>(clienteEntity);
@@ -49,6 +51,21 @@ public class ClienteService : IClienteService
     {
         await _clienteRepository.EnsureConnectionOpenAsync();
         var clienteEntity = await _clienteRepository.GetClienteAsync();
+
+        var pessoasReposity = await _pessoaRepository.GetPessoaAsync();
+
+        foreach(var cliente in clienteEntity)
+        {
+            foreach (var pessoa in pessoasReposity)
+            {
+                if (cliente.PessoaId == pessoa.Id)
+                {
+                    cliente.Pessoa = pessoa;
+                }
+            }
+        }
+
+        
         return _mapper.Map<IEnumerable<ClienteDTO>>(clienteEntity); 
     }
 
@@ -68,6 +85,19 @@ public class ClienteService : IClienteService
         }
 
         var clienteTermo = await _clienteRepository.GetClienteTermoAsync(search);
+
+        var pessoaRepository = await _pessoaRepository.GetPessoaAsync();
+
+        foreach(var pessoa in pessoaRepository)
+        {
+            foreach(var cliente in clienteTermo)
+            {
+                if (cliente.PessoaId == pessoa.Id)
+                {
+                    cliente.Pessoa = pessoa;
+                }
+            }
+        }
 
         return _mapper.Map<List<ClienteDTO>>(clienteTermo);
     }

@@ -29,7 +29,7 @@
                     {
                         <tr>
                             <td>{{cliente.id}}</td>
-                            <td>{{cliente.nome}}</td>
+                            <td>{{cliente.pessoa.nome}}</td>
                             <td>
                                 <button class="btn btn-warning mx-2" [routerLink]="['/cliente/detalhes', cliente.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>

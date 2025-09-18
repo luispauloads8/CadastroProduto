@@ -167,7 +167,7 @@ export class DetalhesLancamentosComponent {
 
   selecionarCliente(cliente: Cliente){
     this.clienteSelecionado = cliente;
-    this.clienteFiltro = cliente.nome;
+    this.clienteFiltro = cliente.pessoa.nome;
     this.clientesFiltrados = [];
   }
 
@@ -307,7 +307,7 @@ export class DetalhesLancamentosComponent {
     }
     if (lancamento.cliente) {
       this.clienteSelecionado = lancamento.cliente;
-      this.clienteFiltro = lancamento.cliente.nome;
+      this.clienteFiltro = lancamento.cliente.pessoa.nome;
     }
     if (lancamento.contaContabil) {
       this.contaContabilSelecionado = lancamento.contaContabil;

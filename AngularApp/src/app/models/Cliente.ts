@@ -2,6 +2,7 @@ import { Cidade } from "./Cidade";
 import { EnumEstadoCivil } from "./EnumEstadoCivil";
 import { EnumSexo } from "./EnumSexo";
 import { Lancamento } from "./Lancamento";
+import { Pessoa } from "./Pessoa";
 
 export interface Cliente{
      id?: number;
@@ -20,4 +21,6 @@ export interface Cliente{
      cidadeEnderecoId: number;
      cidade: Cidade;
      lancamento: Lancamento[];
+     pessoaId: Pessoa;
+     pessoa: Pessoa;
 }

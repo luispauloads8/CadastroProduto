@@ -6,8 +6,10 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GrupoConta } from '../../../models/GrupoConta';
 import { GrupoService } from '../../../services/grupo.service';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
 import { ContaService } from '../../../services/conta.service';
+import { EmpresaService } from '../../../services/empresa.service';
+import { Empresa } from '../../../models/Empresa';
 
 @Component({
   selector: 'app-detalhes',
@@ -27,7 +29,13 @@ export class DetalhesContaComponent implements OnInit {
   carregando: boolean = false;
   estadoSalvar = 'post';
 
+  empresas: Empresa[] = [];
+  empresasFiltradas: Empresa[] = [];
+  empresaSelecionado: Empresa | null = null;// produto escolhido
+  empresaFiltro: string = ''; //valor digitado no campo
+
   private buscaSubject = new Subject<string>();
+  private buscaEmpresaSubject = new Subject<string>();
 
   public get f(): any{
     return this.form.controls;
@@ -37,6 +45,7 @@ export class DetalhesContaComponent implements OnInit {
     private fb: FormBuilder,
     private grupoContaService: GrupoService,
     private contaService: ContaService,
+    private empresaService: EmpresaService,
     private toastr: ToastrService,
     private route: ActivatedRoute
   ){}
@@ -45,6 +54,7 @@ export class DetalhesContaComponent implements OnInit {
     this.validation();
     this.carregaGrupoConta();
     this.carregarContaContabil();
+    this.carregarEmpresa();
   }
 
   onInputChange(){
@@ -56,6 +66,16 @@ export class DetalhesContaComponent implements OnInit {
     this.buscaSubject.next(this.grupoFiltro);
   }
 
+  OnIputChangeEmpresa(){
+
+     if(this.empresaFiltro.trim() === ''){
+       this.empresasFiltradas = []
+      }
+
+    this.carregando = true;
+    this.buscaEmpresaSubject.next(this.empresaFiltro);
+  }
+
   public cssValidator(campoForm: FormControl): any {
     return {'is-invalid' : campoForm.errors && campoForm.touched}
   }
@@ -64,6 +84,12 @@ export class DetalhesContaComponent implements OnInit {
     this.form = this.fb.group({
       descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]]
     })
+  }
+
+  selecionarEmpresa(empresa: Empresa){
+    this.empresaSelecionado = empresa;
+    this.empresaFiltro = empresa.razaoSocial;
+    this.empresasFiltradas = [];
   }
 
   selecionaContaContabil(grupoConta: GrupoConta){
@@ -80,7 +106,8 @@ export class DetalhesContaComponent implements OnInit {
     this.contaContabil = {
       id: this.estadoSalvar == 'put' ? this.contaContabil.id : undefined,
       ...this.form.value,
-      grupoContaId: this.grupoContabilSelecionada?.id
+      grupoContaId: this.grupoContabilSelecionada?.id,
+      empresaId: this.empresaSelecionado?.id
     };
 
     if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put'){
@@ -108,6 +135,8 @@ export class DetalhesContaComponent implements OnInit {
 
           this.form.patchValue({...this.contaContabil});
 
+          this.atualizarFiltros(contaContabil);
+
           if(contaContabil.grupoConta){
             this.grupoContabilSelecionada = contaContabil.grupoConta; // exibe os dados do grupo
             this.grupoFiltro = contaContabil.grupoConta.descricao; // mostra a descrição no input
@@ -119,6 +148,13 @@ export class DetalhesContaComponent implements OnInit {
         () => {},
       )
 
+    }
+  }
+
+  private atualizarFiltros(contContabil: ContaContabil){
+    if (contContabil.empresa) {
+      this.empresaSelecionado = contContabil.empresa;
+      this.empresaFiltro = contContabil.empresa.razaoSocial;
     }
   }
 
@@ -141,6 +177,27 @@ export class DetalhesContaComponent implements OnInit {
         this.grupoContabilFiltradas = grupoContabeis;
         this.carregando = false;
       })
+  }
+
+  buscarEmpresa(termo: string){
+    if(!termo.trim()){
+      this.carregando = false;
+      return of([]); // Retorna um Observable vazio
+    }
+    return this.empresaService.GetEmpresaTermo(termo);
+  }
+
+  carregarEmpresa(): void{
+    this.buscaEmpresaSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((termo) => this.buscarEmpresa(termo))
+      )
+      .subscribe((empresas) => {
+        this.empresasFiltradas = empresas;
+        this.carregando = false;
+      });
   }
 
 }

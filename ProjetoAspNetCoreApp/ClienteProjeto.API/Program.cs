@@ -1,8 +1,9 @@
-using ClienteProjeto.Application.Services.Relatorio;
+﻿using ClienteProjeto.Application.Services.Relatorio;
 using ClienteProjeto.CrossCutting.IoC;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -79,6 +80,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
+// 🔹 Ativar logs detalhados logo no início
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.WebHost.CaptureStartupErrors(true);
+builder.WebHost.UseSetting("detailedErrors", "true");
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjetoServico", Version = "v1" });
@@ -122,9 +129,26 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var error = context.Features.Get<IExceptionHandlerFeature>();
+        if (error != null)
+        {
+            var result = JsonSerializer.Serialize(new { message = error.Error.Message });
+            await context.Response.WriteAsync(result);
+        }
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage(); // Em ambiente de desenvolvimento
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -133,10 +157,12 @@ app.UseCors("clienteProdutoApp");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseDeveloperExceptionPage(); // Em ambiente de desenvolvimento
+
 
 app.Run();

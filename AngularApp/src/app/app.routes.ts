@@ -36,6 +36,9 @@ import path from 'path';
 import { Component } from '@angular/core';
 import { EmissaolancamentoComponent } from './pages/lancamento/emissaolancamento/emissaolancamento.component';
 import { EmissaocategoriaComponent } from './pages/categoria/emissaocategoria/emissaocategoria.component';
+import { PessoaComponent } from './pages/pessoa/pessoa.component';
+import { DetalhesPessoaComponent } from './pages/pessoa/detalhes/detalhesPessoa.component';
+import { CadastroPessoaComponent } from './pages/pessoa/cadastro/cadastroPessoa.component';
 
 
 // export const routes: Routes = [
@@ -160,6 +163,7 @@ const protectedRoutes = [
     { path: 'cidade', component: CidadeComponent, title: 'Cidades', detalhes: DetalhesCidadeComponent, cadastro: CadastroCidadeComponent },
     { path: 'empresa', component: EmpresaComponent, title: 'Empresa', detalhes: DetalhesEmpresaComponent, cadastro: CadastroEmpresaComponent },
     { path: 'cliente', component: ClienteComponent, title: 'Cliente', detalhes: DetalhesClienteComponent, cadastro: CadastroClienteComponent },
+    { path: 'pessoa', component: PessoaComponent, title: 'Pessoa', detalhes: DetalhesPessoaComponent, cadastro: CadastroPessoaComponent },
     { path: 'contaContabil', component: ContaComponent, title: 'Conta', detalhes: DetalhesContaComponent, cadastro: CadastroContaComponent },
     { path: 'grupoConta', component: GrupoComponent, title: 'Grupo', detalhes: DetalhesGrupoComponent, cadastro: CadastroGrupoComponent },
     { path: 'user/perfil', component: PerfilComponent, title: 'Usuario', detalhes: PerfilComponent, cadastro: RegistrationComponent},
@@ -181,6 +185,7 @@ export const routes: Routes = [
     { path: 'cidade', redirectTo: 'cidade/cadastro' },
     { path: 'empresa', redirectTo: 'empresa/cadastro' },
     { path: 'cliente', redirectTo: 'cliente/cadastro' },
+    { path: 'pesssoa', redirectTo: 'pessoa/cadastro' },
     { path: 'contaContabil', redirectTo: 'contaContabil/cadastro' },
     { path: 'grupoConta', redirectTo: 'grupoConta/cadastro' },
     

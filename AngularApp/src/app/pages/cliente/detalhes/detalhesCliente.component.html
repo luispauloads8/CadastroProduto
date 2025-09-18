@@ -4,93 +4,52 @@
         <div class="p-3">
             
             <div class="form-row">
-                <div class="form-group">
-                    <label>Nome</label>
-                    <input type="text" class="form-control"
-                    placeholder="Informe o nome"
-                    formControlName="nome"
-                    [ngClass]="cssValidator(f.nome)"
-                    />
-                    <div *ngIf="f.nome?.errors?.required" class="invalid-feedback">
-                        nome é obrigatorio
-                    </div>
-                    <div *ngIf="f.nome?.errors?.minlength" class="invalid-feedback">
-                        nome deve ter no minimo 40 caracteres
-                    </div>
-                    <div *ngIf="f.nome?.errors?.maxlength" class="invalid-feedback">
-                        nome deve ter no maximo 200 caracteres
-                    </div>
-                </div>
-            </div>
 
-            <div class="row g-3">
-
-                <div class="form-group col-md-4">
-                    <label>Telefone</label>
-                    <input type="text" class="form-control"
-                    placeholder="Informe o telefone"
-                    mask="(00) 00000-0000"
-                    formControlName="telefone"
-                    [ngClass]="cssValidator(f.telefone)"
-                    />
-                    <div *ngIf="f.telefone?.errors?.required" class="invalid-feedback">
-                        telefone é obrigatorio
-                    </div>
-                </div>
-                <div class="form-group col-md-8">
-                    <label>E-mail</label>
-                    <input type="text" class="form-control"
-                    placeholder="Informe o e-mail" appEmailMask
-                    formControlName="email"
-                    />
-                </div>
-
-            </div>
-
-            <div class="row g-3">
-
-                <div class="form-group col-md-4">
-                    <label>Cidade</label>
+                <div class="form-group col-md-6">
+                    <label>Pessoa</label>
                     <input type="text"
-                    class="form-control"
-                    placeholder="Informe a cidade"
-                    [(ngModel)]="cidadeFiltro"
-                    [ngModelOptions]="{standalone: true}"
-                    (input)="onInputChange()"/>
-                    <div class="dropdown-menu show"
-                    *ngIf="cidadesFiltradas.length && !carregando">
-                    <button class="dropdown-item"
-                    *ngFor="let cidade of cidadesFiltradas"
-                    (click)="selecionaCidade(cidade)">
-                        {{cidade.descricao}}
-                    </button>
-                    </div>
-                    <div *ngIf="carregando" class="text-muted mt-2">carregando...
+                            class="form-control"
+                            placeholder="Informe o nome"
+                            [(ngModel)]="pessoaFiltro"
+                            [ngModelOptions]="{standalone: true}"
+                            (input)="onInputChangePessoa()"
+                            [readonly]="pessoaSelecionada && modoEdicao" />
 
+                    <input type="hidden" formControlName="pessoaId" />
+
+                    <!-- Lista de resultados -->
+                    <div class="dropdown-menu show p-0"
+                        *ngIf="pessoasFiltradas.length && !carregandoPessoa && !(pessoaSelecionada && modoEdicao)"
+                        style="max-height: 200px; overflow-y: auto; width: 20%;">
+                        <button class="dropdown-item"
+                                *ngFor="let pessoa of pessoasFiltradas"
+                                (click)="selecionaPessoa(pessoa)">
+                        {{ pessoa.nome }}
+                        </button>
                     </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>CEP</label>
-                    <input type="text" class="form-control"
-                    placeholder="Informe o CEP" mask="00000-000"
-                    formControlName="cep"
-                    [ngClass]="cssValidator(f.cep)"/>
-                    <div *ngIf="f.cep?.errors?.required" class="invalid-feedback">
-                        CEP é obrigátorio
+
+                    <!-- Loader -->
+                    <div *ngIf="carregandoPessoa" class="text-muted mt-2">
+                        Carregando...
                     </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Endereço</label>
-                    <input type="text" class="form-control"
-                    placeholder="Informe o endereço"
-                    formControlName="endereco"
-                    [ngClass]="cssValidator(f.endereco)"/>
-                    <div *ngIf="f.endereco?.errors?.required" class="invalid-feedback">
-                        Endereço é obrigátorio
+
+                    <!-- Mensagem caso já tenha pessoa vinculada -->
+                    <div *ngIf="pessoaSelecionada && modoEdicao" class="text-success mt-2">
+                        Pessoa vinculada: {{ pessoaSelecionada.nome }}
                     </div>
                 </div>
 
             </div>
+
+            <!-- <div class="row g-3">
+                <div class="form-group col-md-8">
+                <label>E-mail</label>
+                <input type="text" class="form-control"
+                placeholder="Informe o e-mail" appEmailMask
+                formControlName="email"
+                />
+                </div>
+            </div> -->
 
             <div class="row g-3">
                 
