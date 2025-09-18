@@ -54,7 +54,6 @@ public class LancamentoRepository : ILancamentoRepository
             .Include(l => l.ContaContabil)
             .ThenInclude(c => c.GrupoConta)
             .FirstOrDefaultAsync(l => l.Id == id);
-            //await _lancamentosContext.Lancamentos.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
     }
 
     public async Task<IEnumerable<Lancamento>> GetLancamentoAsync()

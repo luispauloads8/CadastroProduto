@@ -1,0 +1,51 @@
+<div class="container">
+  <!-- MENU -->
+  <div class="menu">
+  <h2>Produtos</h2>
+  <div *ngFor="let p of produtos" class="sandwich-card">
+    <img [src]="p.imagem" alt="{{p.descricao}}" />
+    <div>
+      <h3>{{p.descricao}}</h3>
+      <p>{{p.descricao}}</p>
+      <!-- <p><strong>R$ {{p.preco | number:'1.2-2'}}</strong></p> -->
+      <button type="button" (click)="adicionarItem(p)">+ Adicionar</button>
+    </div>
+  </div>
+  <!-- <button class="custom" type="button" (click)="criarItemPersonalizado()">
+    🥪 Produto Personalizado
+  </button> -->
+</div>
+
+
+  <!-- RESUMO -->
+  <div class="summary">
+    <h2>Resumo de Pedido</h2>
+    <div *ngFor="let item of itens.controls; let i = index" class="item">
+      <span>{{ item.controls.nome.value }}</span>
+      <input type="number" min="1" [formControl]="item.controls.quantidade" />
+      <span>R${{ item.controls.preco.value * item.controls.quantidade.value | number:'1.2-2' }}</span>
+      <button type="button" (click)="removerItem(i)">❌</button>
+    </div>
+    <hr />
+    <p><strong>Total:</strong> R$ {{total | number:'1.2-2'}}</p>
+  </div>
+  
+
+  <!-- FINALIZAÇÃO -->
+  <div class="checkout" [formGroup]="pedidoForm">
+    <h2>Finalizar Pedido</h2>
+    <input formControlName="cliente" placeholder="Selecionar Cliente"/>
+    <div class="user">
+      <p><strong>Nome:</strong> Maria Oliveira</p>
+      <p><strong>Telefone:</strong> (11) 98765-4321</p>
+    </div>
+
+    <div class="pagamento">
+      <label><input type="radio" formControlName="pagamento" value="cartao"> 💳 Cartão</label>
+      <label><input type="radio" formControlName="pagamento" value="pix"> 📲 Pix</label>
+      <label><input type="radio" formControlName="pagamento" value="dinheiro"> 💵 Dinheiro</label>
+    </div>
+
+    <button class="finalizar" type="button" (click)="fecharPedido()">FECHAR PEDIDO</button>
+  </div>
+</div>

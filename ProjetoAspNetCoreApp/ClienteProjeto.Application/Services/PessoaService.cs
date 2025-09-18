@@ -31,7 +31,7 @@ namespace ClienteProjeto.Application.Services
             await _pessoaRepositoy.EnsureConnectionOpenAsync();
             var pessoaEntity = _mapper.Map<Pessoa>(pessoaDTO);
 
-            if (pessoaDTO.EnderecoId is null && pessoaEntity.Endereco != null)
+            if (pessoaDTO.Id is null && pessoaEntity.Endereco != null)
             {
                 var endereco = await _enderecoRepository.CreateAsync(pessoaEntity.Endereco);
                 pessoaEntity.EnderecoId = endereco.Id;
