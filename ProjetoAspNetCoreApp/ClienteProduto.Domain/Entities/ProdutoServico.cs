@@ -11,6 +11,7 @@ public class ProdutoServico : Entity
     }
 
     public string Descricao { get; set; }
+    public double Preco { get; set; }
     public byte[] Imagem { get; set; }
     public int CategoriaId { get; set; }
 
@@ -18,4 +19,5 @@ public class ProdutoServico : Entity
 
     [JsonIgnore]
     public ICollection<Lancamento> Lancamentos { get; set; }
+    public ICollection<Pedido> Pedidos { get; set; }
 }
