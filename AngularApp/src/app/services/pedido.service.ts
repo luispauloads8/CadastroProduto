@@ -16,8 +16,17 @@ export class PedidoService {
     public GetPedido(): Observable<Pedido[]>{
       return this.http.get<Pedido[]>(`${this.ApiUrl}Pedidos`);
     }
+
+    public GetPedidoId(id: number): Observable<Pedido>{
+      return this.http.get<Pedido>(`${this.ApiUrl}Pedidos/${id}`).pipe(take(1));
+    }
+
     public post(pedido: Pedido): Observable<Pedido>{
       return this.http.post<Pedido>(`${this.ApiUrl}Pedidos`, pedido).pipe(take(1));
+    }
+
+    public put(pedido: Pedido): Observable<Pedido>{
+      return this.http.put<Pedido>(`${this.ApiUrl}Pedidos/${pedido.id}`, pedido).pipe(take(1));
     }
 
     public DeletarPedido(id: number): Observable<Pedido>{
