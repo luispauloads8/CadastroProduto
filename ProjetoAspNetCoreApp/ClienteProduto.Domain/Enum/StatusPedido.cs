@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClienteProjeto.Domain.Enum
 {
-    public enum StatusPedido
+    public enum StatusPedido : int
     {
         Pendente = 0,
         Processando = 1,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClienteProjeto.Domain.Enum
 {
-    public enum FormaDePagamento
+    public enum FormaDePagamento : int
     {
         Pix = 0,
         Dinheiro = 1,
