@@ -26,14 +26,20 @@ public class CategoriaRepository : ICategoriaRepository
 
     public async Task<Categoria> DeleteAsync(Categoria categoria)
     {
-        _categoryContext.Remove(categoria);
+
+        // Desanexa a entidade que já veio do service (tracking ativo)
+        _categoryContext.Entry(categoria).State = EntityState.Detached;
+
+        var categoriaExclusao = new Categoria (categoria.Id);
+        _categoryContext.Categorias.Attach(categoriaExclusao);
+        _categoryContext.Remove(categoriaExclusao);
         await _categoryContext.SaveChangesAsync();
         return categoria;
     }
 
     public async Task<Categoria> GetByIdAsync(int? id)
     {
-        return await _categoryContext.Categorias.Include(c => c.ProdutoServicos)
+        return await _categoryContext.Categorias.AsNoTracking().Include(c => c.ProdutoServicos)
             .SingleOrDefaultAsync(p => p.Id == id);
         
     }
