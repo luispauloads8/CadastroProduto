@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <button class="btn btn-success w-100" [routerLink]="['/cliente/detalhes']" routerLinkActive="router-link-active">Cadastro Empresa</button>
+    <button class="btn btn-success w-100" [routerLink]="['/cliente/detalhes']" routerLinkActive="router-link-active">Cadastro Cliente</button>
 
     <div class="card rounded shadow-sm p-3" id="card">
 
@@ -54,7 +54,7 @@
     
     <ng-template #template>
         <div class="modal-body text-center">
-          <p>Tem certeza que quer deletar a empresa?</p>
+          <p>Tem certeza que quer deletar o cliente?</p>
           <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
           <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
         </div>
