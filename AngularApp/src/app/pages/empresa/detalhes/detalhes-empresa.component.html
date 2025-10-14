@@ -73,6 +73,43 @@
                 </div>
             </div>
 
+            <div class="row g-3">
+                <div class="form-group col-md-6">
+                    <label>Inscrição Estadual</label>
+                    <input type="text" class="form-control"
+                        placeholder="Informe a inscrição estadual"
+                        formControlName="inscricaoEstadual"
+                        [ngClass]="cssValidator(f.inscricaoEstadual)">
+                    <div *ngIf="f.inscricaoEstadual?.errors?.required" class="invalid-feedback">
+                        inscrição estadual é obrigatória
+                    </div>
+                    <div *ngIf="f.inscricaoEstadual?.errors?.minlength" class="invalid-feedback">
+                        inscrição estadual deve ter no mínimo 5 caracteres
+                    </div>
+                    <div *ngIf="f.inscricaoEstadual?.errors?.maxlength" class="invalid-feedback">
+                        inscrição estadual deve ter no máximo 20 caracteres
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>CNAE</label>
+                    <input type="text" class="form-control"
+                        placeholder="Informe o CNAE"
+                        formControlName="cnae"
+                        [ngClass]="cssValidator(f.cnae)">
+                    <div *ngIf="f.cnae?.errors?.required" class="invalid-feedback">
+                        CNAE é obrigatório
+                    </div>
+                    <div *ngIf="f.cnae?.errors?.minlength" class="invalid-feedback">
+                        CNAE deve ter no mínimo 5 caracteres
+                    </div>
+                    <div *ngIf="f.cnae?.errors?.maxlength" class="invalid-feedback">
+                        CNAE deve ter no máximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="form-group col-md-12">
                     <label>Cidade</label>
