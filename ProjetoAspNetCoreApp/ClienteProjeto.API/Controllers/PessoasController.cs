@@ -1,8 +1,15 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Application.Services;
+using ClienteProjeto.Domain.Entities;
+using ClienteProjeto.Domain.Enum;
+using ClienteProjeto.Validator.Entidade;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace ClienteProjeto.API.Controllers
 {
@@ -50,20 +57,28 @@ namespace ClienteProjeto.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PessoaDTO>> Post(PessoaDTO pessoaDTO)
+        public async Task<ActionResult<PessoaDTO>> Post([FromBody] PessoaDTO pessoaDTO)
         {
-            if (pessoaDTO is null)
-            {
-                return BadRequest();
-            }
+            if (pessoaDTO == null)
+                return BadRequest("Corpo da requisição inválido.");
+
+            // Cria o validador manualmente
+            var validator = new ValidadorDeCadastroPessoa();
+            var result = await validator.ValidateAsync(pessoaDTO);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Passa o VM direto para o serviço
             await _pessoaService.Add(pessoaDTO);
 
-            return new CreatedAtRouteResult("GetPessoa",
-                new { id = pessoaDTO.Id }, pessoaDTO);
+            return CreatedAtRoute("GetPessoa", new { id = pessoaDTO.Id }, pessoaDTO);
         }
 
+
+
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, PessoaDTO pessoaDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] PessoaDTO pessoaDTO)
         {
             if (id != pessoaDTO.Id)
             {
@@ -75,16 +90,34 @@ namespace ClienteProjeto.API.Controllers
 
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<ClienteDTO>> Delete(int id)
+        public async Task<ActionResult<PessoaDTO>> Delete(int id)
         {
-            var pessoa = await _pessoaService.GetById(id);
-            if (pessoa is null)
+            try
             {
-                return NoContent();
+                var pessoa = await _pessoaService.GetById(id);
+                if (pessoa is null)
+                {
+                    return NoContent();
+                }
+
+                await _pessoaService.Delete(id);
+                return Ok(pessoa);
+            }
+            catch (DbUpdateException ex)
+            {
+
+                // Aqui você pode verificar se é erro de FK
+                if (ex.InnerException is MySqlConnector.MySqlException mysqlEx &&
+                    mysqlEx.Message.Contains("Cannot delete or update a parent row"))
+                {
+                    return BadRequest(new { message = "Não é possível excluir esta pessoa, pois existe associação com cliente." });
+
+                }
+
+                // fallback genérico
+                return StatusCode(500, "Ocorreu um erro ao excluir o cliente.");
             }
 
-            await _pessoaService.Delete(id);
-            return Ok(pessoa);
         }
     }
 }

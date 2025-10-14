@@ -3,6 +3,7 @@ using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClienteProjeto.API.Controllers
 {
@@ -80,16 +81,35 @@ namespace ClienteProjeto.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Policy ="AdminOnly")]
+        //[Authorize(Policy ="AdminOnly")]
         public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
-            var categoria = await _categoriaService.GetById(id);
-            if (categoria == null)
+            try
             {
-                return NoContent();
+                var categoria = await _categoriaService.GetById(id);
+                if (categoria == null)
+                {
+                    return NoContent();
+                }
+                await _categoriaService.Delete(id);
+                return Ok(categoria);
+
             }
-            await _categoriaService.Delete(id);
-            return Ok(categoria);
+            catch (DbUpdateException ex)
+            {
+
+                // Aqui você pode verificar se é erro de FK
+                if (ex.InnerException is MySqlConnector.MySqlException mysqlEx &&
+                    mysqlEx.Message.Contains("Cannot delete or update a parent row"))
+                {
+                    return BadRequest(new { message = "Não é possível excluir essa catégoria, pois existe associação com produto/serviço." });
+
+                }
+
+                // fallback genérico
+                return StatusCode(500, "Ocorreu um erro ao excluir o cliente.");
+            }
+
         }
     }
 }
