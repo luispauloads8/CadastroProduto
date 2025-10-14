@@ -64,4 +64,15 @@
   border-radius: 6px;
   color: white;
   cursor: pointer;
+  margin-bottom: 10px;
+}
+.cancelar {
+  width: 100%;
+  background: red;
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
 }

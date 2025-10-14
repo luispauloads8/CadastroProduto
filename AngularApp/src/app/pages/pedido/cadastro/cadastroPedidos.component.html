@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <button class="btn btn-success w-100" [routerLink]="['/pedido/detalhes']" routerLinkActive="router-link-active">Cadastro Pessoa</button>
+    <button class="btn btn-success w-100" [routerLink]="['/pedido/detalhes']" routerLinkActive="router-link-active">Cadastro Pedido</button>
 
     <div class="card rounded shadow-sm p-3" id="card">
 
@@ -10,7 +10,7 @@
                         <div class="input-group-text">Pesquisar</div>
                     </div>
 
-                    <input class="form-control" type="text" placeholder="Qual cliente deseja buscar" [(ngModel)]="filtroLista"/>
+                    <input class="form-control" type="text" placeholder="Qual pedido deseja buscar" [(ngModel)]="filtroLista"/>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                             <td>{{pedido.id}}</td>
                             <td>{{pedido.descricao}}</td>
                             <td>
-                                <button class="btn btn-warning mx-2" [routerLink]="['/pessoa/detalhes', pedido.id]" tooltip="Editar">
+                                <button class="btn btn-warning mx-2" [routerLink]="['/pedido/detalhes', pedido.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger mx-2" (click)="openModal($event, template, pedido.id!)" tooltip="Excluir">

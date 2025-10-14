@@ -57,9 +57,9 @@ export class CadastroPedidosComponent implements OnInit {
 
     public CarregaPedido() : void{
       this.pedidoService.GetPedido().subscribe(
-        (pessoa: Pedido[]) => {
-          this.pedidos = pessoa.map(pes => {
-            return {...pes};
+        (pedido: Pedido[]) => {
+          this.pedidos = pedido.map(ped => {
+            return {...ped};
           });
   
           this.pedidoFiltrados = this.pedidos;
@@ -76,14 +76,14 @@ export class CadastroPedidosComponent implements OnInit {
   
       this.pedidoService.DeletarPedido(this.pedidoId).subscribe(
         (result: Pedido) => {
-          // if(result.id === this.pedidoId){
-          //   this.toastr.success('Cliente foi Deletado com Sucesso', 'Deletado!');
-          //   this.CarregaPessoa();
-          // }
+          if(result.id === this.pedidoId){
+            this.toastr.success('Pedido foi Deletado com Sucesso', 'Deletado!');
+            this.CarregaPedido();
+          }
         },
         (error: any) => {
           console.error(error);
-          this.toastr.error('Error ao tentar deletar Cliente', 'Erro');
+          this.toastr.error('Error ao tentar deletar Pedido', 'Erro');
         },
         () => {}
       );
