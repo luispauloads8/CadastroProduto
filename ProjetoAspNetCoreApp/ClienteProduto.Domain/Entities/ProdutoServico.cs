@@ -19,5 +19,5 @@ public class ProdutoServico : Entity
 
     [JsonIgnore]
     public ICollection<Lancamento> Lancamentos { get; set; }
-    public ICollection<Pedido> Pedidos { get; set; }
+    public ICollection<ItensPedido> ItensPedido { get; set; }
 }
