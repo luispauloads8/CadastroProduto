@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Domain;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Enum;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,16 @@ namespace ClienteProjeto.Application.DTOs
 {
     public class PedidoDTO
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Informe descrição do pedido")]
         [MinLength(3)]
         [MaxLength(300)]
         public string Descricao { get; set; }
 
-        [Required(ErrorMessage = "Informe a quantidade")]
-        public int Quantidade { get; set; }
-
         [Required(ErrorMessage = "Informe o valor")]
         [DisplayFormat(DataFormatString = "{0:n2}")]
-        public double ValorTotal { get; set; }
+        public decimal ValorTotal { get; set; }
 
         [Required(ErrorMessage = "Telefone é obrigatorio")]
         public string Telefone { get; set; }
@@ -30,9 +30,12 @@ namespace ClienteProjeto.Application.DTOs
         public DateTime DataPedido { get; set; }
 
         public FormaDePagamento FormaDePagamento { get; set; }
-        public StatusPedido Status { get; set; }
+        public StatusPedido StatusPedido { get; set; }
 
-        public Cliente Cliente { get; set; }
-        public ProdutoServico ProdutoServico { get; set; }
+        public ClienteDTO Cliente { get; set; }
+
+        public int ClienteId { get; set; }
+
+        public ICollection<ItensPedido> ItensPedido { get; set; }
     }
 }

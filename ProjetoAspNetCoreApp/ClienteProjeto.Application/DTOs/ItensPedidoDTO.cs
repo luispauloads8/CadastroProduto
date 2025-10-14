@@ -22,5 +22,6 @@ namespace ClienteProjeto.Application.DTOs
         public decimal ValorTotal { get; set; }
 
         public Pedido Pedido { get; set; }
+        public ProdutoServico ProdutoServico { get; set; }
     }
 }
