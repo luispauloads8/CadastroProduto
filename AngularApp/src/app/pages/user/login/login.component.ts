@@ -27,14 +27,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   public login(): void {
+
+    if (!this.userLogin.userName || !this.userLogin.password) {
+    this.toaster.warning('Preencha usuário e senha antes de continuar.');
+    return; // Interrompe a execução se estiver faltando algo
+  }
+    
     this.authService.login(this.userLogin).subscribe(
       () => {
         this.router.navigateByUrl('/dashboard');
-      },
-      (error: any) => {
-        if (error.status == 401)
-          this.toaster.error('usuário ou senha inválido');
-        else console.error(error);
       }
     );
   }
