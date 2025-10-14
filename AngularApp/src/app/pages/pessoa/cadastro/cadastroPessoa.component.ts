@@ -82,10 +82,10 @@ export class CadastroPessoaComponent implements OnInit {
           this.CarregaPessoa();
         }
       },
-      (error: any) => {
-        console.error(error);
-        this.toastr.error('Error ao tentar deletar Cliente', 'Erro');
-      },
+      // (error: any) => {
+      //   console.error(error);
+      //   this.toastr.error('Error ao tentar deletar Cliente', 'Erro');
+      // },
       () => {}
     );
   }

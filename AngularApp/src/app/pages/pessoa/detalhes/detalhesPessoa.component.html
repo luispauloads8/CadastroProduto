@@ -1,151 +1,264 @@
 <div class="card rounded shadow-sm" id="card">
+  <form [formGroup]="form">
+    <div class="p-3">
 
-        <form [formGroup]="form">
-            <div class="p-3">
-                <div class="p-3">
+      <!-- Tipo de Pessoa -->
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Tipo de Pessoa</label>
+          <select class="form-control" formControlName="tipoPessoa">
+            <option [ngValue]="1">Pessoa Física</option>
+            <option [ngValue]="2">Pessoa Jurídica</option>
+          </select>
+        </div>
+      </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input type="text" class="form-control"
-                            placeholder="Informe o nome"
-                            formControlName="nome"
-                            [ngClass]="cssValidator(f.nome)"/>
-                            <div *ngIf="f.nome?.errors?.required" class="invalid-feedback">
-                                nome é obrigatorio
-                            </div>
-                            <div *ngIf="f.nome?.errors?.minlength" class="invalid-feedback">
-                                nome deve ter no minimo 3 caracteres
-                            </div>
-                            <div *ngIf="f.nome?.errors?.maxlength" class="invalid-feedback">
-                                nome deve ter no maximo 200 caracteres
-                            </div>
-                        </div>
-                    </div>
+      <!-- Empresa -->
+      <div class="form-group col-md-12">
+        <label>Empresa</label>
+        <input type="text"
+               class="form-control"
+               placeholder="Informe a empresa"
+               [(ngModel)]="empresaFiltro"
+               [ngModelOptions]="{standalone: true}"
+               (input)="onInputChangePessoa()" />
 
-                    <div class="row g-3">
+        <input type="hidden" formControlName="empresaId" />
 
-                        <div class="form-group col-md-3">
-                            <label>Telefone</label>
-                            <input type="text" class="form-control"
-                            placeholder="Informe o telefone"
-                            mask="(00) 00000-0000"
-                            formControlName="telefone"
-                            [ngClass]="cssValidator(f.telefone)"
-                            />
-                            <div *ngIf="f.telefone?.errors?.required" class="invalid-feedback">
-                                telefone é obrigatorio
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label>E-mail</label>
-                            <input type="text" class="form-control"
-                            placeholder="Informe o e-mail" appEmailMask
-                            formControlName="email"
-                            [ngClass]="cssValidator(f.email)"
-                            />
-                            <div *ngIf="f.email?.errors?.required" class="invalid-feedback">
-                                email é obrigatorio
-                            </div>
-                            <div *ngIf="f.email?.errors?.email" class="invalid-feedback">
-                                E-mail não é válido
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label>CNPJ</label>
-                            <input type="text" class="form-control"
-                            placeholder="Informe o CNPJ" formControlName="cnpj"
-                            [ngClass]="cssValidator(f.cnpj)"/>
-                            <div *ngIf="f.cnpj?.errors?.required" class="invalid-feedback">
-                                CNPJ é obrigatorio
-                            </div>
-                        </div>
+        <div class="dropdown-menu show p-0"
+             *ngIf="empresasFiltradas.length && !carregandoEmpresa"
+             style="max-height: 200px; overflow-y: auto; width: 20%;">
+          <button class="dropdown-item"
+                  *ngFor="let empresa of empresasFiltradas"
+                  (click)="selecionaEmpresa(empresa)">
+            {{ empresa.nomeFantasia }}
+          </button>
+        </div>
 
-                    </div>
-                    
-                </div>
+        <div *ngIf="carregandoEmpresa" class="text-muted mt-2">
+          Carregando...
+        </div>
 
-                <!-- Separador -->
-                <hr class="my-4">
+        <div *ngIf="empresaSelecionada" class="text-success mt-2">
+          Empresa vinculada: {{ empresaSelecionada.nomeFantasia }}
+        </div>
+      </div>
 
-                <!-- Endereço -->
-               <div formGroupName="endereco" class="row g-3">
-                <h5 class="mb-3">Endereço</h5>
+      <!-- Nome -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Nome</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o nome"
+                 formControlName="nome"
+                 [ngClass]="cssValidator(f.nome)" />
+          <div *ngIf="f.nome?.errors?.required" class="invalid-feedback">
+            Nome é obrigatório
+          </div>
+        </div>
+      </div>
 
-                <div class="form-group col-md-6">
-                    <label>Logradouro</label>
-                    <input type="text" class="form-control" placeholder="Informe o logradouro"
-                        formControlName="logradouro" [ngClass]="cssValidator(f.endereco.get('logradouro'))" />
-                    <div *ngIf="f.logradouro?.errors?.required" class="invalid-feedback">
-                        logradouro é obrigatorio.
-                    </div>
-                </div>
+      <!-- Pessoa Física -->
+      <ng-container *ngIf="form.get('tipoPessoa')?.value == 1">
+        <div class="row g-3">
+          <div class="form-group col-md-4">
+            <label>Nacionalidade</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe a nacionalidade"
+                   formControlName="nacionalidade" />
+          </div>
 
-                <div class="form-group col-md-3">
-                    <label>Bairro</label>
-                    <input type="text" class="form-control" placeholder="Informe o bairro"
-                        formControlName="bairro" [ngClass]="cssValidator(f.endereco.get('bairro'))" />
-                        <div *ngIf="f.bairro?.errors?.required" class="invalid-feedback">
-                            Bairro é obrigatorio
-                        </div>        
-                </div>
+          <div class="form-group col-md-4">
+            <label>Estado Civil</label>
+            <select class="form-control"
+                    formControlName="estadoCivil"
+                    [ngClass]="cssValidator(f.estadoCivil)">
+              <option value="" disabled>Selecione um estado civil</option>
+              <option *ngFor="let civil of estadoCivil" [ngValue]="civil.key">
+                {{ civil.value }}
+              </option>
+            </select>
+          </div>
 
-                <div class="form-group col-md-3">
-                    <label>Caixa Postal</label>
-                    <input type="text" class="form-control" placeholder="Informe a caixa postal"
-                        formControlName="caixaPostal" [ngClass]="cssValidator(f.endereco.get('caixaPostal'))" />
-                        <div *ngIf="f.caixaPostal?.errors?.required" class="invalid-feedback">
-                            Caixa Postal é obrigatorio
-                        </div>       
-                </div>
-            </div>
+          <div class="form-group col-md-4">
+            <label>Sexo</label>
+            <select class="form-control"
+                    formControlName="sexo"
+                    [ngClass]="cssValidator(f.sexo)">
+              <option value="" disabled>Selecione um sexo</option>
+              <option *ngFor="let sexo of sexo" [ngValue]="sexo.key">
+                {{ sexo.value }}
+              </option>
+            </select>
+          </div>
 
-            <div class="row g-3" formGroupName="endereco">
-                <div class="form-group col-md-6">
-                    <label>CEP</label>
-                    <input type="text" class="form-control" placeholder="Informe o CEP" formControlName="cep" [ngClass]="cssValidator(f.endereco.get('cep'))" />
-                    <div *ngIf="f.cep?.errors?.required" class="invalid-feedback">
-                        CEP é obrigatorio
-                    </div>
-                </div>
-            </div>
+          <div class="form-group col-md-4">
+            <label>CPF</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe o CPF"
+                   mask="000.000.000-00"
+                   formControlName="cpf"
+                   [ngClass]="cssValidator(f.cpf)" />
+          </div>
 
-            <div class="row g-3">
+          <div class="form-group col-md-4">
+            <label>Data de Nascimento</label>
+            <input type="date"
+                   class="form-control"
+                   placeholder="Informe a data de nascimento"
+                   formControlName="dataNascimento"
+                   [ngClass]="cssValidator(f.dataNascimento)" />
+          </div>
+        </div>
+      </ng-container>
 
-                <div class="form-group col-md-4">
-                    <label>Cidade</label>
-                    <input type="text"
-                            class="form-control"
-                            placeholder="Informe a cidade"
-                            [(ngModel)]="cidadeFiltro"
-                            [ngModelOptions]="{standalone: true}"
-                            (input)="onInputChange()"/>
+      <!-- Pessoa Jurídica -->
+      <ng-container *ngIf="form.get('tipoPessoa')?.value == 2">
+        <div class="row g-3">
+          <div class="form-group col-md-4">
+            <label>CNPJ</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe o CNPJ"
+                   mask="00.000.000/0000-00"
+                   formControlName="cnpj"
+                   [ngClass]="cssValidator(f.cnpj)" />
+          </div>
 
-                    <div class="dropdown-menu show p-0"
-                        *ngIf="cidadesFiltradas.length && !carregando"
-                        style="max-height: 200px; overflow-y: auto; width: 20%;">
-                        <button class="dropdown-item"
-                                *ngFor="let cidade of cidadesFiltradas"
-                                (click)="selecionaCidade(cidade)">
-                        {{ cidade.descricao }}
-                        </button>
-                    </div>
+          <div class="form-group col-md-4">
+            <label>Inscrição Estadual</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe a Inscrição Estadual"
+                   formControlName="inscricaoEstadual"
+                   [ngClass]="cssValidator(f.inscricaoEstadual)" />
+          </div>
 
-                    <div *ngIf="carregando" class="text-muted mt-2">
-                        Carregando...
-                    </div>
-                </div>
+          <div class="form-group col-md-4">
+            <label>Inscrição Municipal</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe a Inscrição Municipal"
+                   formControlName="inscricaoMunicipal"
+                   [ngClass]="cssValidator(f.inscricaoMunicipal)" />
+          </div>
 
-            </div>
+          <div class="form-group col-md-4">
+            <label>CNAE</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Informe o CNAE"
+                   formControlName="cnae"
+                   [ngClass]="cssValidator(f.cnae)" />
+          </div>
+        </div>
+      </ng-container>
 
-            </div>
+      <!-- Campos Comuns (Telefone / E-mail) -->
+      <div class="row g-3 mt-3">
+        <div class="form-group col-md-3">
+          <label>Telefone</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o telefone"
+                 mask="(00) 00000-0000"
+                 formControlName="telefone"
+                 [ngClass]="cssValidator(f.telefone)" />
+        </div>
 
-            <div class="card-footer">
-                <div class="d-flex mt-3">
-                    <button class="btn btn-success w-10 mx-1" [disabled]="!form.valid" (click)="salvarPessoa()">Gravar</button>
-                    <a class="btn btn-info w-10" [routerLink]="['/pessoa/cadastro']" >voltar</a>
-                </div>                
-            </div>
-            
-        </form>
+        <div class="form-group col-md-5">
+          <label>E-mail</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o e-mail"
+                 appEmailMask
+                 formControlName="email"
+                 [ngClass]="cssValidator(f.email)" />
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <hr class="my-4" />
+
+      <!-- Endereço -->
+      <div formGroupName="endereco" class="row g-3">
+        <h5 class="mb-3">Endereço</h5>
+
+        <div class="form-group col-md-6">
+          <label>Logradouro</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o logradouro"
+                 formControlName="logradouro"
+                 [ngClass]="cssValidator(fe.logradouro)" />
+        </div>
+
+        <div class="form-group col-md-3">
+          <label>Bairro</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o bairro"
+                 formControlName="bairro"
+                 [ngClass]="cssValidator(f.endereco.get('bairro'))" />
+        </div>
+
+        <div class="form-group col-md-3">
+          <label>Caixa Postal</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe a caixa postal"
+                 formControlName="caixaPostal"
+                 [ngClass]="cssValidator(f.endereco.get('caixaPostal'))" />
+        </div>
+
+        <div class="form-group col-md-6">
+          <label>CEP</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe o CEP"
+                 formControlName="cep"
+                 [ngClass]="cssValidator(f.endereco.get('cep'))" />
+        </div>
+
+        <div class="form-group col-md-4">
+          <label>Cidade</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Informe a cidade"
+                 [(ngModel)]="cidadeFiltro"
+                 [ngModelOptions]="{standalone: true}"
+                 (input)="onInputChange()" />
+
+          <div class="dropdown-menu show p-0"
+               *ngIf="cidadesFiltradas.length && !carregando"
+               style="max-height: 200px; overflow-y: auto; width: 20%;">
+            <button class="dropdown-item"
+                    *ngFor="let cidade of cidadesFiltradas"
+                    (click)="selecionaCidade(cidade)">
+              {{ cidade.descricao }}
+            </button>
+          </div>
+
+          <div *ngIf="carregando" class="text-muted mt-2">Carregando...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Rodapé -->
+    <div class="card-footer">
+      <div class="d-flex mt-3">
+        <button class="btn btn-success w-10 mx-1"
+                [disabled]="!form.valid"
+                (click)="salvarPessoa()">
+          Gravar
+        </button>
+        <a class="btn btn-info w-10" [routerLink]="['/pessoa/cadastro']">Voltar</a>
+      </div>
+    </div>
+
+  </form>
 </div>
