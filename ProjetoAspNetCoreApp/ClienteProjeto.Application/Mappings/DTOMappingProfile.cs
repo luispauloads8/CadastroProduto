@@ -12,7 +12,9 @@ public class DTOMappingProfile : Profile
         CreateMap<Categoria, CategoriaDTO>().ReverseMap();
         CreateMap<Cidade, CidadeDTO>().ReverseMap();
         CreateMap<Cliente, ClienteDTO>().ReverseMap();
-        CreateMap<Pessoa, PessoaDTO>().ReverseMap();
+        CreateMap<Pessoa, PessoaDTO>().Include<PessoaFisica, PessoaFisicaDTO>().Include<PessoaJuridica, PessoaJuridicaDTO>().ReverseMap();
+        CreateMap<PessoaFisica, PessoaFisicaDTO>().ReverseMap();
+        CreateMap<PessoaJuridica, PessoaJuridicaDTO>().ReverseMap();
         CreateMap<ContaContabil, ContaContabilDTO>().ReverseMap();
         CreateMap<Empresa, EmpresaDTO>().ReverseMap();
         CreateMap<Fornecedor, FornecedorDTO>().ReverseMap();
@@ -21,5 +23,7 @@ public class DTOMappingProfile : Profile
         CreateMap<ItensLancamento, ItensLancamentoDTO>().ReverseMap();
         CreateMap<Lancamento, LancamentoDTO>().ReverseMap();
         CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+        CreateMap<Pedido, PedidoDTO>().ReverseMap();
+
     }
 }

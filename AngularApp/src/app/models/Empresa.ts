@@ -7,6 +7,8 @@ export interface Empresa{
  razaoSocial: string;
  nomeFantasia: string;
  CNPJ: string;
+ inscricaoEstadual: string;
+ CNAE: string;
  email: string;
  telefone: string;
  cidadeEmpresaId: number;

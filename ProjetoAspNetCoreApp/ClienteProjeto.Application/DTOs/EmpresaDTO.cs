@@ -27,6 +27,12 @@ public class EmpresaDTO
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
+    [Required(ErrorMessage = "Informe o Inscricao Estadual")]
+    public string InscricaoEstadual { get; set; }
+
+    [Required(ErrorMessage = "Informe o CNAE")]
+    public string CNAE { get; set; }
+
     [Required(ErrorMessage = "Informe telefone")]
     [MaxLength(15)]
     public string Telefone { get; set; }

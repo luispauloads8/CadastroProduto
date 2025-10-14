@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClienteProjeto.CrossCutting\ClienteProjeto.CrossCutting.csproj" />
+    <ProjectReference Include="..\ClienteProjeto.Validator\ClienteProjeto.Validator.csproj" />
   </ItemGroup>
 
 </Project>

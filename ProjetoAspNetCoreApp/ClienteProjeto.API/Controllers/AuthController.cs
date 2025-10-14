@@ -181,7 +181,10 @@ public class AuthController : ControllerBase
                 Expiration = token.ValidTo
             });
         }
-        return Unauthorized();
+        return Unauthorized(new
+        {
+            message = "Usuário ou senha inválidos. Verifique e tente novamente."
+        });
 
     }
 

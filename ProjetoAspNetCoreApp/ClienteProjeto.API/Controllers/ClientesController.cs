@@ -1,6 +1,7 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClienteProjeto.API.Controllers
 {
@@ -76,14 +77,33 @@ namespace ClienteProjeto.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ClienteDTO>> Delete(int id)
         {
-            var cliente = await _clienteService.GetById(id);
-            if (cliente is null)
+            try
             {
-                return NoContent();
+                var cliente = await _clienteService.GetById(id);
+                if (cliente is null)
+                {
+                    return NoContent();
+                }
+
+                await _clienteService.Delete(id);
+                return Ok(cliente);
+
+            }
+            catch (DbUpdateException ex)
+            {
+
+                // Aqui você pode verificar se é erro de FK
+                if (ex.InnerException is MySqlConnector.MySqlException mysqlEx &&
+                    mysqlEx.Message.Contains("Cannot delete or update a parent row"))
+                {
+                    return BadRequest(new { message = "Não é possível excluir este cliente, pois existem pedidos associados a ele." });
+
+                }
+
+                // fallback genérico
+                return StatusCode(500, "Ocorreu um erro ao excluir o cliente.");
             }
 
-            await _clienteService.Delete(id);
-            return Ok(cliente);
         }
     }
 }

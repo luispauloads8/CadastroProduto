@@ -12,6 +12,7 @@ public class ProdutoServicoDTO
     [MinLength(3)]
     [MaxLength(100)]
     public string Descricao { get; set; }
+    public double Preco { get; set; }
     public string Imagem { get; set; }
     public byte[] ImagemByteArray { get; set; }
     public int CategoriaId { get; set; }

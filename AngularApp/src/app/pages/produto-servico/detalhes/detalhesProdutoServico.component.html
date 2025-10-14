@@ -45,6 +45,17 @@
                         <div *ngIf="carregando" class="text-muted mt-2">Carregando...</div>
                         <!-- <p *ngIf="categoriaSelecionada">Categoria selecionada: {{ categoriaSelecionada.id}}</p> -->
                       </div>
+
+                      <div class="form-row d-flex">
+                        <div class="form-group col-md-2 margin-right-10px">
+                            <label>Preço</label>
+                            <input type="text" placeholder="Preço" formControlName="preco" class="form-control" (input)="formatarPreco($event)"
+                            [ngClass]="cssValidator(f.preco)">
+                            <div *ngIf="f.descricao?.errors?.required" class="invalid-feedback">
+                                preço é obrigatoria
+                            </div>
+                        </div>                        
+                      </div>
       
                 </div>            
     

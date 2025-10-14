@@ -90,11 +90,6 @@ export class DetalhesLancamentosComponent {
   )
     
   {
-    this.localeService.use('pr-br');
-
-    this.form = this.fb.group({
-      valorItem: [0, [Validators.required, this.valorMaiorQueZeroValidator()]]
-    });
   }
 
   ngOnInit(): void {
@@ -181,22 +176,6 @@ export class DetalhesLancamentosComponent {
     this.form.reset();
   }
 
-  permitirApenasNumeros(event: KeyboardEvent) {
-    const tecla = event.key;
-
-    // Permite números, backspace e setas
-    if (
-      !/[\d]/.test(tecla) &&
-      tecla !== 'Backspace' &&
-      tecla !== 'ArrowLeft' &&
-      tecla !== 'ArrowRight' &&
-      tecla !== 'Delete' &&
-      tecla !== 'Tab'
-    ) {
-      event.preventDefault();
-    }
-  }
-
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
 
@@ -211,52 +190,24 @@ export class DetalhesLancamentosComponent {
     this.form.get('valorItem')?.setValue(numero);
   }
 
-  onBlur(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const numero = this.form.get('valorItem')?.value || 0;
+   formatarPreco(event: any) {
+    let valor = event.target.value;
 
-    if(!numero || numero <= 0)
-    {
-      input.value = ''; // Deixa o campo vazio
-      this.form.get('valorItem')?.setValue(null); // Opcional: limpa também no form
-    }else{
-      // Formata o valor como moeda no blur
-    input.value = this.formatarNumero(numero);  
-    }
+    // Remove tudo que não seja número ou vírgula
+    valor = valor.replace(/\D/g, '');
+
+    // Converte para número com 2 casas
+    const valorNumerico = (Number(valor) / 100).toFixed(2);
+
+    // Aplica formatação monetária (ex: R$ 1.234,56)
+    const valorFormatado = this.currencyPipe.transform(valorNumerico, 'BRL', 'symbol', '1.2-2');
+    
+    // Atualiza o campo
+    this.form.get('valorItem')?.setValue(valorFormatado, { emitEvent: false });
   }
 
-  // Getter para exibir o valor formatado no input
-  formatarValorItem(): string {
-    const valor = this.form.get('valorItem')?.value ?? 0;
-    return this.formatarNumero(valor);
-  }
-
-  // Função para formatar número como moeda brasileira
-  formatarNumero(valor: number): string {
-    return valor.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  }
-
-  // Validador personalizado: valor maior que zero
-  valorMaiorQueZeroValidator(): ValidatorFn {
-    return (control: AbstractControl) => {
-      const rawValue = control.value;
-
-      if (rawValue == null || rawValue === '') return null;
-
-      // Se for número direto, usa; se for string, remove máscara e parseia
-      let valorNumerico = typeof rawValue === 'number'
-        ? rawValue
-        : parseFloat(rawValue.toString().replace(/\./g, '').replace(',', '.')) || 0;
-
-      return valorNumerico > 0 ? null : { menorOuIgualZero: true };
-    };
-  }
-
-  public cssValidator(campo: AbstractControl | null): string {
-    return campo && campo.invalid && (campo.dirty || campo.touched) ? 'is-invalid' : '';
+  public cssValidator(campoForm: FormControl): any {
+      return {'is-invalid' : campoForm.errors && campoForm.touched}
   }
 
   public carregarLancamento(): void{
@@ -272,16 +223,18 @@ export class DetalhesLancamentosComponent {
         //formatar a data de lancamento
         this.lancamento.dataLancamento = new Date(this.lancamento.dataLancamento);
           
-        this.form.patchValue({...this.lancamento});
+        this.form.patchValue(this.lancamento);
 
         // Exibir empresa, produto, cliente e conta contábil
         this.atualizarFiltros(lancamento);
 
-        //configurar valor e quantidade
-        if(lancamento.itensLancamentos){
+        if (lancamento.itensLancamentos) {
           lancamento.itensLancamentos.forEach((item) => {
+            // 👇 Aqui aplica a máscara ao exibir
+            const precoFormatado = this.currencyPipe.transform(item.valorItem, 'BRL', 'symbol', '1.2-2');
+
             this.form.patchValue({
-              valorItem: item.valorItem,
+              valorItem: precoFormatado,   // ou "valor" se esse for o nome certo
               quantidade: item.quantidade
             });
           });
@@ -325,19 +278,25 @@ export class DetalhesLancamentosComponent {
         ? new Date(this.form.value.dataLancamento).toISOString()
         : null;  
 
-      const dadosLancamento = {
-        ...this.form.value,
-        empresaId: this.empresaSelecionado?.id,
-        produtoServicoId: this.produtoServicoSelecionando?.id,
-        clienteId: this.clienteSelecionado?.id,
-        contaContabilId: this.contaContabilSelecionado?.id,
-        dataLancamento,
-        itensLancamentos: [{
-          quantidade: this.form.value.quantidade,
-          valorItem: this.form.value.valorItem
-        }]
-      }  
+    if (this.form.valid) {
+      // Remove tudo que não seja número
+      const precoString = this.form.value.valorItem.replace(/\D/g, '');
+      // Converte para decimal (divide por 100)
+      const precoDecimal = Number(precoString) / 100;
 
+        const dadosLancamento = {
+          ...this.form.value,
+          empresaId: this.empresaSelecionado?.id,
+          produtoServicoId: this.produtoServicoSelecionando?.id,
+          clienteId: this.clienteSelecionado?.id,
+          contaContabilId: this.contaContabilSelecionado?.id,
+          dataLancamento,
+          itensLancamentos: [{
+            quantidade: this.form.value.quantidade,
+            valorItem: precoDecimal
+          }],
+        }  
+    
       this.lancamento = (this.estadoSalvar === 'post')
                         ? {...dadosLancamento}
                         : {id: this.lancamento.id,
@@ -346,9 +305,10 @@ export class DetalhesLancamentosComponent {
                             id: this.lancamento.itensLancamentos.find(item => item.id)?.id,
                             lancamentoId: this.lancamento.itensLancamentos.find(item => item.lancamentoId)?.lancamentoId,
                             quantidade: this.form.value.quantidade,
-                            valorItem: this.form.value.valorItem
+                            valorItem: precoDecimal
                           }]
                         };
+    }
 
       if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put'){
         this.lancamentoService[this.estadoSalvar](this.lancamento).subscribe(

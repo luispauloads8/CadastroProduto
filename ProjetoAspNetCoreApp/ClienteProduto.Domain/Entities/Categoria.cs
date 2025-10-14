@@ -8,6 +8,11 @@ public class Categoria : Entity
     {
     }
 
+    public Categoria(int id)
+    {
+        Id = id;
+    }
+
     public Categoria(int id, string descricao)
     {
         Id = id;

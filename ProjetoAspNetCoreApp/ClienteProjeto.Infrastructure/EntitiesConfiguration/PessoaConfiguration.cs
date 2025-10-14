@@ -1,9 +1,11 @@
 ﻿using ClienteProjeto.Domain.Entities;
+using ClienteProjeto.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,13 +18,15 @@ namespace ClienteProjeto.Infrastructure.EntitiesConfiguration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Nome).HasMaxLength(300);
             builder.Property(x => x.Email).HasMaxLength(300);
-            builder.Property(x => x.CNPJ).HasMaxLength(20);
             builder.Property(x => x.Telefone).HasMaxLength(15);
+            builder.Property(x => x.Sexo).HasMaxLength(1).IsRequired();
 
-            //builder.HasOne(x => x.Endereco)
-            //    .WithMany(x => x.Pessoa)
-            //    .HasForeignKey(x => x)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // TPH - uma única tabela Pessoas
+            builder.HasDiscriminator<TipoPessoa>("TipoPessoa")
+            .HasValue<PessoaFisica>(TipoPessoa.Fisica)
+            .HasValue<PessoaJuridica>(TipoPessoa.Juridica);
+
+
         }
     }
 }

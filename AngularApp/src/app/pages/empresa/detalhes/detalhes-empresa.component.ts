@@ -70,7 +70,9 @@ export class DetalhesEmpresaComponent implements OnInit {
       nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       telefone: ['', [Validators.required]],
       email: ['', [Validators.required]],
-      cnpj: ['', [Validators.required]]
+      cnpj: ['', [Validators.required]],
+      inscricaoEstadual: ['', [Validators.required]],
+      cnae: ['', [Validators.required]]
     })
   }
 

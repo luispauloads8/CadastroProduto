@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteProjeto.Nucleo", "Cl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relatorio.Dto", "Relatorio.Dto\Relatorio.Dto.csproj", "{27F14F36-AEE1-473B-AB63-6E485CA805A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClienteProjeto.Validator", "ClienteProjeto.Validator\ClienteProjeto.Validator.csproj", "{63EECBA1-02AA-4FCE-A0F0-909C1F1BCFFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{27F14F36-AEE1-473B-AB63-6E485CA805A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27F14F36-AEE1-473B-AB63-6E485CA805A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27F14F36-AEE1-473B-AB63-6E485CA805A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63EECBA1-02AA-4FCE-A0F0-909C1F1BCFFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EECBA1-02AA-4FCE-A0F0-909C1F1BCFFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EECBA1-02AA-4FCE-A0F0-909C1F1BCFFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EECBA1-02AA-4FCE-A0F0-909C1F1BCFFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

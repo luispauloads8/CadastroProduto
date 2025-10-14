@@ -47,7 +47,7 @@ export class CadastroClienteComponent implements OnInit {
   public filtroCliente(filtrarPor: string): Cliente[]{
     filtrarPor = filtrarPor.toLowerCase();
     return this.clientes.filter(
-      (cliente: Cliente) => cliente.nome.toLocaleLowerCase().indexOf(filtrarPor) !== -1
+      (cliente: Cliente) => cliente.pessoa.nome.toLocaleLowerCase().indexOf(filtrarPor) !== -1
     )
   }
 
@@ -83,10 +83,10 @@ export class CadastroClienteComponent implements OnInit {
           this.carregaCliente();
         }
       },
-      (error: any) => {
-        console.error(error);
-        this.toastr.error('Error ao tentar deletar Cliente', 'Erro');
-      },
+      // (error) => {
+      //  // agora o subscribe recebe a mensagem do interceptor
+      // this.toastr.error(error.message, 'Erro');
+      // },
       () => {}
     );
   }

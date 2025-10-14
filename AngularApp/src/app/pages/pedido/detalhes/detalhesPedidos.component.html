@@ -1,0 +1,135 @@
+<div class="container">
+  <!-- MENU -->
+  <div class="menu">
+  <h2>Produtos</h2>
+    <div *ngFor="let p of produtos" class="sandwich-card">
+      <img [src]="p.imagem" alt="{{p.descricao}}" />
+      <div>
+        <h3>{{p.descricao}}</h3>
+        <p>{{p.descricao}}</p>
+        <!-- <p><strong>R$ {{p.preco | number:'1.2-2'}}</strong></p> -->
+        <button type="button" (click)="adicionarItem(p)">+ Adicionar</button>
+      </div>
+    </div>
+    <!-- <button class="custom" type="button" (click)="criarItemPersonalizado()">
+      🥪 Produto Personalizado
+    </button> -->
+    </div>
+
+
+  <!-- RESUMO -->
+  <div class="summary">
+    <h2>Resumo de Pedido</h2>
+    <div *ngFor="let item of ItensPedido.controls; let i = index" class="item">
+      <span>{{ item.controls.nome.value }}</span>
+      <input type="number" min="1" [formControl]="item.controls.quantidade" />
+      <span>R${{ item.controls.valorItem.value * item.controls.quantidade.value | number:'1.2-2' }}</span>
+      <button type="button" (click)="removerItem(i)">❌</button>
+    </div>
+    <hr />
+    <p><strong>Total:</strong> R$ {{total | number:'1.2-2'}}</p>
+  </div>
+  
+
+  <!-- FINALIZAÇÃO -->
+  <div class="checkout" [formGroup]="pedidoForm">
+    <h2>Finalizar Pedido</h2>
+                    <div class="form-group col-md-8">
+                    <label>Cliente</label>
+                    <input type="text" class="form-control" 
+                    placeholder="Informe o cliente" 
+                    [(ngModel)]="clienteFiltro"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="onInputChangeCliente()"/>
+                    <div class="dropdown-menu show"
+                    *ngIf="clientesFiltrados?.length && !carregando">
+                     <button
+                     class="dropdown-item"
+                     *ngFor="let cliente of clientesFiltrados"
+                     (click)="selecionarCliente(cliente)"
+                     >
+                        {{cliente.pessoa.nome}}
+                     </button>
+                    </div>
+                    <div *ngIf="carregando" class="text-muted mt-2">carregando...</div>
+                </div>
+    <div class="user">
+      <div class="user" *ngIf="clienteSelecionado">
+        <p><strong>Nome:</strong> {{ clienteSelecionado.pessoa.nome }}</p>
+      </div>
+      <div class="form-group col-md-8">
+          <label>Telefone</label>
+          <input type="text" class="form-control"
+          placeholder="Informe o telefone"
+          mask="(00) 00000-0000"
+          formControlName="telefone"
+          [ngClass]="cssValidator(f.telefone)"
+          />
+          <div *ngIf="f.telefone?.errors?.required" class="invalid-feedback">
+              telefone é obrigatorio
+          </div>
+      </div>
+      
+    </div>
+
+    <div class="pagamento">
+      <label class="form-label fw-bold">Forma de Pagamento</label>
+
+      <div class="d-flex flex-column gap-2">
+        <label class="form-check-label text-primary">
+          <input type="radio" class="form-check-input me-1"
+                formControlName="formaDePagamento" [value]= 0>
+          <i class="fa-solid fa-credit-card me-1"></i> Cartão
+        </label>
+
+        <label class="form-check-label text-success">
+          <input type="radio" class="form-check-input me-1"
+                formControlName="formaDePagamento" [value]= 1>
+          <i class="fa-brands fa-pix me-1"></i> Pix
+        </label>
+
+        <label class="form-check-label text-warning">
+          <input type="radio" class="form-check-input me-1"
+                formControlName="formaDePagamento" [value]= 2>
+          <i class="fa-solid fa-money-bill-wave me-1"></i> Dinheiro
+        </label>
+      </div>
+    </div>
+
+    
+    <div class="statusPedido">
+      <label class="form-label fw-bold">Status de Pedido</label>
+
+        <div class="d-flex flex-column gap-2">
+          <label class="form-check-label text-warning">
+            <input type="radio" class="form-check-input me-1"
+                  formControlName="statusPedido" [value]= 0>
+            <i class="fa-solid fa-hourglass-half me-1"></i> Pendente
+          </label>
+
+          <label class="form-check-label text-primary">
+            <input type="radio" class="form-check-input me-1"
+                  formControlName="statusPedido" [value]= 1>
+            <i class="fa-solid fa-spinner fa-spin me-1"></i> Processando
+          </label>
+
+          <label class="form-check-label text-success">
+            <input type="radio" class="form-check-input me-1"
+                  formControlName="statusPedido" [value]= 2>
+            <i class="fa-solid fa-circle-check me-1"></i> Concluído
+          </label>
+
+          <label class="form-check-label text-danger">
+            <input type="radio" class="form-check-input me-1"
+                  formControlName="statusPedido" [value]= 3>
+            <i class="fa-solid fa-circle-xmark me-1"></i> Cancelado
+          </label>
+       </div>
+
+    </div>
+
+    <button class="finalizar" type="button" (click)="fecharPedido()">FECHAR PEDIDO</button>
+
+    <button class="cancelar" type="button" [routerLink]="['/pedido/cadastro']" >CANCELAR PEDIDO</button>
+  </div>
+</div>

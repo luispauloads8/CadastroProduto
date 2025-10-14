@@ -11,6 +11,9 @@ public class EmpresaConfiguration : IEntityTypeConfiguration<Empresa>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.RazaoSocial).HasMaxLength(300).IsRequired();
         builder.Property(x => x.NomeFantasia).HasMaxLength(300).IsRequired();
+        builder.Property(x => x.Telefone).HasMaxLength(15);
+        builder.Property(x => x.Email).HasMaxLength(300);
+        builder.Property(x => x.CNPJ).HasMaxLength(14).IsRequired();
 
         builder.HasOne(x => x.Cidade)
             .WithMany(x => x.Empresas)

@@ -23,6 +23,11 @@ import {
   tap,
 } from 'rxjs';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { EnumEstadoCivil } from '../../../models/EnumEstadoCivil';
+import { EnumSexo } from '../../../models/EnumSexo';
+import { EmpresaService } from '../../../services/empresa.service';
+import { Empresa } from '../../../models/Empresa';
+
 
 @Component({
   selector: 'app-detalhes',
@@ -47,11 +52,22 @@ export class DetalhesPessoaComponent implements OnInit {
   cidades: Cidade[] = [];
   cidadesFiltradas: Cidade[] = [];
   carregando: boolean = false;
+  estadoCivil: {key: number; value: string}[] = [];
+  sexo: {key: number; value: string}[] = [];
+
+  empresaFiltro: string = '';
+  empresasFiltradas: Empresa[] = [];
+  empresaSelecionada!: Empresa;
+  carregandoEmpresa: boolean = false;
+
+    // Se estiver editando, setar como true
+  modoEdicao: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private pessoaService: PessoaService,
     private cidadeService: CidadeService,
+    private empresaServico: EmpresaService,
     private toastr: ToastrService,
     private route: ActivatedRoute
   ) {}
@@ -62,10 +78,16 @@ export class DetalhesPessoaComponent implements OnInit {
     return this.form.controls;
   }
 
+  public get fe(): any {
+  return (this.form.get('endereco') as FormGroup).controls;
+}
+
   ngOnInit(): void {
     this.validation();
     this.carregarPessoa();
     this.carregaCidade();
+    this.enumEstadoCivil();
+    this.enumSexo();
   }
 
   onInputChange() {
@@ -77,8 +99,64 @@ export class DetalhesPessoaComponent implements OnInit {
     this.buscaSubject.next(this.cidadeFiltro);
   }
 
+  onInputChangePessoa() {
+    if (!this.empresaFiltro || (this.empresaSelecionada && this.modoEdicao)) {
+      return;
+    }
+
+    this.carregandoEmpresa = true;
+    this.empresasFiltradas = [];
+
+    // Aqui você chama seu serviço de busca de pessoas
+    this.empresaServico.GetEmpresaTermo(this.empresaFiltro).subscribe({
+      next: (dados) => {
+        this.empresasFiltradas = dados;
+        this.carregandoEmpresa = false;
+      },
+      error: () => {
+        this.carregandoEmpresa = false;
+      }
+    });
+  }
+
+ private applyConditionalValidators(): void {
+  this.form.get('tipoPessoa')?.valueChanges.subscribe(tipoPessoa => {
+    if (tipoPessoa === 1) { // Pessoa Física
+      this.form.get('cpf')?.setValidators([Validators.required]);
+      this.form.get('dataNascimento')?.setValidators([Validators.required]);
+      this.form.get('estadoCivil')?.setValidators([Validators.required]);
+      this.form.get('inscricaoEstadual')?.clearValidators();
+      this.form.get('inscricaoMunicipal')?.clearValidators();
+      this.form.get('cnae')?.clearValidators();
+      this.form.get('sexo')?.setValidators([Validators.required]);
+      this.form.get('cnpj')?.clearValidators();
+    } else { // Pessoa Jurídica
+      this.form.get('cnpj')?.setValidators([Validators.required]);
+      this.form.get('cpf')?.clearValidators();
+      this.form.get('inscricaoEstadual')?.setValidators([Validators.required]);
+      this.form.get('inscricaoMunicipal')?.setValidators([Validators.required]);
+      this.form.get('cnae')?.setValidators([Validators.required]);
+      this.form.get('dataNascimento')?.clearValidators();
+      this.form.get('estadoCivil')?.clearValidators();
+      this.form.get('sexo')?.clearValidators();
+    }
+
+    this.form.get('cpf')?.updateValueAndValidity();
+    this.form.get('cnpj')?.updateValueAndValidity();
+    this.form.get('dataNascimento')?.updateValueAndValidity();
+    this.form.get('estadoCivil')?.updateValueAndValidity();
+    this.form.get('sexo')?.updateValueAndValidity();
+  });
+
+  // dispara validação inicial (pois o tipo já vem setado como 1)
+  this.form.get('tipoPessoa')?.updateValueAndValidity();
+}
+
+
   private validation(): void {
     this.form = this.fb.group({
+      tipoPessoa: [1, Validators.required], // 1 = Fisica, 2 = Juridica
+      empresaId: [null, Validators.required],
       nome: [
         '',
         [
@@ -89,14 +167,49 @@ export class DetalhesPessoaComponent implements OnInit {
       ],
       telefone: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      cnpj: ['', [Validators.required]],
+      cpf: ['' ],
+      cnpj: [''],
+      nacionalidade: [''],
+      dataNascimento: [''],
+      estadoCivil: [''],
+      inscricaoEstadual: [''],
+      inscricaoMunicipal: [''],
+      cnae: [''],
+      sexo: [''],
       endereco: this.fb.group({
         logradouro: ['', [Validators.required]],
         bairro: ['', [Validators.required]],
         caixaPostal: ['', [Validators.required]],
         cep: ['', [Validators.required]],
+        
       }),
     });
+
+    this.applyConditionalValidators();
+    this.form.updateValueAndValidity();
+  }
+
+  selecionaEmpresa(empresa: Empresa) {
+    this.empresaSelecionada = empresa;
+    this.empresaFiltro = empresa.nomeFantasia;
+    this.form.patchValue({ empresaId: empresa.id });
+    this.empresasFiltradas = [];
+
+    this.form.patchValue({
+      nome: empresa.nomeFantasia
+    });
+  }
+
+  public enumEstadoCivil(): void{
+    this.estadoCivil = Object.keys(EnumEstadoCivil)
+    .filter(key => isNaN(Number(key)))
+    .map(key => ({key: EnumEstadoCivil[key as keyof typeof EnumEstadoCivil], value: key}));
+  }
+
+  public enumSexo(): void{
+    this.sexo = Object.keys(EnumSexo)
+    .filter(key => isNaN(Number(key)))
+    .map(key => ({key: EnumSexo[key as keyof typeof EnumSexo], value: key}))
   }
 
   public cssValidator(control: any) {
@@ -120,8 +233,17 @@ export class DetalhesPessoaComponent implements OnInit {
           //this.form.patchValue({...this.pessoa});
 
           this.form.patchValue({
+            tipoPessoa: pessoa.tipoPessoa,
             nome: pessoa.nome,
             telefone: pessoa.telefone,
+            nacionalidade: pessoa.nacionalidade,
+            cnae: pessoa.cnae,
+            cpf: pessoa.cpf,
+            dataNascimento: pessoa.dataNascimento
+            ? new Date(pessoa.dataNascimento).toISOString().substring(0, 10)
+            : null,
+            inscricaoEstadual: pessoa.inscricaoEstadual,
+            inscricaoMunicipal: pessoa.inscricaoMunicipal,
             email: pessoa.email,
             cnpj: pessoa.cnpj,
             endereco: {
@@ -131,8 +253,19 @@ export class DetalhesPessoaComponent implements OnInit {
               caixaPostal: pessoa.endereco.caixaPostal,
               cep: pessoa.endereco.cep,
             },
+            estadoCivil: pessoa.estadoCivil,  // <-- número recebido do backend
+            sexo: pessoa.sexo,
+            empresaId: pessoa.empresa?.id,
             //cidade: pessoa.endereco.Cidade?.id // ou descricao, depende de como você preenche
           });
+
+          this.form.get('tipoPessoa')?.updateValueAndValidity();
+
+          // Atualiza o input do autocomplete e a referência da empresa selecionada
+          if (pessoa.empresa) {
+            this.empresaSelecionada = pessoa.empresa;
+            this.empresaFiltro = pessoa.empresa.nomeFantasia; // exibe no input
+          }
 
           //configura a cidade selecionada
           if (pessoa.endereco.cidade) {
@@ -162,25 +295,52 @@ export class DetalhesPessoaComponent implements OnInit {
     // Dados comuns entre post e put
     const dadosPessoa = {
       ...this.form.value,
-      endereco: {
-        ...this.form.value.endereco,
-        cep: cepFormatado,
+      cnpj: this.form.value.cnpj || null,
         cidadeId: this.cidadeSelecionada?.id,
-      },
-      enderecoId: this.pessoa?.enderecoId ?? null,
+        estadoCivil: this.form.value.estadoCivil,
+        sexo: this.form.value.sexo
     };
+
+      // Condicional: não enviar CNPJ se for Pessoa Física
+      if (this.form.value.tipoPessoa === 1) { // 1 = Física
+        delete dadosPessoa.cnpj;
+        delete dadosPessoa.inscricaoEstadual;
+        delete dadosPessoa.inscricaoMunicipal;
+        delete dadosPessoa.cnae;
+      } else { // 2 = Jurídica
+        dadosPessoa.cnpj = this.form.value.cnpj;
+        dadosPessoa.inscricaoEstadual = this.form.value.inscricaoEstadual;
+        dadosPessoa.inscricaoMunicipal = this.form.value.inscricaoMunicipal;
+        dadosPessoa.cnae = this.form.value.cnae;
+        delete dadosPessoa.estadoCivil;
+        delete dadosPessoa.nacionalidade;
+        delete dadosPessoa.sexo;
+        delete dadosPessoa.dataNascimento;
+        delete dadosPessoa.cpf;
+      }
 
     if (this.estadoSalvar === 'post') {
       this.pessoa = {
-        ...dadosPessoa,
+        ...this.pessoa, // preserva tudo que já existe
+        ...dadosPessoa, // adiciona/atualiza campos comuns
+        endereco: {
+          ...this.form.value.endereco,
+          cep: cepFormatado,
+          //cidade: this.cidadeSelecionada,
+          cidadeId: this.cidadeSelecionada?.id
+        },
       };
     } else {
       this.pessoa = {
-        id: this.pessoa.id,
-        enderecoId: this.pessoa.endereco?.id ?? null, // garante que o ID do endereço vá no update
-        ...dadosPessoa,
+        ...this.pessoa, // mantém os dados atuais
+        ...dadosPessoa, // atualiza campos do form
+        enderecoId: this.pessoa.endereco?.id ?? null,
+        endereco: {
+          ...this.pessoa.endereco, // garante que o endereço completo permaneça
+        },
       };
     }
+
 
     if (this.estadoSalvar === 'post' || this.estadoSalvar === 'put') {
       this.pessoaService[this.estadoSalvar](this.pessoa).subscribe(
