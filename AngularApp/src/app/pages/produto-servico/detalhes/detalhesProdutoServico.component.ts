@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ProdutoServicoService } from '../../../services/produto-servico.service';
 import { ProdutoServico } from '../../../models/ProdutoServico';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, map, Observable, Subject, switchMap
   selector: 'app-detalhes',
   standalone: true,
   imports: [FormsModule, RouterModule, CommonModule,  ReactiveFormsModule],
+  providers: [CurrencyPipe], // necessário para injetar o CurrencyPipe
   templateUrl: './detalhesProdutoServico.component.html',
   styleUrl: './detalhesProdutoServico.component.css'
 })
@@ -42,7 +43,8 @@ export class DetalhesProdutoServicoComponent implements OnInit {
               private router: Router,
               private produtoServicoService: ProdutoServicoService,
               private toastr: ToastrService,
-              private categoriaService: CategoriaService, 
+              private categoriaService: CategoriaService,
+              private currencyPipe: CurrencyPipe
   ){}
 
   ngOnInit(): void {
@@ -71,8 +73,25 @@ export class DetalhesProdutoServicoComponent implements OnInit {
 
   public validation(): void {
     this.form = this.fb.group({
-      descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
+      descricao: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+      preco: ['', [Validators.required]]
     });
+  }
+
+    formatarPreco(event: any) {
+    let valor = event.target.value;
+
+    // Remove tudo que não seja número ou vírgula
+    valor = valor.replace(/\D/g, '');
+
+    // Converte para número com 2 casas
+    const valorNumerico = (Number(valor) / 100).toFixed(2);
+
+    // Aplica formatação monetária (ex: R$ 1.234,56)
+    const valorFormatado = this.currencyPipe.transform(valorNumerico, 'BRL', 'symbol', '1.2-2');
+    
+    // Atualiza o campo
+    this.form.get('preco')?.setValue(valorFormatado, { emitEvent: false });
   }
 
   selecionarCategoria(categoria: Categoria) {
@@ -100,7 +119,15 @@ export class DetalhesProdutoServicoComponent implements OnInit {
             this.imagemPreview = `data:image/png;base64,${produtoServico.imagem}`;
           }
 
-          this.form.patchValue(this.produtoServico);
+           // Atualiza o FormControl com valor **numérico**
+        this.form.patchValue({
+          ...this.produtoServico,
+          preco: produtoServico.preco // mantém como número para salvar
+        });
+
+        // Aplica máscara visual no input
+        const precoFormatado = this.currencyPipe.transform(produtoServico.preco, 'BRL', 'symbol', '1.2-2');
+        this.form.get('preco')?.setValue(precoFormatado, { emitEvent: false });
 
         // Configura a categoria selecionada
         if (produtoServico.categoria) {
@@ -122,13 +149,22 @@ export class DetalhesProdutoServicoComponent implements OnInit {
         return;
     }
 
-    // Verifique se produtoServico.id está sendo atribuído corretamente
-    this.produtoServico = {
-        ...this.form.value,
-        id: this.produtoServico?.id, // Adicione isso para garantir que o ID seja mantido
-        categoriaId: this.categoriaSelecionada?.id,
-        imagem: this.produtoServico?.imagem // Mantém a imagem existente por padrão
-    };
+     if (this.form.valid) {
+    // Remove tudo que não seja número
+    const precoString = this.form.value.preco.replace(/\D/g, '');
+    // Converte para decimal (divide por 100)
+    const precoDecimal = Number(precoString) / 100;
+   
+      // Verifique se produtoServico.id está sendo atribuído corretamente
+      this.produtoServico = {
+          ...this.form.value,
+          id: this.produtoServico?.id, // Adicione isso para garantir que o ID seja mantido
+          categoriaId: this.categoriaSelecionada?.id,
+          imagem: this.produtoServico?.imagem, // Mantém a imagem existente por padrão
+          preco: precoDecimal
+      };
+
+    }
 
     if (this.imagemSelecionada instanceof File) {
         this.convertImageToBase64(this.imagemSelecionada)
