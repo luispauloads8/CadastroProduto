@@ -21,7 +21,7 @@ defineLocale('pr-br', ptBrLocale);
 @Component({
   selector: 'app-detalhes',
   standalone: true,
-  imports: [NgxMaskDirective, FormsModule, RouterModule, CommonModule, ReactiveFormsModule, BsDatepickerModule],
+  imports: [ FormsModule, RouterModule, CommonModule, ReactiveFormsModule, BsDatepickerModule],
   providers: [provideNgxMask(), DatePipe],
   templateUrl: './detalhesCliente.component.html',
   styleUrl: './detalhesCliente.component.css'
@@ -31,8 +31,6 @@ export class DetalhesClienteComponent implements OnInit {
   form!: FormGroup;
   cliente!: Cliente;
   estadoSalvar = 'post';
-  estadoCivil: {key: number; value: string}[] = [];
-  sexo: {key: number; value: string}[] = [];
   cidadeFiltro: string = '';
   cidades: Cidade[] = [];
   cidadesFiltradas: Cidade[] = [];
@@ -77,8 +75,6 @@ export class DetalhesClienteComponent implements OnInit {
 
   ngOnInit(): void {
     this.validation();
-    this.enumEstadoCivil();
-    this.enumSexo();
     this.carregarCliente();
     //this.carregaCidade();
   }
@@ -129,47 +125,33 @@ export class DetalhesClienteComponent implements OnInit {
     this.buscaSubject.next(this.cidadeFiltro);
   }
 
-  public enumEstadoCivil(): void{
-    this.estadoCivil = Object.keys(EnumEstadoCivil)
-    .filter(key => isNaN(Number(key)))
-    .map(key => ({key: EnumEstadoCivil[key as keyof typeof EnumEstadoCivil], value: key}));
-  }
-
-  public enumSexo(): void{
-    this.sexo = Object.keys(EnumSexo)
-    .filter(key => isNaN(Number(key)))
-    .map(key => ({key: EnumSexo[key as keyof typeof EnumSexo], value: key}))
-  }
 
   public cssValidator(campoForm: FormControl): any {
     return {'is-invalid' : campoForm.errors && campoForm.touched}
   }
 
-  definirMascara(valor?: string) {
-      // Se não for passado um valor, usa o do formulário
-      const rg = valor || this.form.get('rg')?.value || '';
-      const numeros = rg.replace(/\D/g, ''); // Remove não numéricos
+  // definirMascara(valor?: string) {
+  //     // Se não for passado um valor, usa o do formulário
+  //     const rg = valor || this.form.get('rg')?.value || '';
+  //     const numeros = rg.replace(/\D/g, ''); // Remove não numéricos
     
 
-      if (numeros.length >= 7) {
-        this.mask = '00.000.000-0'; // Troca para 9 dígitos
-      } else {
-        this.mask = '00.000.00'; // Mantém 7 dígitos
-      }
+  //     if (numeros.length >= 7) {
+  //       this.mask = '00.000.000-0'; // Troca para 9 dígitos
+  //     } else {
+  //       this.mask = '00.000.00'; // Mantém 7 dígitos
+  //     }
 
-    // Garante que o Angular detecte a mudança
-    this.form.get('rg')?.updateValueAndValidity({ onlySelf: true });
-  }
+  //   // Garante que o Angular detecte a mudança
+  //   this.form.get('rg')?.updateValueAndValidity({ onlySelf: true });
+  // }
 
   private validation(): void{
     this.form = this.fb.group({
       pessoaId: [null, Validators.required],
-      nacionalidade: ['', [Validators.required]],
-      estadoCivil: ['', Validators.required],
-      sexo: ['', [Validators.required]],
-      dataNascimento: ['', [Validators.required]],
-      cpf: ['',  [Validators.required]],
-      rg: ['', [Validators.required]],
+      // dataNascimento: ['', [Validators.required]],
+      // cpf: ['',  [Validators.required]],
+      // rg: ['', [Validators.required]],
       observacao: ['']  // Adicionando o campo observação sem validação obrigatória
       
     })
@@ -182,19 +164,19 @@ export class DetalhesClienteComponent implements OnInit {
     }
 
     // Obtendo o valor do campo dataNascimento do formulário
-    const dataNascimento = this.form.value.dataNascimento 
-      ? new Date(this.form.value.dataNascimento).toISOString() // Converte para DateTime no formato ISO 8601
-      : null;
+    // const dataNascimento = this.form.value.dataNascimento 
+    //   ? new Date(this.form.value.dataNascimento).toISOString() // Converte para DateTime no formato ISO 8601
+    //   : null;
 
     const { nome, ...dadosSemNome } = this.form.value;
 
     // Dados comuns entre post e put
     const dadosCliente = {
       ...dadosSemNome,
-      pessoaId: this.pessoaSelecionada.id,
-      estadoCivil: +this.form.value.estadoCivil,
-      sexo: +this.form.value.sexo,
-      dataNascimento
+      pessoaId: this.pessoaSelecionada.id
+      // estadoCivil: +this.form.value.estadoCivil,
+      // sexo: +this.form.value.sexo
+      //dataNascimento
     };
 
     if (this.estadoSalvar === 'post') {
@@ -233,7 +215,7 @@ export class DetalhesClienteComponent implements OnInit {
           this.cliente = {...cliente};
 
         // Formatar a data de nascimento
-        this.cliente.dataNascimento = new Date(this.cliente.dataNascimento);
+        // this.cliente.dataNascimento = new Date(this.cliente.dataNascimento);
 
         
         if (this.modoEdicao) {
