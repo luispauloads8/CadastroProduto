@@ -84,10 +84,10 @@ export class CadastroComponent {
           this.carregarCategoria();
         }
       },
-      (error: any) => {
-        console.error(error);
-        this.toastr.error('Erro ao tentar deletar a categoria.', 'Erro');
-      },
+      // (error: any) => {
+      //   console.error(error);
+      //   this.toastr.error('Erro ao tentar deletar a categoria.', 'Erro');
+      // },
       () => {},
     ); 
   }
