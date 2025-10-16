@@ -2,11 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserLogin } from '../models/UserLogin';
-import { BehaviorSubject, catchError, Observable, of, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, take, tap, throwError } from 'rxjs';
 import { User } from '../models/User';
 import { LOCAL_STORAGE } from './storage.token';
 import { Usuario } from '../models/Usuario';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { UserUpdate } from '../models/UserUpdate';
 
 @Injectable({
   providedIn: 'root'
@@ -42,16 +43,16 @@ export class AuthService {
       );
   }
 
-  public getUsuario(): Observable<Usuario>{
-    return this.http.get<Usuario>(`${this.ApiURL}Auth/GetUsuario`).pipe(take(1));
+  public getUsuario(): Observable<UserUpdate>{
+    return this.http.get<UserUpdate>(`${this.ApiURL}Auth/GetUsuario`).pipe(take(1));
   }
 
-  public updateUsuario(userLogin: UserLogin): Observable<UserLogin> {
-    return this.http.post<UserLogin>(`${this.ApiURL}Auth/updateUsuario`, userLogin).pipe(
+  public updateUsuario(userUpdate: UserUpdate): Observable<UserUpdate> {
+    return this.http.put<UserUpdate>(`${this.ApiURL}Auth/updateUsuario`, userUpdate).pipe(
       tap((response) => this.setToken(response.token, response.refreshToken, response.expiration))
     );
-  }    
-
+  }
+  
   // 🔴 Logout: Remove o token
   public logout(): void {
     this.storage?.removeItem(this.token);

@@ -80,23 +80,27 @@
                     <div class="form-group col-sm">
                         <label>Senha</label>
                         <input type="password" class="form-control" formControlName="password"
-                        [ngClass]="cssValidator(f.password)"/>
-                        <div *ngIf="f.password?.errors?.required" class="invalid-feedback">
-                            password é obrigatorio
+                        [ngClass]="cssValidator(f.password)" />
+
+                        <div *ngIf="f.password?.errors?.['required']" class="invalid-feedback">
+                        Senha é obrigatória
                         </div>
-                        <div *ngIf="f.password?.errors?.minlength" class="invalid-feedback">
-                            password deve ter no minimo 6 caracteres
+                        <div *ngIf="f.password?.errors?.['minlength']" class="invalid-feedback">
+                        Senha deve ter no mínimo 6 caracteres
                         </div>
                     </div>
+
                     <div class="form-group col-sm">
                         <label>Confirmar Senha</label>
                         <input type="password" class="form-control" formControlName="confirmaPassword"
                         [ngClass]="cssValidator(f.confirmaPassword)" />
-                        <div *ngIf="f.confirmaPassword?.errors?.required" class="invalid-feedback">
-                            Confirmar password é obrigatorio
+
+                        <div *ngIf="f.confirmaPassword?.errors?.['required']" class="invalid-feedback">
+                        Confirmação de senha é obrigatória
                         </div>
-                        <div *ngIf="f.confirmaSenha?.errors?.mustMatch" class="invalid-feedback">
-                            passwords devem ser iguais
+
+                        <div *ngIf="form.errors?.['mustMatch'] && (f.confirmaPassword?.dirty || f.confirmaPassword?.touched)" class="invalid-feedback">
+                        As senhas devem ser iguais
                         </div>
                     </div>
                 </div>

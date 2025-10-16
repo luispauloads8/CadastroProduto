@@ -42,8 +42,10 @@ import { CadastroPessoaComponent } from './pages/pessoa/cadastro/cadastroPessoa.
 import { PedidoComponent } from './pages/pedido/pedido.component';
 import { DetalhesPedidosComponent } from './pages/pedido/detalhes/detalhesPedidos.component';
 import { CadastroPedidosComponent } from './pages/pedido/cadastro/cadastroPedidos.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const protectedRoutes = [
+    { path: 'home', component: HomeComponent, title: 'Home' },
     { path: 'categoria', component: CategoriaComponent, title: 'Categoria', detalhes: DetalhesComponent, cadastro: CadastroComponent, emissao: EmissaocategoriaComponent },
     { path: 'lancamento', component: LancamentoComponent, title: 'Lançamentos', detalhes: DetalhesLancamentosComponent, cadastro: CadastroLancamentosComponent, emissao: EmissaolancamentoComponent },
     { path: 'pedido', component: PedidoComponent, title: 'Pedidos', detalhes: DetalhesPedidosComponent, cadastro: CadastroPedidosComponent},
@@ -67,6 +69,7 @@ export const routes: Routes = [
     },
     
 
+    { path: 'home', redirectTo: 'home' },
     { path: 'categoria', redirectTo: 'categoria/cadastro' },
     { path: 'lancamento', redirectTo: 'lancamento/cadastro' },
     { path: 'pedido', redirectTo: 'pedido/cadastro' },
