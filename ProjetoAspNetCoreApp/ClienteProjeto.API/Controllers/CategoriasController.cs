@@ -111,5 +111,15 @@ namespace ClienteProjeto.API.Controllers
             }
 
         }
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<PagedResult<CategoriaDTO>>> GetPaginado(
+        int pageNumber = 1,
+        int pageSize = 10,
+        string searchTerm = "")
+        {
+            var resultado = await _categoriaService.ObterPaginadoAsync(pageNumber, pageSize, searchTerm);
+            return Ok(resultado);
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Services;
 using ClienteProjeto.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClienteProjeto.API.Controllers;
 
@@ -83,12 +85,41 @@ public class ProdutosController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<ProdutoServicoDTO>> Delete(int id)
     {
-        var produto = await _produtoServicoService.GetById(id);
-        if (produto == null)
+
+        try
         {
-            return NotFound();
+            var produto = await _produtoServicoService.GetById(id);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+            await _produtoServicoService.Delete(id);
+            return Ok(produto);
         }
-        await _produtoServicoService.Delete(id);
-        return Ok(produto);
+        catch (DbUpdateException ex)
+        {
+
+            // Aqui você pode verificar se é erro de FK
+            if (ex.InnerException is MySqlConnector.MySqlException mysqlEx &&
+                mysqlEx.Message.Contains("Cannot delete or update a parent row"))
+            {
+                return BadRequest(new { message = "Não é possível excluir este produto/serviço, pois existe associação" });
+
+            }
+
+            // fallback genérico
+            return StatusCode(500, "Ocorreu um erro ao excluir o cliente.");
+        }
+
+
+    }
+
+    [HttpGet("paginado")]
+    public async Task<ActionResult<PagedResult<ProdutoServicoDTO>>> GetPaginado(
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var resultado = await _produtoServicoService.ObterPaginadoAsync(pageNumber, pageSize);
+        return Ok(resultado);
     }
 }
