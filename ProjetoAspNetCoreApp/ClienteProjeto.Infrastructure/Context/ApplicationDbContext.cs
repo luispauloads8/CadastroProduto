@@ -37,7 +37,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(p => p.Empresa)
             .WithMany(e => e.Pessoas)
             .HasForeignKey(p => p.EmpresaId)
-            .IsRequired(false) // true se for obrigatório
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ProdutoServico>(entity => {
@@ -45,7 +45,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                   .IsRequired(false); 
         });
 
-        // Configuração de herança TPH (Table Per Hierarchy)
         modelBuilder.Entity<Pessoa>()
             .ToTable("Pessoas")
             .HasDiscriminator(p => p.TipoPessoa)
@@ -68,11 +67,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<ItensPedido>()
             .HasOne(i => i.Pedido)
             .WithMany(p => p.ItensPedido)
-            .HasForeignKey(i => i.PedidoId) // indica qual coluna é a FK
-            .HasConstraintName("FK_ItensPedido_Pedido_PedidoId") // opcional, para garantir nome
+            .HasForeignKey(i => i.PedidoId)
+            .HasConstraintName("FK_ItensPedido_Pedido_PedidoId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Relacionamento 1:N (Empresa -> Pessoas)
+        modelBuilder.Entity<ItensPedido>()
+            .HasOne(i => i.ProdutoServico)
+            .WithMany(p => p.ItensPedido)
+            .HasForeignKey(i => i.ProdutoServicoId)
+            .HasConstraintName("FK_ItensPedido_ProdutoServicos_ProdutoServicoId")
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Empresa>()
             .HasMany(e => e.Pessoas)
             .WithOne(p => p.Empresa)
@@ -92,6 +97,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .Property(p => p.ValorItem)
             .HasColumnType("decimal(18,2)");
 
-        
     }
 }
