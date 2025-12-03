@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,27 @@ namespace ClienteProjeto.Infrastructure.Repositories
 
         }
 
+        public async Task<PagedResult<Pedido>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var query = _pedidoContext.Pedidos.AsQueryable();
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(c => c.Descricao)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Pedido>
+            {
+                Items = items,
+                TotalItems = totalItems,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<IEnumerable<Pedido>> GetPedidoAsync()
         {
             return await _pedidoContext.Pedidos.AsNoTracking().ToListAsync();
@@ -71,17 +93,52 @@ namespace ClienteProjeto.Infrastructure.Repositories
 
         public async Task<Pedido> UpdateAsync(Pedido pedido)
         {
-            var local = _pedidoContext.Set<Pedido>().Local.FirstOrDefault(entry => entry.Id == pedido.Id);
+            var pedidoAtual = await _pedidoContext.Pedidos
+                .Include(p => p.ItensPedido)
+                .FirstOrDefaultAsync(p => p.Id == pedido.Id);
 
-            if (local != null)
+            if (pedidoAtual == null)
+                throw new Exception("Pedido não encontrado.");
+
+            _pedidoContext.Entry(pedidoAtual).CurrentValues.SetValues(pedido);
+
+            foreach (var itemDb in pedidoAtual.ItensPedido.ToList())
             {
-                _pedidoContext.Entry(local).State = EntityState.Detached;
+                if (!pedido.ItensPedido.Any(i => i.Id == itemDb.Id))
+                    _pedidoContext.Remove(itemDb);
             }
-            _pedidoContext.Entry(pedido).State = EntityState.Modified;
 
-            _pedidoContext.Update(pedido);
+            foreach (var item in pedido.ItensPedido)
+            {
+                var itemExistente = pedidoAtual.ItensPedido
+                    .FirstOrDefault(i => i.Id == item.Id);
+
+                if (itemExistente == null)
+                {
+                    var novoItem = new ItensPedido
+                    {
+                        PedidoId = pedidoAtual.Id,
+                        ProdutoServicoId = item.ProdutoServicoId,
+                        Quantidade = item.Quantidade,
+                        ValorItem = item.ValorItem,
+                        ValorTotal = item.ValorTotal
+                    };
+
+                    pedidoAtual.ItensPedido.Add(novoItem);
+                }
+                else
+                {
+                    itemExistente.Quantidade = item.Quantidade;
+                    itemExistente.ValorItem = item.ValorItem;
+                    itemExistente.ValorTotal = item.ValorTotal;
+
+                    itemExistente.ProdutoServicoId = item.ProdutoServicoId;
+                }
+            }
+
             await _pedidoContext.SaveChangesAsync();
-            return pedido;
+            return pedidoAtual;
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,6 @@ public class CategoriaRepository : ICategoriaRepository
 
     public async Task<Categoria> DeleteAsync(Categoria categoria)
     {
-
-        // Desanexa a entidade que já veio do service (tracking ativo)
         _categoryContext.Entry(categoria).State = EntityState.Detached;
 
         var categoriaExclusao = new Categoria (categoria.Id);
@@ -101,5 +100,31 @@ public class CategoriaRepository : ICategoriaRepository
             .ToListAsync();
 
         return categorias;
+    }
+
+    public async Task<PagedResult<Categoria>> GetPagedAsync(int pageNumber, int pageSize, string search)
+    {
+        var query = _categoryContext.Categorias.AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(c => c.Descricao.Contains(search));
+        }
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.Descricao)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<Categoria>
+        {
+            Items = items,
+            TotalItems = totalItems,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 }

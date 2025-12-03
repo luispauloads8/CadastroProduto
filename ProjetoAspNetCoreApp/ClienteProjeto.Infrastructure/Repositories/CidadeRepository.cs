@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -79,5 +80,32 @@ public class CidadeRepository : ICidadeRepository
         return await _cidadeContext.Cidades
            .Where(p => p.Descricao.Contains(termo))
            .ToListAsync();
+    }
+
+    public async Task<PagedResult<Cidade>> GetPagedAsync(int pageNumber, int pageSize, string search)
+    {
+        var query = _cidadeContext.Cidades.AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(c => c.Descricao.Contains(search));
+        }
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.Descricao)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<Cidade>
+        {
+            Items = items,
+            TotalItems = totalItems,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
     }
 }

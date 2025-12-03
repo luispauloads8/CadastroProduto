@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -79,5 +80,26 @@ public class GrupoContaRepository : IGrupoContaRepository
         return await _grupoContasContext.GrupoContas
        .Where(p => p.Descricao.Contains(search))
        .ToListAsync();
+    }
+
+    public async Task<PagedResult<GrupoConta>> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        var query = _grupoContasContext.GrupoContas.AsQueryable();
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.Descricao)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<GrupoConta>
+        {
+            Items = items,
+            TotalItems = totalItems,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 }
