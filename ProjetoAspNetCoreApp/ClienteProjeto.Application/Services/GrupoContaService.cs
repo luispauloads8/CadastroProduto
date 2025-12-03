@@ -65,4 +65,15 @@ public class GrupoContaService : IGrupoContaService
 
         return _mapper.Map<List<GrupoContaDTO>>(grupoContaTermo);
     }
+
+    public async Task<PagedResult<GrupoContaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var grupoEntity = await _grupoContaRepository.GetPagedAsync(pageNumber, pageSize);
+
+        return _mapper.Map<PagedResult<GrupoContaDTO>>(grupoEntity);
+    }
 }

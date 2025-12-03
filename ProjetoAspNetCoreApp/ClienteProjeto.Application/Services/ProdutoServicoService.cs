@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.Formats;
 
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace ClienteProjeto.Application.Services;
@@ -110,5 +111,38 @@ public class ProdutoServicoService : IProdutoServicoService
         var produtoServicoTermo = await _produtoServicoRepository.GetProdutoServicoTermoAsync(search);
 
         return _mapper.Map<List<ProdutoServicoDTO>>(produtoServicoTermo);
+    }
+
+    private static ProdutoServicoDTO MapToDTO(ProdutoServico produto)
+    {
+        return new ProdutoServicoDTO
+        {
+            Id = produto.Id,
+            Descricao = produto.Descricao,
+            Preco = produto.Preco,
+            ImagemByteArray = produto.Imagem,
+            Imagem = produto.Imagem != null && produto.Imagem.Length > 0
+                ? Convert.ToBase64String(produto.Imagem)
+                : null
+        };
+    }
+
+    public async Task<PagedResult<ProdutoServicoDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var produtoEntity = await _produtoServicoRepository.GetPagedAsync(pageNumber, pageSize);
+
+        var dtoItems = produtoEntity.Items.Select(MapToDTO).ToList();
+       
+        return new PagedResult<ProdutoServicoDTO>
+        {
+            Items = dtoItems,
+            PageNumber = produtoEntity.PageNumber,
+            PageSize = produtoEntity.PageSize,
+            TotalItems = produtoEntity.TotalItems
+        };
     }
 }

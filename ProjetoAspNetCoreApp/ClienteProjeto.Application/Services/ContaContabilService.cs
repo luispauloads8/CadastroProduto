@@ -80,4 +80,15 @@ public class ContaContabilService : IContaContabilService
 
         return _mapper.Map<List<ContaContabilDTO>>(contaContabilTermo);
     }
+
+    public async Task<PagedResult<ContaContabilDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var contaContabilEntity = await _contaContabilRepository.GetPagedAsync(pageNumber, pageSize);
+
+        return _mapper.Map<PagedResult<ContaContabilDTO>>(contaContabilEntity);
+    }
 }

@@ -129,6 +129,15 @@ namespace ClienteProjeto.Application.Services
             };
         }
 
+        public async Task<PagedResult<PessoaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+        {
+            // Aqui pode entrar regra de negócio, validação, logs, etc
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
 
+            var pessoaEntity = await _pessoaRepositoy.GetPagedAsync(pageNumber, pageSize);
+
+            return _mapper.Map<PagedResult<PessoaDTO>>(pessoaEntity);
+        }
     }
 }

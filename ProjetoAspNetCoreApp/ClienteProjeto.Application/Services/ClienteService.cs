@@ -52,9 +52,16 @@ public class ClienteService : IClienteService
         await _clienteRepository.EnsureConnectionOpenAsync();
         var clienteEntity = await _clienteRepository.GetClienteAsync();
 
+        await FiltraPessoa(clienteEntity);
+
+        return _mapper.Map<IEnumerable<ClienteDTO>>(clienteEntity);
+    }
+
+    private async Task FiltraPessoa(IEnumerable<Cliente> clienteEntity)
+    {
         var pessoasReposity = await _pessoaRepository.GetPessoaAsync();
 
-        foreach(var cliente in clienteEntity)
+        foreach (var cliente in clienteEntity)
         {
             foreach (var pessoa in pessoasReposity)
             {
@@ -64,9 +71,6 @@ public class ClienteService : IClienteService
                 }
             }
         }
-
-        
-        return _mapper.Map<IEnumerable<ClienteDTO>>(clienteEntity); 
     }
 
     public async Task Update(ClienteDTO clienteDTO)
@@ -100,5 +104,18 @@ public class ClienteService : IClienteService
         }
 
         return _mapper.Map<List<ClienteDTO>>(clienteTermo);
+    }
+
+    public async Task<PagedResult<ClienteDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var clienteEntity = await _clienteRepository.GetPagedAsync(pageNumber, pageSize);
+
+        //await FiltraPessoa(clienteEntity.Items);
+
+        return _mapper.Map<PagedResult<ClienteDTO>>(clienteEntity);
     }
 }
