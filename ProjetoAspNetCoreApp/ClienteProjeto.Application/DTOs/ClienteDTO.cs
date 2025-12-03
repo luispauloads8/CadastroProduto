@@ -1,5 +1,4 @@
-﻿using ClienteProjeto.Application.ConversaoEntidade;
-using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 

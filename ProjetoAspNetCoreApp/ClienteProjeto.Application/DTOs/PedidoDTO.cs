@@ -36,6 +36,6 @@ namespace ClienteProjeto.Application.DTOs
 
         public int ClienteId { get; set; }
 
-        public ICollection<ItensPedido> ItensPedido { get; set; }
+        public ICollection<ItensPedidoDTO> ItensPedido { get; set; }
     }
 }
