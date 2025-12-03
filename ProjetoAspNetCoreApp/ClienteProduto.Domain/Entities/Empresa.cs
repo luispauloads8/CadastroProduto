@@ -17,7 +17,6 @@ public class Empresa : Entity
     public ICollection<Lancamento> Lancamentos { get; set; }
     public ICollection<ContaContabil> ContaContabils { get; set; }
 
-    // 1:N -> Uma Empresa pode ter muitas Pessoas
     public ICollection<Pessoa> Pessoas { get; set; } = new List<Pessoa>();
 
     #region "EF"
