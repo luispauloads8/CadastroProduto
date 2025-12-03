@@ -1,4 +1,5 @@
 ﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Application.Interfaces;
 
@@ -10,4 +11,5 @@ public interface ICategoriaService
     Task Add(CategoriaDTO categoriaDTO);
     Task Update(CategoriaDTO categoriaDTO);
     Task Delete(int ?id);
+    Task<PagedResult<CategoriaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize, string searchTerm);
 }

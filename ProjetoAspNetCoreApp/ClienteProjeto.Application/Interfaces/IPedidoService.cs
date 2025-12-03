@@ -15,5 +15,6 @@ namespace ClienteProjeto.Application.Interfaces
         Task Add(PedidoDTO pedidoDTO);
         Task Update(PedidoDTO pedidoDTO);
         Task Delete(int? id);
+        Task<PagedResult<PedidoDTO>> ObterPaginadoAsync(int pageNumber, int pageSize);
     }
 }

@@ -10,4 +10,5 @@ public interface IGrupoContaService
     Task Add(GrupoContaDTO grupoContaDTO);
     Task Update(GrupoContaDTO grupoContaDTO);
     Task Delete(int? id);
+    Task<PagedResult<GrupoContaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize);
 }

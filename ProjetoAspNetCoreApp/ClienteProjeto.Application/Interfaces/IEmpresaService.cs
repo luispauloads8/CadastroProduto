@@ -10,4 +10,5 @@ public interface IEmpresaService
     Task Add(EmpresaDTO empresaDTO);
     Task Update(EmpresaDTO empresaDTO);
     Task Delete(int? id);
+    Task<PagedResult<EmpresaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize);
 }
