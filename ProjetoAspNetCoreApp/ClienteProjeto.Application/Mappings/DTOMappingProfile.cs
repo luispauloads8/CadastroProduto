@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClienteProjeto.Application.Conversao;
 using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Domain.Entities;
 
@@ -24,6 +25,10 @@ public class DTOMappingProfile : Profile
         CreateMap<Lancamento, LancamentoDTO>().ReverseMap();
         CreateMap<Usuario, UsuarioDTO>().ReverseMap();
         CreateMap<Pedido, PedidoDTO>().ReverseMap();
+        CreateMap<ItensPedido, ItensPedidoDTO>().ReverseMap();
+
+        CreateMap(typeof(PagedResult<>), typeof(PagedResult<>))
+            .ConvertUsing(typeof(PagedResultConverter<,>));
 
     }
 }
