@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -12,5 +13,6 @@ public interface ICategoriaRepository
     Task<Categoria> CreateAsync(Categoria categoria);
     Task<Categoria> UpdateAsync(Categoria categoria);
     Task<Categoria> DeleteAsync(Categoria categoria);
+    Task<PagedResult<Categoria>> GetPagedAsync(int pageNumber, int pageSize, string searchTerm);
     Task EnsureConnectionOpenAsync();
 }

@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -10,5 +11,6 @@ public interface IProdutoServicoRepository
     Task<ProdutoServico> CreateAsync(ProdutoServico produtoServico);
     Task<ProdutoServico> UpdateAsync(ProdutoServico produtoServico);
     Task<ProdutoServico> DeleteAsync(ProdutoServico produtoServico);
+    Task<PagedResult<ProdutoServico>> GetPagedAsync(int pageNumber, int pageSize);
     Task EnsureConnectionOpenAsync();
 }

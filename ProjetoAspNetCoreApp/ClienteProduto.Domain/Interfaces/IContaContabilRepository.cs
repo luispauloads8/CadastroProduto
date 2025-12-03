@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -10,5 +11,6 @@ public interface IContaContabilRepository
     Task<ContaContabil> CreateAsync(ContaContabil contaContabil);
     Task<ContaContabil> UpdateAsync(ContaContabil contaContabil);
     Task<ContaContabil> DeleteAsync(ContaContabil contaContabil);
+    Task<PagedResult<ContaContabil>> GetPagedAsync(int pageNumber, int pageSize);
     Task EnsureConnectionOpenAsync();
 }

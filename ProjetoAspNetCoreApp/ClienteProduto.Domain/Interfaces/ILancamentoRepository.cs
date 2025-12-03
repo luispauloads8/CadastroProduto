@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -14,5 +15,6 @@ public interface ILancamentoRepository
     Task<Lancamento> CreateAsync(Lancamento lancamento);
     Task<Lancamento> UpdateAsync(Lancamento lancamento);
     Task<Lancamento> DeleteAsync(Lancamento lancamento);
+    Task<PagedResult<Lancamento>> GetPagedAsync(int pageNumber, int pageSize);
     Task EnsureConnectionOpenAsync();
 }

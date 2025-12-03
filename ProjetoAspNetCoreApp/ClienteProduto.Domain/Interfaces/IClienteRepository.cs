@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -10,5 +11,6 @@ public interface IClienteRepository
     Task<Cliente> CreateAsync(Cliente cliente);
     Task<Cliente> UpdateAsync(Cliente cliente);
     Task<Cliente> DeleteAsync(Cliente cliente);
+    Task<PagedResult<Cliente>> GetPagedAsync(int pageNumber, int pageSize);
     Task EnsureConnectionOpenAsync();
 }

@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 
 namespace ClienteProjeto.Domain.Interfaces;
 
@@ -11,4 +12,5 @@ public interface ICidadeRepository
     Task<Cidade> UpdateAsync(Cidade cidade);
     Task<Cidade> DeleteAsync(Cidade cidade);
     Task EnsureConnectionOpenAsync();
+    Task<PagedResult<Cidade>> GetPagedAsync(int pageNumber, int pageSize, string searchTerm);
 }
