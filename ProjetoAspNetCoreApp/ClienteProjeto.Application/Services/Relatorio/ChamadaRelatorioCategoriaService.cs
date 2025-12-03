@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ClienteProjeto.Application.ConversaoEntidade;
+using ClienteProjeto.Application.Conversao.ConversaoEntidade;
 using ClienteProjeto.Application.DTOs.Filtro;
 using ClienteProjeto.Application.Interfaces;
 using ClienteProjeto.Application.Interfaces.Emissao;

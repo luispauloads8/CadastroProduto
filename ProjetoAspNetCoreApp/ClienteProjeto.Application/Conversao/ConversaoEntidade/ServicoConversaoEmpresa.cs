@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClienteProjeto.Application.ConversaoEntidade
+namespace ClienteProjeto.Application.Conversao.ConversaoEntidade
 {
     public static class ServicoConversaoEmpresa
     {
