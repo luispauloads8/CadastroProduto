@@ -50,6 +50,7 @@ export const errorInterceptor: HttpInterceptorFn = (
       if (error.status === 400 && isDeleteRequest) {
         title = 'Falha na Exclusão';
         toastr.warning(friendlyMessage, title);
+        limparConsole();
       } 
       else if (error.status === 400) {
         title = 'Requisição Inválida';
