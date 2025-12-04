@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { Pessoa } from '../models/Pessoa';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,12 @@ export class PessoaService {
 
   public DeletarPessoa(id: number): Observable<Pessoa>{
     return this.http.delete<Pessoa>(`${this.ApiUrl}Pessoas/${id}`).pipe(take(1));
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10) {
+    return this.http.get<PagedResult<Pessoa>>(
+      `${this.ApiUrl}Pessoas/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
   
 }

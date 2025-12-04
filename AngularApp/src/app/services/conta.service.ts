@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { ContaContabil } from '../models/ContaContabil';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,11 @@ export class ContaService {
 
   public DeletarContaContabil(id: number): Observable<ContaContabil>{
     return this.http.delete<ContaContabil>(`${this.ApiUrl}ContaContabeis/${id}`).pipe(take(1));
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10) {
+    return this.http.get<PagedResult<ContaContabil>>(
+      `${this.ApiUrl}ContaContabeis/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 }

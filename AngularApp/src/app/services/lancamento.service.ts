@@ -5,6 +5,7 @@ import { Observable, take } from 'rxjs';
 import { Lancamento } from '../models/Lancamento';
 import { table } from 'node:console';
 import { EmissaoLancamento } from '../models/emissao/lancamento/EmissaoLancamento';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,12 @@ export class LancamentoService {
     return this.http.post<Blob>(`${this.ApiUrl}Relatorios/emissao_lancamento`, lancamento, {
       responseType: 'blob' as 'json'
     });
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10) {
+    return this.http.get<PagedResult<Lancamento>>(
+      `${this.ApiUrl}Lancamentos/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 
 }

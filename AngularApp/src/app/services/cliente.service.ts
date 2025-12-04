@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { Cliente } from '../models/Cliente';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,12 @@ export class ClienteService {
 
   public DeletarCliente(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.ApiUrl}Clientes/${id}`).pipe(take(1));
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10) {
+    return this.http.get<PagedResult<Cliente>>(
+      `${this.ApiUrl}Clientes/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
   
 }

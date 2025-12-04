@@ -5,6 +5,7 @@ import { Observable, take } from 'rxjs';
 import { Categoria } from '../models/Categoria';
 import { EmissaoCategoria } from '../models/emissao/categoria/EmissaoCategoria';
 import { ParametroEmissaoCategoriaVM } from '../models/emissao/categoria/ParametroEmissaoCategoriaVM';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,12 @@ export class CategoriaService {
     return this.http.post<Blob>(`${this.ApiUrl}EmissaoCategoria/emissao_categoria`, categoria, {
       responseType: 'blob' as 'json'
     });
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10, searchTerm: string) {
+    return this.http.get<PagedResult<Categoria>>(
+      `${this.ApiUrl}Categorias/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`
+    );
   }
 
 }
