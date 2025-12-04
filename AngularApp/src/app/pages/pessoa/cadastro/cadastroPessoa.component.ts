@@ -6,11 +6,12 @@ import { PessoaService } from '../../../services/pessoa.service';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { Pessoa } from '../../../models/Pessoa';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroPessoa.component.html',
   styleUrl: './cadastroPessoa.component.css'
@@ -20,8 +21,13 @@ export class CadastroPessoaComponent implements OnInit {
   _filtroLista: string = '';
   public pessoas: Pessoa[] = [];
   public pessoasFiltrados: Pessoa[] = [];
-    public pessoaId!: number;
-    public modalRef!: BsModalRef;
+  public pessoaId!: number;
+  public modalRef!: BsModalRef;
+
+           // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
 
   ngOnInit(): void {
@@ -50,20 +56,24 @@ export class CadastroPessoaComponent implements OnInit {
     )
   }
 
-  public CarregaPessoa() : void{
-    this.PessoaService.GetPessoa().subscribe(
-      (pessoa: Pessoa[]) => {
-        this.pessoas = pessoa.map(pes => {
-          return {...pes};
-        });
-
+        // 🔹 Método de carregar com paginação
+  public CarregaPessoa(): void {
+    this.PessoaService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.pessoas = result.items;
+        this.totalItems = result.totalItems;
         this.pessoasFiltrados = this.pessoas;
       },
-      (error: any) => {
-        console.error('Erro ao carregar pessoa', error);
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {}
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.CarregaPessoa();
   }
 
   openModal(event: any, template: TemplateRef<void>, clienteId: number): void{

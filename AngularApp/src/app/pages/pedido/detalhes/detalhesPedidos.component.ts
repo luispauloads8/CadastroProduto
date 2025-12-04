@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClienteService } from '../../../services/cliente.service';
 import { ProdutoServico } from '../../../models/ProdutoServico';
 import { ToastrService } from 'ngx-toastr';
@@ -30,7 +30,7 @@ type  ItemPedidoForm = FormGroup<{
 })
 export class DetalhesPedidosComponent implements OnInit {
 
- pedidoForm: FormGroup;
+ pedidoForm!: FormGroup;
  estadoSalvar = 'post';
  produtos!: ProdutoServico[];
  pedido!: Pedido;
@@ -49,63 +49,60 @@ export class DetalhesPedidosComponent implements OnInit {
     private toastr: ToastrService,
     private clienteService: ClienteService,
     private pedidoService: PedidoService
-  ) {
-    this.pedidoForm = this.fb.group({
-      cliente: [''],
-      ItensPedido: this.fb.array([]),
-      formaPagamento: ['']
-    });
-  }
+  ) {}
 
 
   ngOnInit(): void {
-  this.validation();
-  this.carregarPedido();
-  this.carregarCliente();
-  this.carregarProdutos();
+    this.criarFormulario();
+    this.carregarPedido();
+    this.carregarCliente();
+    this.carregarProdutos();
   }
 
-  public validation(): void {
-        this.pedidoForm = this.fb.group({
-      cliente: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
+  private criarFormulario(): void {
+    this.pedidoForm = this.fb.group({
+      id: [0],
+      descricao: ['', Validators.required],
+      clienteId: [null, Validators.required],
+      cliente: [null],
+      telefone: ['', Validators.required],
+      dataPedido: ['', Validators.required],
       formaDePagamento: [null, Validators.required],
-      statusPedido:    [null, Validators.required],
-      telefone: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
-      ItensPedido: this.fb.array<ItemPedidoForm>([], [Validators.required])
-    });
+      statusPedido: [null, Validators.required],
+      valorTotal: [0, Validators.required],
+      itensPedido: this.fb.array([])
+    }); 
   }
 
   public get f(): any {
     return this.pedidoForm.controls;
   }
 
-onInputChangeCliente(): void {
-  const termo = this.clienteFiltro.trim();
+  onInputChangeCliente(): void {
+    const termo = this.clienteFiltro.trim();
 
-  if (termo === '') {
-    // limpa imediatamente quando apaga o campo
-    this.clientesFiltrados = [];
-    return;
+    if (termo === '') {
+      this.clientesFiltrados = [];
+      return;
+    }
+
+    this.carregando = true;
+    this.buscaClienteSubject.next(termo);
   }
-
-  this.carregando = true;
-  this.buscaClienteSubject.next(termo);
-}
 
   get ItensPedido(): FormArray<ItemPedidoForm> {
-  return this.pedidoForm.get('ItensPedido') as FormArray<ItemPedidoForm>;
+    return this.pedidoForm.get('itensPedido') as FormArray<ItemPedidoForm>;
   }
 
-    // Adiciona item ao FormArray
   adicionarItem(produto: ProdutoServico) {
     const ItensPedido: FormGroup = this.fb.group({
-      id: [produto.id],
+      id: 0,
+      produtoServicoId: [produto.id],
       nome: [produto.descricao],
       valorItem: [produto.preco],
       quantidade: [1]
     });
     
-    // Atualiza o total quando a quantidade mudar
     ItensPedido.get('quantidade')?.valueChanges.subscribe(() => this.calcularTotal());
 
     this.ItensPedido.push(ItensPedido);
@@ -126,8 +123,6 @@ onInputChangeCliente(): void {
     };
   }
 
-
-    // Calcula o total do pedido
   calcularTotal() {
     this.total = this.ItensPedido.controls.reduce((acc, item) => {
       const valorItem = item.get('valorItem')?.value || 0;
@@ -136,11 +131,10 @@ onInputChangeCliente(): void {
     }, 0);
   }
   
-
   buscarCliente(termo: string){
       if(!termo.trim()){
         this.carregando = false;
-        return of([]); // Retorna um Observable vazio
+        return of([]);
       }
       return this.clienteService.GetClienteTermo(termo);
   }
@@ -165,7 +159,6 @@ onInputChangeCliente(): void {
       next: (res: any[]) => {
         this.produtos = res.map(p => {
           if (p.imagem) {
-            // cria URL base64 a partir da string recebida da API
             const url = `data:image/jpeg;base64,${p.imagem}`;
             return { ...p, imagem: url };
           }
@@ -178,73 +171,94 @@ onInputChangeCliente(): void {
 
   removerItem(index: number) {
     this.ItensPedido.removeAt(index);
-    this.calcularTotal(); // 🔑 Recalcula o total após a remoção
+    this.calcularTotal();
   }
 
-  fecharPedido(){
+  fecharPedido() {
 
-    if(!this.pedidoForm.valid){
-      return;
+    if (!this.pedidoForm.valid) {
+          return;
     }
 
-    const pedido = {
-      ...this.pedidoForm.value,
-      descricao: this.clienteSelecionado?.pessoa.nome,
-      cliente: this.clienteSelecionado,
-      clienteId: this.clienteSelecionado?.id,
+    const itensPedido = this.pedidoForm.value.itensPedido.map((item: any) => ({
+      id: this.estadoSalvar === 'put' && item.id ? item.id : 0,
+      pedidoId: this.pedido?.id ?? 0,
+      produtoServicoId: item.produtoServico?.id ?? item.produtoServicoId,
+      valorItem: item.valorItem,
+      valorTotal: item.valorItem * item.quantidade,
+      quantidade: item.quantidade 
+    }));
+
+    this.pedido = {
+      id: this.estadoSalvar === 'put' ? this.pedido.id : 0,
+      descricao: this.clienteSelecionado?.pessoa.nome ?? "",
+      clienteId: this.clienteSelecionado?.id ?? 0,
+      cliente: this.clienteSelecionado!,
       valorTotal: this.total,
       dataPedido: new Date().toISOString(),
       formaDePagamento: +this.pedidoForm.value.formaDePagamento,
       statusPedido: +this.pedidoForm.value.statusPedido,
-        itensPedido: this.pedidoForm.value.ItensPedido.map((item: any) => ({
-        produtoServicoId: item.id,
-        valorItem: item.valorItem,
-        valorTotal: item.valorItem * item.quantidade,
-        quantidade: item.quantidade,
-      }))
+      telefone: this.pedidoForm.value.telefone,
+      itensPedido
+    };
+
+    if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put'){
+      this.pedidoService[this.estadoSalvar](this.pedido).subscribe(
+        () => {
+          this.toastr.success('Lançamento gravado com sucesso!', 'Sucesso');
+        },
+        (error: any) => {
+          console.error(error);
+          this.toastr.error('Error ao salvar o lançamento', 'Error');
+        },
+        () => {},
+      );
     }
-
-    this.pedido = (this.estadoSalvar === 'post')
-                  ? {...pedido} 
-                  : {id: this.pedido.id,
-                    ...pedido,
-                      clienteId: this.clienteSelecionado?.id,
-                      itensPedido: this.pedidoForm.value.ItensPedido.map((item: any) => ({
-                      id: item.id,
-                      pedidoId: this.pedido.id,
-                      produtoServicoId: item.id,  
-                      valorItem: item.valorItem,
-                      valorTotal: item.valorItem * item.quantidade,
-                      quantidade: item.quantidade 
-                    }))
-                  };
-
-      if(this.estadoSalvar === 'post' || this.estadoSalvar === 'put'){
-        this.pedidoService[this.estadoSalvar](this.pedido).subscribe(
-          () => {
-            this.toastr.success('Lançamento gravado com sucesso!', 'Sucesso');
-          },
-          (error: any) => {
-            console.error(error);
-            this.toastr.error('Error ao salvar o lançamento', 'Error');
-          },
-          () => {},
-        );
-      }
   }
 
   private criarItemForm(item: any): FormGroup {
-  const grupo = this.fb.group({
-    id:         [item.id],
-    nome:       [item.produtoServico?.descricao || ''],
-    valorItem:  [item.valorItem],
-    valorTotal: [item.valorTotal],
-    quantidade: [item.quantidade]
-  });
+    const grupo = this.fb.group({
+      id:             [Number(item?.id) || 0],
+      produtoServicoId: [
+        item?.produtoServicoId ?? item?.produtoServico?.id ?? null,
+        Validators.required
+      ],
+      produtoServico: [item?.produtoServico ?? null],
 
-    grupo.get('quantidade')?.valueChanges.subscribe(() => this.calcularTotal());
-    return grupo;
+      nome: [
+        item?.produtoServico?.descricao || '',
+        Validators.required
+      ],
+
+      quantidade: [
+        item?.quantidade ?? 1,
+        [Validators.required, Validators.min(1)]
+      ],
+
+      valorItem: [
+        item?.valorItem ?? 0,
+        [Validators.required, Validators.min(0.01)]
+      ],
+
+      valorTotal: [
+        item?.valorTotal ?? (item?.valorItem || 0) * (item?.quantidade || 0)
+      ]
+      });
+
+      grupo.get('quantidade')?.valueChanges.subscribe(() => this.atualizarTotal(grupo));
+      grupo.get('valorItem')?.valueChanges.subscribe(() => this.atualizarTotal(grupo));
+
+      return grupo; 
+    }
+
+    private atualizarTotal(grupo: FormGroup) {
+      const quantidade = Number(grupo.get('quantidade')?.value || 0);
+      const valorItem = Number(grupo.get('valorItem')?.value || 0);
+      grupo.patchValue({ valorTotal: quantidade * valorItem }, { emitEvent: false });
+
+      this.calcularTotal();
   }
+
 
   carregarPedido() : void{
     const pedido = this.route.snapshot.paramMap.get('id');
@@ -256,10 +270,17 @@ onInputChangeCliente(): void {
           (pedido: Pedido) =>{
             this.pedido = {...pedido}
 
-            this.pedidoForm.patchValue({...this.pedido});
+        this.pedidoForm.patchValue({
+          descricao: pedido.descricao,
+          valorTotal: pedido.valorTotal,
+          telefone: pedido.telefone,
+          dataPedido: pedido.dataPedido,
+          formaDePagamento: +pedido.formaDePagamento,
+          statusPedido: +pedido.statusPedido,
+          clienteId: pedido.clienteId
+        });
 
-            // *** NOVO trecho ***
-          this.ItensPedido.clear(); // esvazia o FormArray
+          this.ItensPedido.clear();
           
           this.total = pedido.valorTotal ?? 0;
 

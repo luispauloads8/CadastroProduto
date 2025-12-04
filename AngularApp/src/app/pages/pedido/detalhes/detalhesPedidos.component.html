@@ -42,7 +42,7 @@
                     [ngModelOptions]="{standalone: true}"
                     (input)="onInputChangeCliente()"/>
                     <div class="dropdown-menu show"
-                    *ngIf="clientesFiltrados?.length && !carregando">
+                    *ngIf="clientesFiltrados.length && !carregando">
                      <button
                      class="dropdown-item"
                      *ngFor="let cliente of clientesFiltrados"

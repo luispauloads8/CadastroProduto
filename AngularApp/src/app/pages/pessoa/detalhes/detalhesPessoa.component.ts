@@ -119,39 +119,44 @@ export class DetalhesPessoaComponent implements OnInit {
     });
   }
 
- private applyConditionalValidators(): void {
-  this.form.get('tipoPessoa')?.valueChanges.subscribe(tipoPessoa => {
-    if (tipoPessoa === 1) { // Pessoa Física
-      this.form.get('cpf')?.setValidators([Validators.required]);
-      this.form.get('dataNascimento')?.setValidators([Validators.required]);
-      this.form.get('estadoCivil')?.setValidators([Validators.required]);
-      this.form.get('inscricaoEstadual')?.clearValidators();
-      this.form.get('inscricaoMunicipal')?.clearValidators();
-      this.form.get('cnae')?.clearValidators();
-      this.form.get('sexo')?.setValidators([Validators.required]);
-      this.form.get('cnpj')?.clearValidators();
-    } else { // Pessoa Jurídica
-      this.form.get('cnpj')?.setValidators([Validators.required]);
-      this.form.get('cpf')?.clearValidators();
-      this.form.get('inscricaoEstadual')?.setValidators([Validators.required]);
-      this.form.get('inscricaoMunicipal')?.setValidators([Validators.required]);
-      this.form.get('cnae')?.setValidators([Validators.required]);
-      this.form.get('dataNascimento')?.clearValidators();
-      this.form.get('estadoCivil')?.clearValidators();
-      this.form.get('sexo')?.clearValidators();
-    }
+  private applyConditionalValidators(): void {
+    this.form.get('tipoPessoa')?.valueChanges.subscribe(tipoPessoa => {
+      if (tipoPessoa === 1) { // Pessoa Física
+        // Ativa validações da física
+        this.form.get('cpf')?.setValidators([Validators.required]);
+        this.form.get('dataNascimento')?.setValidators([Validators.required]);
+        this.form.get('estadoCivil')?.setValidators([Validators.required]);
+        this.form.get('sexo')?.setValidators([Validators.required]);
 
-    this.form.get('cpf')?.updateValueAndValidity();
-    this.form.get('cnpj')?.updateValueAndValidity();
-    this.form.get('dataNascimento')?.updateValueAndValidity();
-    this.form.get('estadoCivil')?.updateValueAndValidity();
-    this.form.get('sexo')?.updateValueAndValidity();
-  });
+        // Remove obrigatoriedade da jurídica, mas mantém os valores
+        ['cnpj', 'inscricaoEstadual', 'inscricaoMunicipal', 'cnae'].forEach(campo => {
+          const control = this.form.get(campo);
+          control?.clearValidators();
+          control?.setErrors(null); // 🔹 limpa erros sem apagar valores
+          control?.updateValueAndValidity({ emitEvent: false });
+        });
 
-  // dispara validação inicial (pois o tipo já vem setado como 1)
-  this.form.get('tipoPessoa')?.updateValueAndValidity();
-}
+      } else if (tipoPessoa === 2) { // Pessoa Jurídica
+        // Ativa validações da jurídica
+        ['cnpj', 'inscricaoEstadual', 'inscricaoMunicipal', 'cnae'].forEach(campo => {
+          const control = this.form.get(campo);
+          control?.setValidators([Validators.required]);
+          control?.updateValueAndValidity({ emitEvent: false });
+        });
 
+        // Remove obrigatoriedade da física, mas mantém valores
+        ['cpf', 'dataNascimento', 'estadoCivil', 'sexo'].forEach(campo => {
+          const control = this.form.get(campo);
+          control?.clearValidators();
+          control?.setErrors(null);
+          control?.updateValueAndValidity({ emitEvent: false });
+        });
+      }
+
+      // Atualiza o form geral
+      this.form.updateValueAndValidity({ emitEvent: false });
+    });
+  }
 
   private validation(): void {
     this.form = this.fb.group({

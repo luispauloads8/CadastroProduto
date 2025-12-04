@@ -6,11 +6,12 @@ import { ContaContabil } from '../../../models/ContaContabil';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { ContaService } from '../../../services/conta.service';
 import { ToastrService } from 'ngx-toastr';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroConta.component.html',
   styleUrl: './cadastroConta.component.css'
@@ -22,6 +23,11 @@ export class CadastroContaComponent implements OnInit {
   public contaContabilFiltrados: ContaContabil[] = [];
   public contaContabilId!: number;
   public modalRef!: BsModalRef;
+
+         // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
   ngOnInit(): void {
     this.carregaContaContabil();
@@ -49,20 +55,24 @@ export class CadastroContaComponent implements OnInit {
     )
   }
 
-  public carregaContaContabil(): void{
-    this.contaContabilService.GetContaContabil().subscribe(
-      (contaContabil: ContaContabil[]) => {
-        this.contaContabeis = contaContabil.map(conta => {
-          return {...conta};
-        });
-
+        // 🔹 Método de carregar com paginação
+  public carregaContaContabil(): void {
+    this.contaContabilService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.contaContabeis = result.items;
+        this.totalItems = result.totalItems;
         this.contaContabilFiltrados = this.contaContabeis;
       },
-      (error: any) => {
-        console.error('Erro ao carregar conta Contabil');
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {},
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregaContaContabil();
   }
 
   openModal(event: any, template: TemplateRef<void>, contaContabilId: number): void{

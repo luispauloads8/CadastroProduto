@@ -7,11 +7,14 @@ import { CidadeService } from '../../../services/cidade.service';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { EnumEstado } from '../../../models/EnumEstado';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroCidade.component.html',
   styleUrl: './cadastroCidade.component.css'
@@ -25,6 +28,14 @@ export class CadastroCidadeComponent implements OnInit {
   public modalRef!: BsModalRef;
   EnumEstado!: EnumEstado;
   estadoKey: string | undefined
+  searchChanged = new Subject<string>();
+
+
+     // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  searchTerm: string = '';
+  totalItems = 0;
 
    constructor(
     private cidadeService: CidadeService,
@@ -33,7 +44,25 @@ export class CadastroCidadeComponent implements OnInit {
    ){}
 
   ngOnInit(): void {
-    this.carregaCidade();
+    this.carregarCidades();
+    this.escutarDigitacao();
+  }
+
+  private escutarDigitacao() {
+    this.searchChanged
+    .pipe(
+      debounceTime(400),        // espera 400ms entre as teclas
+      distinctUntilChanged()    // só dispara se o texto mudar
+    )
+    .subscribe(search => {
+      this.searchTerm = search;
+      this.pageNumber = 1;      // resetar página ao buscar
+      this.carregarCidades();
+    });
+  }
+
+  public getEstadoDescricao(estadoNumero: number): string {
+    return EnumEstado[estadoNumero]; // retorna o nome, ex: "Goias"
   }
 
   public get filtroLista(): string {return this._filtroLista;}
@@ -50,22 +79,30 @@ export class CadastroCidadeComponent implements OnInit {
       )
   }
 
-  public carregaCidade(): void{
-    this.cidadeService.GetCidade().subscribe(
-      (cidade: Cidade[]) => {
-        this.cidades = cidade.map(cid => {
-          return {...cid,
-          estadoDescricao: EnumEstado[cid.estado] // Convertendo código numérico para nome
-          };
-        });
-
+    // 🔹 Método de carregar com paginação
+  public carregarCidades(): void {
+    this.cidadeService.getCategoriasPaginadas(this.pageNumber, this.pageSize, this.searchTerm).subscribe({
+      next: (result) => {
+        this.cidades = result.items;
+        this.totalItems = result.totalItems;
         this.cidadesFiltradas = this.cidades;
       },
-      (error: any) => {
-        console.error('Erro ao carregar cidade:', error);
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {},
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregarCidades();
+  }
+
+  onSearchChange(search: string): void {
+    this.pageNumber = 1; // reset na página
+    this.searchTerm = search;
+    this.carregarCidades(); // chama API
   }
 
   openModal(event: any, template: TemplateRef<void>, cidadeId: number): void {
@@ -81,7 +118,7 @@ export class CadastroCidadeComponent implements OnInit {
       (result: Cidade) => {
         if(result.id === this.cidadeId){
           this.toastr.success('Produto foi Deletado com Sucesso', 'Deletado!');
-          this.carregaCidade();
+          this.carregarCidades();
         }
       },
       (error: any) => {
