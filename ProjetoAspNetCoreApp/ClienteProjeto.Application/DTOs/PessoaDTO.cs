@@ -1,4 +1,4 @@
-﻿using ClienteProjeto.Application.ConversaoEntidade;
+﻿using ClienteProjeto.Application.Conversao.ConversaoEntidade;
 using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Enum;
 using System;

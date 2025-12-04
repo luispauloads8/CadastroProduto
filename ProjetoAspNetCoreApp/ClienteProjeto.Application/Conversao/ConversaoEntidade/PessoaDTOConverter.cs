@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ClienteProjeto.Application.ConversaoEntidade
+namespace ClienteProjeto.Application.Conversao.ConversaoEntidade
 {
     public class PessoaDTOConverter : JsonConverter<PessoaDTO>
     {
@@ -51,7 +51,7 @@ namespace ClienteProjeto.Application.ConversaoEntidade
 
         public override void Write(Utf8JsonWriter writer, PessoaDTO value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, (object)value, value.GetType(), options);
+            JsonSerializer.Serialize(writer, value, value.GetType(), options);
         }
     }
 }

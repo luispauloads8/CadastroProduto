@@ -72,4 +72,15 @@ public class EmpresaService : IEmpresaService
         return _mapper.Map<List<EmpresaDTO>>(empresaTermo);
 
     }
+
+    public async Task<PagedResult<EmpresaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var empresaEntity = await _empresaRepository.GetPagedAsync(pageNumber, pageSize);
+
+        return _mapper.Map<PagedResult<EmpresaDTO>>(empresaEntity);
+    }
 }

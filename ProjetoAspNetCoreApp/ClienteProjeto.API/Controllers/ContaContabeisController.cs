@@ -1,5 +1,6 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClienteProjeto.API.Controllers
@@ -83,6 +84,15 @@ namespace ClienteProjeto.API.Controllers
             }
             await _contaContabilService.Delete(id);
             return Ok(contaContabil);
+        }
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<PagedResult<ContaContabilDTO>>> GetPaginado(
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var resultado = await _contaContabilService.ObterPaginadoAsync(pageNumber, pageSize);
+            return Ok(resultado);
         }
     }
 }

@@ -10,7 +10,7 @@
                         <div class="input-group-text">Pesquisar</div>     
                     </div>
                     
-                    <input class="form-control" type="text" placeholder="Qual a produto/serviço deseja buscar" [(ngModel)]="filtroLista"/>
+                    <input class="form-control" type="text" placeholder="Qual a produto/serviço deseja buscar" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)"/>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{cidade.id}}</td>
                             <td>{{cidade.descricao}}</td>
-                            <td>{{cidade.estadoDescricao}}</td>
+                            <td>{{getEstadoDescricao(cidade.estado)}}</td>
                             <td>
                                 <button class="btn btn-warning mx-2" [routerLink]="['/cidade/detalhes', cidade.id]" tooltip="Editar">
                                     <i class="fa fa-edit"></i>
@@ -54,6 +54,20 @@
                 }
             </tbody>
         </table>
+
+        <pagination
+        [totalItems]="totalItems"
+        [(ngModel)]="pageNumber"
+        [itemsPerPage]="pageSize"
+        [maxSize]="5"
+        [boundaryLinks]="true"
+        firstText="«"
+        previousText="‹"
+        nextText="›"
+        lastText="»"
+        (pageChanged)="onPageChanged($event)"
+        class="justify-content-center"
+        ></pagination>
 
     </div>
 

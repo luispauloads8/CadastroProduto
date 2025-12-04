@@ -6,11 +6,12 @@ import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { GrupoConta } from '../../../models/GrupoConta';
 import { GrupoService } from '../../../services/grupo.service';
 import { ToastrService } from 'ngx-toastr';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
     providers:[BsModalService, ModalModule],
   templateUrl: './cadastroGrupo.component.html',
   styleUrl: './cadastroGrupo.component.css'
@@ -22,6 +23,11 @@ export class CadastroGrupoComponent implements OnInit{
   public grupoContaFiltrados: GrupoConta[] = [];
   public grupoContaId!: number; 
   public modalRef!: BsModalRef;
+
+           // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
   ngOnInit(): void {
     this.carregaGrupoConta();
@@ -49,20 +55,24 @@ export class CadastroGrupoComponent implements OnInit{
     )
   }
 
-  public carregaGrupoConta(): void{
-    this.grupoContaService.GetGrupoConta().subscribe(
-      (grupoConta: GrupoConta[]) => {
-        this.grupoContas = grupoConta.map(grupo => {
-          return {...grupo};
-        });
-
+        // 🔹 Método de carregar com paginação
+  public carregaGrupoConta(): void {
+    this.grupoContaService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.grupoContas = result.items;
+        this.totalItems = result.totalItems;
         this.grupoContaFiltrados = this.grupoContas;
       },
-      (error: any) => {
-        console.error('Erro ao carregar grupo de conta');
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {}
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregaGrupoConta();
   }
 
   openModal(event: any, template: TemplateRef<void>, grupoContaId: number): void{

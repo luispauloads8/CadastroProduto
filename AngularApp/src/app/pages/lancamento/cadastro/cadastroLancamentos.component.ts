@@ -6,11 +6,12 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Lancamento } from '../../../models/Lancamento';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { LancamentoService } from '../../../services/lancamento.service';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, ToastrModule, CommonModule],
+  imports: [FormsModule, RouterModule, ToastrModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroLancamentos.component.html',
   styleUrl: './cadastroLancamentos.component.css'
@@ -23,6 +24,11 @@ export class CadastroLancamentosComponent implements OnInit{
   public lancamentoFiltrados: Lancamento[] = [];
   public lancamentoId!: number;
   public modalRef!: BsModalRef;
+
+         // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
 
   public get filtroLista(): string {return this._filtroLista;}
@@ -42,19 +48,24 @@ export class CadastroLancamentosComponent implements OnInit{
     this.carregarLancamentos();
   }
 
-  public carregarLancamentos(): void{
-    this.lancamentoService.GetLancamentos().subscribe(
-      (lancamento: Lancamento[]) => {
-        this.lancamentos = lancamento.map(lan => {
-          return {...lan}
-        })
+      // 🔹 Método de carregar com paginação
+  public carregarLancamentos(): void {
+    this.lancamentoService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.lancamentos = result.items;
+        this.totalItems = result.totalItems;
         this.lancamentoFiltrados = this.lancamentos;
       },
-      (error: any) => {
-        console.error('Erro ao carregar lançamentos', error);
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {},
-    );
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregarLancamentos();
   }
 
   openModal(event: any, template: TemplateRef<void>, lancamentoId: number): void {

@@ -7,11 +7,12 @@ import { Cliente } from '../../../models/Cliente';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { response } from 'express';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroCliente.component.html',
   styleUrl: './cadastroCliente.component.css'
@@ -23,6 +24,11 @@ export class CadastroClienteComponent implements OnInit {
   public clienteFiltrados: Cliente[] = [];
   public clienteId!: number;
   public modalRef!: BsModalRef;
+
+       // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
   ngOnInit(): void {
     this.carregaCliente();
@@ -51,20 +57,24 @@ export class CadastroClienteComponent implements OnInit {
     )
   }
 
-  public carregaCliente(): void{
-    this.clienteService.GetCliente().subscribe(
-      (cliente: Cliente[]) => {
-        this.clientes = cliente.map(clie => {
-          return {...clie};
-        });
-
+      // 🔹 Método de carregar com paginação
+  public carregaCliente(): void {
+    this.clienteService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.clientes = result.items;
+        this.totalItems = result.totalItems;
         this.clienteFiltrados = this.clientes;
       },
-      (error: any) => {
-        console.error('Erro ao carregar cliente', error);
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {}
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregaCliente();
   }
 
   openModal(event: any, template: TemplateRef<void>, clienteId: number): void{
@@ -83,10 +93,6 @@ export class CadastroClienteComponent implements OnInit {
           this.carregaCliente();
         }
       },
-      // (error) => {
-      //  // agora o subscribe recebe a mensagem do interceptor
-      // this.toastr.error(error.message, 'Erro');
-      // },
       () => {}
     );
   }

@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -79,5 +80,26 @@ public class ClienteRepository : IClienteRepository
         return _clienteContext.Clientes
             .Where(c => c.Pessoa.Nome.Contains(search))
             .ToListAsync();
+    }
+
+    public async Task<PagedResult<Cliente>> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        var query = _clienteContext.Clientes.Include(p => p.Pessoa).AsQueryable();
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.Pessoa.Nome)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<Cliente>
+        {
+            Items = items,
+            TotalItems = totalItems,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 }

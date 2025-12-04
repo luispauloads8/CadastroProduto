@@ -219,6 +219,70 @@ public class AuthController : ControllerBase
 
     }
 
+    [Authorize]
+    [HttpPut("updateUsuario")]
+    public async Task<IActionResult> UpdateUser([FromBody] UsuarioDTO userUpdateDto)
+    {
+        try
+        {
+            // Obtém o usuário logado (do token)
+            var userName = User.Identity?.Name;
+            if (string.IsNullOrEmpty(userName))
+                return Unauthorized("Usuário não autenticado.");
+
+            // Confere se o nome informado é o mesmo do usuário logado
+            if (!string.Equals(userName, userUpdateDto.Nome, StringComparison.OrdinalIgnoreCase))
+                return Unauthorized("Usuário inválido para atualização.");
+
+            // Busca o usuário no banco pelo nome de usuário
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return NotFound("Usuário não encontrado.");
+
+            // Atualiza os campos permitidos
+            user.UserName = userUpdateDto.Nome;
+            user.Email = userUpdateDto.Email;
+
+
+            // Atualiza a senha se foi informada
+            if (!string.IsNullOrEmpty(userUpdateDto.Password))
+            {
+                
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passResult = await _userManager.ResetPasswordAsync(user, token, userUpdateDto.Password);
+                if (!passResult.Succeeded)
+                    return BadRequest(passResult.Errors);
+            }
+
+            // Atualiza o usuário
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+            };
+
+            // Gera novo token JWT
+            var tokenNovo =  _tokenService.GenerateAccessToken(authClaims, _configuration);
+
+            return Ok(new
+            {
+                userName = user.UserName,
+                email = user.Email,
+                tokenNovo
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                $"Erro ao tentar atualizar usuário. Detalhes: {ex.Message}");
+        }
+    }
+
+
     [HttpPost]
     [Route("refresh-token")]
     public async Task<IActionResult> RefreshToken(TokenDTO tokenDTO)

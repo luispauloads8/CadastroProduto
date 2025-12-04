@@ -50,6 +50,20 @@
             </tbody>
         </table>
 
+        <pagination
+        [totalItems]="totalItems"
+        [(ngModel)]="pageNumber"
+        [itemsPerPage]="pageSize"
+        [maxSize]="5"
+        [boundaryLinks]="true"
+        firstText="«"
+        previousText="‹"
+        nextText="›"
+        lastText="»"
+        (pageChanged)="onPageChanged($event)"
+        class="justify-content-center"
+        ></pagination>
+        
     </div>
     
     <ng-template #template>

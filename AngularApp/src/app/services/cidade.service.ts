@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { Cidade } from '../models/Cidade';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,12 @@ export class CidadeService {
 
   public DeletarCidade(id: number): Observable<Cidade>{
     return this.htpp.delete<Cidade>(`${this.ApiUrl}Cidades/${id}`).pipe(take(1));
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10, searchTerm: string) {
+    return this.htpp.get<PagedResult<Cidade>>(
+      `${this.ApiUrl}Cidades/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`
+    );
   }
   
 }

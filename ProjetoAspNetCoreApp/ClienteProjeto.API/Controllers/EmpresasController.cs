@@ -1,5 +1,6 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClienteProjeto.API.Controllers
@@ -85,6 +86,15 @@ namespace ClienteProjeto.API.Controllers
             await _empresaService.Delete(id); 
             return Ok(empresa);
 
+        }
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<PagedResult<EmpresaDTO>>> GetPaginado(
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var resultado = await _empresaService.ObterPaginadoAsync(pageNumber, pageSize);
+            return Ok(resultado);
         }
 
     }

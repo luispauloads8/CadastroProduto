@@ -150,4 +150,15 @@ public class LancamentoService : ILancamentoService
         var lancamento = _mapper.Map<Lancamento>(lancamentoDTO);
         await _lancamentoRepository.UpdateAsync(lancamento);
     }
+
+    public async Task<PagedResult<LancamentoDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var lancamentoEntity = await _lancamentoRepository.GetPagedAsync(pageNumber, pageSize);
+
+        return _mapper.Map<PagedResult<LancamentoDTO>>(lancamentoEntity);
+    }
 }

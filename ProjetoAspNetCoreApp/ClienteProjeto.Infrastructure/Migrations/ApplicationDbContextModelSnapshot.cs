@@ -524,7 +524,7 @@ namespace ClienteProjeto.Infrastructure.Migrations
 
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Pessoa", (string)null);
+                    b.ToTable("Pessoas", (string)null);
 
                     b.HasDiscriminator<int>("TipoPessoa");
 
@@ -752,10 +752,10 @@ namespace ClienteProjeto.Infrastructure.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<string>("IncricaoMunicipal")
+                    b.Property<string>("InscricaoEstadual")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("InscricaoEstadual")
+                    b.Property<string>("InscricaoMunicipal")
                         .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue(2);
@@ -855,8 +855,9 @@ namespace ClienteProjeto.Infrastructure.Migrations
                     b.HasOne("ClienteProjeto.Domain.Entities.ProdutoServico", "ProdutoServico")
                         .WithMany("ItensPedido")
                         .HasForeignKey("ProdutoServicoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_ItensPedido_ProdutoServicos_ProdutoServicoId");
 
                     b.Navigation("Pedido");
 

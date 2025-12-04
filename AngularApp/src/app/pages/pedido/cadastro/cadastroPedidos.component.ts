@@ -6,11 +6,12 @@ import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { PedidoService } from '../../../services/pedido.service';
 import { Pedido } from '../../../models/Pedido';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-   imports: [FormsModule, RouterModule, CommonModule],
+   imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
    providers:[BsModalService, ModalModule],
   templateUrl: './cadastroPedidos.component.html',
   styleUrl: './cadastroPedidos.component.css',
@@ -22,6 +23,11 @@ export class CadastroPedidosComponent implements OnInit {
     public pedidoFiltrados: Pedido[] = [];
     public pedidoId!: number
     public modalRef!: BsModalRef;
+
+           // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
     constructor(
       private pedidoService: PedidoService,
@@ -55,21 +61,25 @@ export class CadastroPedidosComponent implements OnInit {
       )
     }
 
-    public CarregaPedido() : void{
-      this.pedidoService.GetPedido().subscribe(
-        (pedido: Pedido[]) => {
-          this.pedidos = pedido.map(ped => {
-            return {...ped};
-          });
-  
-          this.pedidoFiltrados = this.pedidos;
-        },
-        (error: any) => {
-          console.error('Erro ao carregar pedido', error);
-        },
-        () => {}
-      )
-    }
+      // 🔹 Método de carregar com paginação
+  public CarregaPedido(): void {
+    this.pedidoService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.pedidos = result.items;
+        this.totalItems = result.totalItems;
+        this.pedidoFiltrados = this.pedidos;
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
+      },
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.CarregaPedido();
+  }
 
     confirm(){
       this.modalRef.hide();

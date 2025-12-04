@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -75,12 +76,6 @@ public class LancamentoRepository : ILancamentoRepository
         if (empresaId.HasValue)
             query = query.Where(l => l.EmpresaId == empresaId.Value);
 
-        //if (contaContabilId.HasValue)
-        //    query = query.Where(l => l.ContaContabilId == contaContabilId.Value);
-
-        //if (clienteId.HasValue)
-        //    query = query.Where(l => l.ClienteId == clienteId.Value);
-
         if (lancamentoInicio.HasValue)
         {
             query = query.Where(l => l.DataLancamento >= lancamentoInicio.Value.Date);
@@ -88,16 +83,36 @@ public class LancamentoRepository : ILancamentoRepository
 
         if (lancamentoFim.HasValue)
         {
-            var fim = lancamentoFim.Value.Date.AddDays(1); // dia seguinte à meia-noite
+            var fim = lancamentoFim.Value.Date.AddDays(1);
             query = query.Where(l => l.DataLancamento < fim);
         }
 
         return await query.ToListAsync();
     }
 
+    public async Task<PagedResult<Lancamento>> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        var query = _lancamentosContext.Lancamentos.Include(l => l.ProdutoServico).Include(c => c.Cliente.Pessoa).AsQueryable();
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.ProdutoServico.Descricao)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<Lancamento>
+        {
+            Items = items,
+            TotalItems = totalItems,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+    }
+
     public async Task<Lancamento> UpdateAsync(Lancamento lancamento)
     {
-        // Carregar o lançamento existente e seus itens relacionados
         var lancamentoExistente = await _lancamentosContext.Lancamentos
             .Include(l => l.ItensLancamentos)
             .FirstOrDefaultAsync(l => l.Id == lancamento.Id);
@@ -107,10 +122,8 @@ public class LancamentoRepository : ILancamentoRepository
             throw new KeyNotFoundException("Lançamento não encontrado");
         }
 
-        // Atualiza os campos do lançamento principal
         _lancamentosContext.Entry(lancamentoExistente).CurrentValues.SetValues(lancamento);
 
-        // Atualiza ou adiciona os ItensLancamento
         foreach (var itemRecebido in lancamento.ItensLancamentos)
         {
             var itemExistente = lancamentoExistente.ItensLancamentos
@@ -118,12 +131,10 @@ public class LancamentoRepository : ILancamentoRepository
 
             if (itemExistente != null)
             {
-                // Atualiza o item existente apenas se necessário
                 _lancamentosContext.Entry(itemExistente).CurrentValues.SetValues(itemRecebido);
             }
             else
             {
-                // Adiciona o novo item
                 lancamentoExistente.ItensLancamentos.Add(itemRecebido);
             }
         }

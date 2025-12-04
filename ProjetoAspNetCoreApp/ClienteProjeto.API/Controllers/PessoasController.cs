@@ -119,5 +119,14 @@ namespace ClienteProjeto.API.Controllers
             }
 
         }
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<PagedResult<PessoaDTO>>> GetPaginado(
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var resultado = await _pessoaService.ObterPaginadoAsync(pageNumber, pageSize);
+            return Ok(resultado);
+        }
     }
 }

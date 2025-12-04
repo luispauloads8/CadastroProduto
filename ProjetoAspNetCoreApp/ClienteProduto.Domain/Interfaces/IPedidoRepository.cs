@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace ClienteProjeto.Domain.Interfaces
         Task<Pedido> CreateAsync(Pedido pedido);
         Task<Pedido> UpdateAsync(Pedido pedido);
         Task<Pedido> DeleteAsync(Pedido pedido);
+        Task<PagedResult<Pedido>> GetPagedAsync(int pageNumber, int pageSize);
         Task EnsureConnectionOpenAsync();
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClienteProjeto.Domain.Entities
 {
-    public abstract class Pessoa : Entity// : EntidadeComNome
+    public abstract class Pessoa : Entity
     {
         public string Email { get; set; }
         public string Nome { get; set; }

@@ -50,21 +50,22 @@ export const errorInterceptor: HttpInterceptorFn = (
       if (error.status === 400 && isDeleteRequest) {
         title = 'Falha na Exclusão';
         toastr.warning(friendlyMessage, title);
+        limparConsole();
       } 
       else if (error.status === 400) {
         title = 'Requisição Inválida';
         toastr.warning(friendlyMessage, title);
-        limparConsole();
+        //limparConsole();
       } 
       else if (error.status === 401) {
         title = 'Falha na Autenticação';
         toastr.warning(friendlyMessage, title);
-        limparConsole();
+        //limparConsole();
       }
       else if (error.status === 403) {
         title = 'Acesso Negado';
         toastr.warning('Você não tem permissão para acessar este recurso.', title);
-        limparConsole();
+        //limparConsole();
       }
       else if (error.status === 404) {
         title = 'Não Encontrado';

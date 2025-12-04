@@ -63,4 +63,15 @@ public class CidadeService : ICidadeService
 
         return _mapper.Map<List<CidadeDTO>>(cidadeTermo);
     }
+
+    public async Task<PagedResult<CidadeDTO>> ObterPaginadoAsync(int pageNumber, int pageSize, string searchTerm)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var cidadeEntity = await _cidadeRepository.GetPagedAsync(pageNumber, pageSize, searchTerm);
+
+        return _mapper.Map<PagedResult<CidadeDTO>>(cidadeEntity);
+    }
 }

@@ -79,5 +79,16 @@ namespace ClienteProjeto.Application.Services
 
             await _pedidoRepository.UpdateAsync(pedidoEntity);
         }
+
+        public async Task<PagedResult<PedidoDTO>> ObterPaginadoAsync(int pageNumber, int pageSize)
+        {
+            // Aqui pode entrar regra de negócio, validação, logs, etc
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
+
+            var pedidoEntity = await _pedidoRepository.GetPagedAsync(pageNumber, pageSize);
+
+            return _mapper.Map<PagedResult<PedidoDTO>>(pedidoEntity);
+        }
     }
 }

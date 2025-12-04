@@ -1,5 +1,6 @@
 ﻿using ClienteProjeto.Application.DTOs;
 using ClienteProjeto.Application.Interfaces;
+using ClienteProjeto.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -96,7 +97,7 @@ namespace ClienteProjeto.API.Controllers
                 if (ex.InnerException is MySqlConnector.MySqlException mysqlEx &&
                     mysqlEx.Message.Contains("Cannot delete or update a parent row"))
                 {
-                    return BadRequest(new { message = "Não é possível excluir este cliente, pois existem pedidos associados a ele." });
+                    return BadRequest(new { message = "Não é possível excluir este cliente, pois existem pedidos associados" });
 
                 }
 
@@ -104,6 +105,15 @@ namespace ClienteProjeto.API.Controllers
                 return StatusCode(500, "Ocorreu um erro ao excluir o cliente.");
             }
 
+        }
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<PagedResult<ClienteDTO>>> GetPaginado(
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var resultado = await _clienteService.ObterPaginadoAsync(pageNumber, pageSize);
+            return Ok(resultado);
         }
     }
 }

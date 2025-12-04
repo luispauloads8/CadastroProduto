@@ -10,11 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [RouterModule, FormsModule, HttpClientModule, CommonModule],
+  imports: [RouterModule, FormsModule, HttpClientModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.css'
@@ -26,7 +28,13 @@ export class CadastroComponent {
   public categorias: Categoria[] = [];
   public categoriasFiltradas: Categoria[] = [];
   _filtroLista: string = '';
+  searchTerm: string = '';
   public categoriaId!: number;
+
+   // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
  constructor(
    private categoriaService:CategoriaService,
@@ -54,19 +62,32 @@ export class CadastroComponent {
    )
  }
 
- public carregarCategoria(): void {
-  this.categoriaService.GetCategorias().subscribe({
-    next: (categorias: Categoria[]) => {
-      this.categorias = categorias;
-      this.categoriasFiltradas = this.categorias;
-    },
-    error: (erro) => {
-      console.error('Erro ao carregar categorias:', erro);
-     // this.toastr.error('Erro ao Carregar categorias', 'Erro!');
-    },
-    complete: () => {},
-  });
- }
+  // 🔹 Método de carregar com paginação
+  carregarCategoria(): void {
+    this.categoriaService.getCategoriasPaginadas(this.pageNumber, this.pageSize, this.searchTerm).subscribe({
+      next: (result) => {
+        this.categorias = result.items;
+        this.totalItems = result.totalItems;
+        this.categoriasFiltradas = this.categorias;
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
+      },
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregarCategoria();
+  }
+
+    onSearchChange(search: string): void {
+    this.pageNumber = 1; // reset na página
+    this.searchTerm = search;
+    this.carregarCategoria(); // chama API
+  }
+
 
  openModal(event: any, template: TemplateRef<void>, categoriaId: number): void {
   event.stopPropagation();
@@ -84,10 +105,6 @@ export class CadastroComponent {
           this.carregarCategoria();
         }
       },
-      // (error: any) => {
-      //   console.error(error);
-      //   this.toastr.error('Erro ao tentar deletar a categoria.', 'Erro');
-      // },
       () => {},
     ); 
   }

@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 import { GrupoConta } from '../models/GrupoConta';
+import { PagedResult } from '../models/PagedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,11 @@ export class GrupoService {
 
   public DeletarGrupoConta(id: number): Observable<GrupoConta>{
     return this.http.delete<GrupoConta>(`${this.apiUrl}GrupoContas/${id}`).pipe(take(1));
+  }
+
+  public getCategoriasPaginadas(pageNumber = 1, pageSize = 10) {
+    return this.http.get<PagedResult<GrupoConta>>(
+      `${this.apiUrl}GrupoContas/paginado?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 }

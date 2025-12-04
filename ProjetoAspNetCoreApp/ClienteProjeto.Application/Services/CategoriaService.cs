@@ -64,4 +64,15 @@ public class CategoriaService : ICategoriaService
 
         return _mapper.Map<List<CategoriaDTO>>(categoriaTermo);
     }
+
+    public async Task<PagedResult<CategoriaDTO>> ObterPaginadoAsync(int pageNumber, int pageSize, string searchTerm)
+    {
+        // Aqui pode entrar regra de negócio, validação, logs, etc
+        if (pageNumber <= 0) pageNumber = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var categoriaEntity = await _categoriaRepository.GetPagedAsync(pageNumber, pageSize, searchTerm);
+
+        return _mapper.Map<PagedResult<CategoriaDTO>>(categoriaEntity);
+    }
 }

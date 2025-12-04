@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [FormsModule, RouterModule, ToastrModule, CommonModule],
+  imports: [FormsModule, RouterModule, ToastrModule, CommonModule, PaginationModule],
   providers:[BsModalService, ModalModule],
   templateUrl: './cadastroProdutoServico.component.html',
   styleUrl: './cadastroProdutoServico.component.css'
@@ -22,6 +23,11 @@ export class CadastroProdutoServicoComponent implements OnInit {
   _filtroLista: string = '';
   public produtoServicoId!: number;
   public modalRef!: BsModalRef;
+
+     // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
   constructor(
     private produtoServicoService: ProdutoServicoService,
@@ -43,22 +49,26 @@ export class CadastroProdutoServicoComponent implements OnInit {
   }
   
 
-  public carregaProdutoServico(): void {
-    this.produtoServicoService.GetProdutoServico().subscribe(
-      (produtoServico: ProdutoServico[]) => {
-        this.produtosServicos = produtoServico.map(produto => {
-          return {
-            ...produto,
-            imagem: `data:image/png;base64,${produto.imagem}`
-          };
-        });
-        this.produtosServicosFiltrados = this.produtosServicos;
-      },
-      (error : any) => {
-        console.error('Erro ao carregar produto serviço:', error);
-      },
-      () => {}
-    );
+public carregaProdutoServico(): void {
+  this.produtoServicoService.getProdutoServicoPaginadas(this.pageNumber, this.pageSize).subscribe({
+    next: (result) => {
+      this.produtosServicos = result.items.map(produto => ({
+        ...produto,
+        imagem: `data:image/png;base64,${produto.imagem}`
+      }));
+      this.totalItems = result.totalItems;
+      this.produtosServicosFiltrados = this.produtosServicos;
+    },
+    error: (error) => {
+      console.error('Erro ao carregar produto serviço:', error);
+    }
+  });
+}
+
+    // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregaProdutoServico();
   }
     
   public filtroProduto(filtrarPor: string): ProdutoServico[]{
@@ -83,10 +93,6 @@ export class CadastroProdutoServicoComponent implements OnInit {
           this.toastr.success('Produto foi Deletado com Sucesso', 'Deletado!');
           this.carregaProdutoServico();
         }
-      },
-      (error: any) => {
-        console.error(error);
-        this.toastr.error('Error ao tentar deletar produto e serviço', 'Erro');
       },
       () => {}
     );

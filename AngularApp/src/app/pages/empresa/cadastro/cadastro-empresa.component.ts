@@ -6,11 +6,12 @@ import { Empresa } from '../../../models/Empresa';
 import { EmpresaService } from '../../../services/empresa.service';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-cadastro-empresa',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule, CommonModule, PaginationModule],
    providers:[BsModalService, ModalModule],
   templateUrl: './cadastro-empresa.component.html',
   styleUrl: './cadastro-empresa.component.css'
@@ -22,6 +23,11 @@ export class CadastroEmpresaComponent implements OnInit {
   public empresas: Empresa[] = [];
   public empresaId!: number;
   public modalRef!: BsModalRef;
+
+       // 🔹 Paginação
+  pageNumber = 1;
+  pageSize = 5;
+  totalItems = 0;
 
   constructor(
     private empresaService: EmpresaService,
@@ -50,20 +56,24 @@ export class CadastroEmpresaComponent implements OnInit {
     this.carregaEmpresa();
   }
 
-  public carregaEmpresa(): void{
-    this.empresaService.GetEmpresa().subscribe(
-      (empresa: Empresa[]) => {
-        this.empresas = empresa.map(emp => {
-          return {...emp};
-        });
-
+      // 🔹 Método de carregar com paginação
+  public carregaEmpresa(): void {
+    this.empresaService.getCategoriasPaginadas(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.empresas = result.items;
+        this.totalItems = result.totalItems;
         this.empresaFiltradas = this.empresas;
       },
-      (error: any) => {
-        console.error('Erro ao carregar empresa', error);
+      error: (erro) => {
+        console.error('Erro ao carregar categorias:', erro);
       },
-      () => {},
-    )
+    });
+  }
+
+  // 🔹 Evento de mudança de página
+  onPageChanged(event: any): void {
+    this.pageNumber = event.page;
+    this.carregaEmpresa();
   }
 
   openModal(event: any, template: TemplateRef<void>, empresaId: number): void{

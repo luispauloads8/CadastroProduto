@@ -10,6 +10,8 @@ namespace ClienteProjeto.Application.DTOs
 {
     public class ItensPedidoDTO
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Informe a quantidade")]
         public int Quantidade { get; set; }
 
@@ -21,7 +23,9 @@ namespace ClienteProjeto.Application.DTOs
         [DisplayFormat(DataFormatString = "{0:n2}")]
         public decimal ValorTotal { get; set; }
 
+        public int ProdutoServicoId { get; set; }
+
         public Pedido Pedido { get; set; }
-        public ProdutoServico ProdutoServico { get; set; }
+        public ProdutoServicoDTO ProdutoServico { get; set; }
     }
 }

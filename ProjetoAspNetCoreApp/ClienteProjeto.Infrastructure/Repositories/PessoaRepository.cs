@@ -1,4 +1,5 @@
-﻿using ClienteProjeto.Domain.Entities;
+﻿using ClienteProjeto.Application.DTOs;
+using ClienteProjeto.Domain.Entities;
 using ClienteProjeto.Domain.Enum;
 using ClienteProjeto.Domain.Interfaces;
 using ClienteProjeto.Infrastructure.Context;
@@ -59,6 +60,27 @@ namespace ClienteProjeto.Infrastructure.Repositories
             return await _pessoaContext.Pessoas.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task<PagedResult<Pessoa>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var query = _pessoaContext.Pessoas.AsQueryable();
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(c => c.Nome)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Pessoa>
+            {
+                Items = items,
+                TotalItems = totalItems,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<IEnumerable<Pessoa>> GetPessoaAsync()
         {
             return await _pessoaContext.Pessoas.AsNoTracking().ToListAsync();
@@ -70,45 +92,6 @@ namespace ClienteProjeto.Infrastructure.Repositories
             .Where(c => c.Nome.Contains(search))
             .ToListAsync();
         }
-
-        //public async Task<Pessoa> UpdateAsync(Pessoa pessoa)
-        //{
-        //    var local = _pessoaContext.Set<Pessoa>().Local
-        //        .FirstOrDefault(entry => entry.Id == pessoa.Id);
-
-        //    if (local != null)
-        //    {
-        //        _pessoaContext.Entry(local).State = EntityState.Detached;
-        //    }
-
-        //    // Carrega a pessoa existente com o endereço
-        //    var pessoaExistente = await _pessoaContext.Pessoas
-        //        .Include(p => p.Endereco)
-        //        .FirstOrDefaultAsync(p => p.Id == pessoa.Id);
-
-        //    if (pessoaExistente == null)
-        //        throw new Exception("Pessoa não encontrada.");
-
-        //    // Atualiza os campos da pessoa
-        //    pessoaExistente.Nome = pessoa.Nome;
-
-        //    pessoaExistente.Telefone = pessoa.Telefone;
-        //    //pessoaExistente.CNPJ = pessoa.CNPJ;
-        //    pessoaExistente.Email = pessoa.Email;
-
-        //    // Atualiza os campos do endereço
-        //    if (pessoaExistente.Endereco != null && pessoa.Endereco != null)
-        //    {
-        //        pessoaExistente.Endereco.Logradouro = pessoa.Endereco.Logradouro;
-        //        pessoaExistente.Endereco.Cidade = pessoa.Endereco.Cidade;
-        //        pessoaExistente.Endereco.CEP = pessoa.Endereco.CEP;
-        //        pessoaExistente.Endereco.CaixaPostal = pessoa.Endereco.CaixaPostal;
-        //    }
-
-        //    await _pessoaContext.SaveChangesAsync();
-        //    return pessoaExistente;
-
-        //}
 
         public async Task<Pessoa> UpdateAsync(Pessoa pessoa)
         {

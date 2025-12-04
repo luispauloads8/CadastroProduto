@@ -7,11 +7,12 @@ import { ProdutoServico } from "./ProdutoServico";
 export interface Pedido {
     id: number,
     descricao: string,
-    produto: ProdutoServico,
     cliente: Cliente, 
+    clienteId: number;
     statusPedido: EnumStatusPedido,
     formaDePagamento: EnumFormaDePagamento,
     itensPedido: ItensPedido[], 
-    valorTotal: number
-
+    valorTotal: number, 
+    dataPedido: Date | string,
+    telefone: string,
 }
